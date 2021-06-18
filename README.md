@@ -1,7 +1,8 @@
 # Docker Images
 
-* [apache-tomcat](/apache-tomcat)
-* [oracle-java-8](/oracle-java-8)
+* [Apache Tomcat](/apache-tomcat)
+* [Oracle Java 8](/oracle-java-8)
+* [Oracle Weblogic 12.2.1.4](/oracle-weblogic-12.2.1.4)
 
 ## Appendix A) Docker how to guide
 * Start Docker daemon on Centos: `sudo systemctl start docker`

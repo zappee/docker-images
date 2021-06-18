@@ -13,7 +13,7 @@
 #     $ ./build.sh true      build and push the image to the image registry                                  **
 # ******************************************************************************
 DOCKER_REGISTRY=docker
-DOCKER_REGISTRY_NAMESPACE=images/oracle-java-8
+DOCKER_REGISTRY_NAMESPACE=images/oracle-java
 IMAGE_NAME=oracle-java-8
 IMAGE_VERSION=1.0.0
 PUSH_IMAGE=${1:-false}
