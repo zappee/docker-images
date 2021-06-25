@@ -57,7 +57,7 @@ You can find multiply `docker-compose.yml` sample files under the [usage-of-the-
    *  `docker logs -f weblogic-admin-server`
 
 ## 4) Automated application deployment
-The WebLogic Admin Server and the [WebLogic Managed Server](/oracle-weblogic-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
+The WebLogic Admin Server and the [WebLogic Managed Server](/oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
 This image set can be used at all environment levels: `PRODUCTION`, `ACCEPTANCE`, `TEST`, and `DEVELOPMENT`.
 
 The application deployment can be automated easily using the four built-in admin server lifecycle methods.
