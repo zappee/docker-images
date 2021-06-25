@@ -1,15 +1,16 @@
-# Oracle WebLogic Administration Server Docker Image
+# Oracle WebLogic Managed Server Docker Image
 
 ## 1) Image Description
-This is a Dockerfile for _Oracle WebLogic Administration Server_, built at the top of the [WebLogic base image](/oracle-weblogic-12.2.1.4).
+This is a Dockerfile for _Oracle WebLogic Managed Server_ built at the top of the [WebLogic base image](/oracle-weblogic-12.2.1.4).
 Developers can use this image as the main building block of a WebLogic environment.
 
 The main technical details of the image:
-* The WebLogic Admin server will start automatically with the container.
-* If the WebLogic admin server is stopped or killed then the docker container will stop too because the main process that keeps alive the container is the WebLogic process itself.
-* Multiply WebLogic Admin servers can be started paralelly on the same host machine using one or multiply `docker-compose.yml`. You can find examples under the [usage-of-the-docker-images](usage-of-the-docker-images) directory. 
-* The current installation contains a WebLogic Cluster.
+* The WebLogic Managed server will start automatically with the container.
+* If the NodeManager is stopped or killed then the docker container will stop too because the main process that keeps alive the container is the NodeManager process.
+* Multiply WebLogic Managed servers can be started paralelly. You can find examples under the [usage-of-the-docker-images](usage-of-the-docker-images) directory.
 * The WebLogic Managed servers will join automatically to the cluster without any additional configuration after they start.
+* FIPS 140-2 is enabled in the managed server
+    * If you see in log the `<Changing the default Random Number Generator in RSA CryptoJ from ECDRBG128 to HMACDRBG. To disable this change, specify -Dweblogic.security.allowCryptoJDefaultPRNG=true.>` entry, then it means that the `FIPS 140-2` is enabled properly.
 * The `JMS-Message-Sender` command line tool to can be used to send text messages to JMS and SAF queues.
 * Use the `SQL-Runner` command line tool to execute SQL commands like `SELECT`, `INSERT`, `UPDATE` or `CREATE`.
 * The `common-utils.sh` bash script contains reusable functions that can be used to
@@ -19,75 +20,36 @@ The main technical details of the image:
     * create a new database schema
     * execute SQL commands
     * run Liquibase and update your database
-* Use the WebLogic lifecycle bash scripts to automate the application deployment. There are four lifecycle methods that you can use:
-    * `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
-    * `before-startup.sh`: executed before each startup of the WebLogic Admin server
-    * `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
-    * `after-startup.sh`: executed after each startup of the WebLogic Admin server
-* The `WEB_CONSOLE_COLOR` variable can be used to customize the color of the WebLogic web console. This feature is useful when multiple WebLogic domains are started.
-* The execution of the `after-*.sh` lifecycle scripts can be controlled by the four `wait-for-*.sh` bash scripts.
+* Use the WebLogic lifecycle bash scripts to automate the application deployment. There is one lifecycle methods that you can use:
+    * `before-startup.sh`: executed before each startup of the WebLogic Managed server
 
 ## 2) Build
 1) Pull all the following images from the docker repository or build them locally:
     * Remal Oracle Java 8 image
     * Remal Oracle WebLogic image
 
-2) Before building this image the followings needs to be checked and set properly:
+1) Before building this image the followings needs to be checked and set properly:
     * in `Dockerfile`: base image name and version (`FROM`)
     * in the `build.sh` script: the name and the version of the image you are building
 
-3) Build it using:
+1) Build it using:
     ```
-    $ cd oracle-weblogic-admin-server
+    $ cd oracle-weblogic-managed-server
     $ ./build.sh
     ```
 
 ## 3) How to use this image
 You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](usage-of-the-docker-images) directory.
 
-* Run the image
-   * normal mode: `docker run -d -p 7001:7001 --name weblogic-admin-server weblogic-admin-server-12.2.1.4:1.0.0`
-   * without starting the admin server: `docker run -d --name weblogic-admin-server weblogic-admin-server-12.2.1.4:1.0.0 tail -f /dev/null`
-
-* Login into the running container
-   * as an ordinary user: `docker exec -it weblogic-admin-server /bin/bash`
-   * as root: `docker exec -it -u root -w /root weblogic-admin-server /bin/bash`
-
-* Displays and follow log output
-   *  `docker logs -f weblogic-admin-server`
-
 ## 4) Automated application deployment
-The WebLogic Admin Server and the [WebLogic Managed Server](/oracle-weblogic-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
+The [WebLogic Admin Server](/oracle-weblogic-admin-server) and the WebLogic Managed Server Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
 This image set can be used at all environment levels: `PRODUCTION`, `ACCEPTANCE`, `TEST`, and `DEVELOPMENT`.
 
-The application deployment can be automated easily using the four built-in admin server lifecycle methods.
-These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need to prepare the environment and deploy the application or applications.
+The application deployment can be automated easily using the built-in managed server lifecycle method.
+The lifecycle method is actually a bash script, and they can execute any Unix commands that you need to prepare the environment and deploy the application or applications.
 
-The mentioned four lifecycle scripts, and their execution order is the following:
-1. `before-first-startup.sh`
-1. `before-startup.sh`
-1. `after-first-startup.sh`
-1. `after-startup.sh`
-
-## 5) Block the server startup
-In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for another server or signal.
-
-The following use case is a good example that demonstrates when you need to block the WebLogic server startup.
-In the production environment always external database servers are used (not the Oracle Database Docker Image).
-But during the application development, each developer works on a separate environment with their own servers running on the `localhost`.
-That means an Oracle Database Docker Image is used often together with this WebLogic Docker image in the same `docker-compose.yml` file.
-Unfortunately, the database server startup time takes longer than the WebLogic server startup, so you may need to block the WebLogic startup until the database server is up and able to serve requests.
-Otherwise, the connection pool deployment with the WLST tool from e.g., the `after-first-startup.sh` bash script will fail because the WebLogic Admin server starts before the database server.
-As it is known, one of the main important pre-requirement to create a WebLogic connection pool is that the database must be up during the creation time of the connection pool.
-
-Another situation that required to block the execution of the `after-*.sh` lifecycle bash scripts is that when you would like to create a WebLogic resource and deploy it to the managed server or servers.
-For example, to create file persistent stores with WLST from the `after-first-startup.sh` script and deploy them to the managed servers must require that the managed servers must be running at the creation time of the File Persistent Store.
-
-To handle the cases or any similar situations described above, you can use the following scripts:
-* `wait-for-admin-server.sh`: this script returns only if the admin server is up and running
-* `wait-for-database-server.sh`: this script returns only if the database server is up and running
-* `wait-for-managed-server.sh`: this script waits until the managed server or servers up and running
-* `wait-for-database-and-managed-server.sh`: this script is a combination of two scripts
+The mentioned lifecycle script is the following:
+    1. `before-startup.sh`
 
 ## 6) SQL Runner command line tool
 The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
@@ -201,7 +163,7 @@ The library can be found within in the `/home/oracle` directory.
 ### 8.5) Application deployment
 * Command: `deployApplication <artifact>`
 * Parameters:
-   * `artifact`: the file that will be deployed to the WebLogic cluster as an application
+    * `artifact`: the file that will be deployed to the WebLogic cluster as an application
 * Used environment variables:
     * `ADMIN_SERVER_PORT`: the port of the T3 protocol
     * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
@@ -221,7 +183,7 @@ The library can be found within in the `/home/oracle` directory.
 ### 8.6) Shared library deployment
 * Command: `deployLibrary <artifact>`
 * Parameters:
-   * `artifact`: the file that will be deployed to the WebLogic cluster as a library
+    * `artifact`: the file that will be deployed to the WebLogic cluster as a library
 * Used environment variables:
     * `ADMIN_SERVER_PORT`: the port of the T3 protocol
     * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
@@ -257,26 +219,32 @@ In this section, you can find information about the variables and their default 
 
 Variables used from the `Dockerfile`:
 
-| variables                 | default value | description |
-|---------------------------|---------------|-------------|
-| ADMIN_SERVER_JAVA_OPTIONS | -Dweblogic.rjvm.enableprotocolswitch=true -Dweblogic.data.canTransferAnyFile=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4001 -XX:+UnlockCommercialFeatures -XX:+ResourceManagement | The WebLogic admin server classpath. |
-| ADMIN_SERVER_NAME         | ADMIN_SERVER  | An alphanumeric name for this server instance. |
-| ADMIN_SERVER_PORT         | 7001          | The TCP port that this server uses to listen for regular (non-SSL) incoming connections. |
-| CLUSTER_NAME              | DEV_CLUSTER   | The name of the WebLogic cluster. |
-| DOMAIN_NAME               | DEV_DOMAIN    | The name of the WebLogic cluster. |
-| ORACLE_HOME               | /home/oracle  | The home directory of the `oracle` user. |
-| PRODUCTION_MODE           | true          | Boolean value, set it true if the production mode is used. |
+| variables                   | default value         | description |
+|-----------------------------|-----------------------|-------------|
+| ADMIN_SERVER_HOST           | weblogic-admin-server | The hostname of the docker container where the WebLogic Admin server runs. |
+| ADMIN_SERVER_NAME           | ADMIN_SERVER          | An alphanumeric name for this server instance. |
+| ADMIN_SERVER_PORT           | 7001                  | The TCP port that this server uses to listen for regular (non-SSL) incoming connections. See `container_name` and `hostname` in the `docker-compose.yml` file. |
+| CLASSPATH                   | $CLASSPATH:$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/app-config:$ORACLE_HOME/wlserver/server/lib/jcmFIPS.jar:$ORACLE_HOME/wlserver/server/lib/sslj.jar | The WebLogic managed server classpath. |
+| CLUSTER_NAME                | DEV_CLUSTER           | The name of the WebLogic cluster. |
+| DOMAIN_NAME                 | DEV_DOMAIN            | The name of the WebLogic cluster. |
+| MANAGED_SERVER_JAVA_OPTIONS | -Dweblogic.rjvm.enableprotocolswitch=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4001 -XX:+UnlockCommercialFeatures -XX:+ResourceManagement -Djava.security.properties==$JAVA_HOME/jre/lib/security/java.security -Dweblogic.security.allowCryptoJDefaultJCEVerification=true | The JVM option used by the WebLogic managed server. |
+| MANAGED_SERVER_NAME         | MANAGED_SERVER        | The name of the WebLogic Managed Server. It must be unique in the WebLogic domain. |
+| MANAGED_SERVER_PORT         | 8001                  | The TCP port that this server uses to listen for regular (non-SSL) incoming connections.|
+| NODE_MANAGER_PORT           | 5556                  | The Node Manager listen port.  |
+| ORACLE_HOME                 | /home/oracle        | The home directory of the `oracle` user.  |
+| PRODUCTION_MODE             | true                  | Boolean value, set it true if the production mode is used. |
 
 Another variables:
 
-| variables   | default value                                      | description |
-|-------------|----------------------------------------------------|-------------|
-| username    | weblogic                                           | The WebLogic console user, defined in the `boot.properties`. |
-| password    | weblogic12                                         | The password for the console user, defined in the `boot.properties`. |
-| domain home | `/home/oracle/user_projects/domains/<DOMAIN-NAME>` | The WebLogic domain home directory. |
-| server log  |`<DOMAIN-HOME>/servers/<ADMIN-SERVER-NAME>/logs`    | The directory where the admin server's logfiles locates. |
+| variables                        | default value                                                                    | description |
+|----------------------------------|----------------------------------------------------------------------------------|-------------|
+| username                         | weblogic                                                                         | The WebLogic console user, defined in the `boot.properties`. |
+| password                         | weblogic12                                                                       | The password for the console user, defined in the `boot.properties`. |
+| managed server home              | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/servers/<MANAGED-SERVER>`      | The WebLogic managed server home directory. |
+| managed server log               | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/servers/<MANAGED-SERVER>/logs` | The directory where the managed server's logfiles locates. |
+| node manager server start script | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/bin/startNodeManager.sh`       | The Node Manager starting bash script. |
 
-## 10) Example how to build WebLogic Images with  automated deployment 
+## 10) Example how to build WebLogic Images with  automated deployment
 The [oracle-weblogic-demo-application](../oracle-weblogic-demo-application) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
 
 ## 11) License

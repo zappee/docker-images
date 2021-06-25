@@ -1,0 +1,18 @@
+# project files
+*.class
+target/**
+
+# intellij idea specific
+*.iml
+*.ipr
+*.iws
+.idea
+
+# eclipse specific
+**/.classpath
+**/.jupiter
+**/.project
+**/.settings/**
+
+# CVS
+**/.cvsignore
