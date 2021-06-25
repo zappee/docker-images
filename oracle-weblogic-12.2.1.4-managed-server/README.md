@@ -7,7 +7,7 @@ Developers can use this image as the main building block of a WebLogic environme
 The main technical details of the image:
 * The WebLogic Managed server will start automatically with the container.
 * If the NodeManager is stopped or killed then the docker container will stop too because the main process that keeps alive the container is the NodeManager process.
-* Multiply WebLogic Managed servers can be started paralelly. You can find examples under the [/usage-of-the-docker-images](usage-of-the-docker-images) directory.
+* Multiply WebLogic Managed servers can be started paralelly. You can find examples under the [usage-of-the-docker-images](/usage-of-the-docker-images) directory.
 * The WebLogic Managed servers will join automatically to the cluster without any additional configuration after they start.
 * FIPS 140-2 is enabled in the managed server
     * If you see in log the `<Changing the default Random Number Generator in RSA CryptoJ from ECDRBG128 to HMACDRBG. To disable this change, specify -Dweblogic.security.allowCryptoJDefaultPRNG=true.>` entry, then it means that the `FIPS 140-2` is enabled properly.
@@ -39,7 +39,7 @@ The main technical details of the image:
     ```
 
 ## 3) How to use this image
-You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](usage-of-the-docker-images) directory.
+You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](/usage-of-the-docker-images) directory.
 
 ## 4) Automated application deployment
 The [WebLogic Admin Server](/oracle-weblogic-12.2.1.4-admin-server) and the WebLogic Managed Server Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
