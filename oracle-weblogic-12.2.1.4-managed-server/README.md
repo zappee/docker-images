@@ -42,7 +42,7 @@ The main technical details of the image:
 You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](usage-of-the-docker-images) directory.
 
 ## 4) Automated application deployment
-The [WebLogic Admin Server](/oracle-weblogic-admin-server) and the WebLogic Managed Server Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
+The [WebLogic Admin Server](/oracle-weblogic-12.2.1.4-admin-server) and the WebLogic Managed Server Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
 This image set can be used at all environment levels: `PRODUCTION`, `ACCEPTANCE`, `TEST`, and `DEVELOPMENT`.
 
 The application deployment can be automated easily using the built-in managed server lifecycle method.
@@ -51,7 +51,7 @@ The lifecycle method is actually a bash script, and they can execute any Unix co
 The mentioned lifecycle script is the following:
     1. `before-startup.sh`
 
-## 6) SQL Runner command line tool
+## 5) SQL Runner command line tool
 The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
 The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE` commands.
 You can use this tool for example to create a new database schema during the application deployment and insert initial data into databases.
@@ -63,7 +63,7 @@ The tool is available from the image, the installation directory is  `/home/orac
 
 For more info about the tool, please read [this](https://github.com/zappee/sql-runner).
 
-## 7) JMS Message Sender command line tool
+## 6) JMS Message Sender command line tool
 The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to any kind of JMS Queue.
 This is a command line tool can be run from bash or windows scripts and command line as well.
 
@@ -77,7 +77,7 @@ The tool is available from the image, the installation directory is  `/home/orac
 
 For more info about the tool, please read [this](https://github.com/zappee/jms-message-sender).
 
-## 8) common-utils.sh library
+## 7) common-utils.sh library
 The `common-utils` is a collection of bash functions that you can use from any of the four WebLogic lifecycle methods, mentioned in the previous chapters.
 The functions simplify the usage of some often used commands like
 * create a new Oracle database schema when you use Oracle Database Docker image
