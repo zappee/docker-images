@@ -43,7 +43,7 @@ The main technical details of the image:
     ```
 
 ## 3) How to use this image
-You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](usage-of-the-docker-images) directory.
+You can find multiply `docker-compose.yml` sample files under the [/usage-of-the-docker-images](usage-of-the-docker-images) directory.
 
 * Run the image
    * normal mode: `docker run -d -p 7001:7001 --name weblogic-admin-server weblogic-admin-server-12.2.1.4:1.0.0`
