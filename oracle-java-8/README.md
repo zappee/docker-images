@@ -31,7 +31,7 @@ $ ./build.sh
 
 ## 3) Usage
 * Run the image
-    * `docker run --name java-8 -d docker/images/oracle-java-8/oracle-java-8:1.0.0 tail -f /dev/null`
+    * `docker run --name java-8 -d docker/images/oracle-java-8:1.0.0 tail -f /dev/null`
 
 * Login into the running container
     * as an ordinary user: `docker exec -it java-8 /bin/bash`
