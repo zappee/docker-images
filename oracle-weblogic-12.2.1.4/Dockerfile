@@ -7,7 +7,7 @@
 #  Copyright (c) 2020 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/images/oracle-java/oracle-java-8:1.0.0
+FROM docker/images/oracle-java-8:1.0.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 # common environment variables required for this build

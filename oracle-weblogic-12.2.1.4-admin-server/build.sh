@@ -13,8 +13,8 @@
 #     $ ./build.sh true      build and push the image to the image registry                                  **
 # ******************************************************************************
 DOCKER_REGISTRY=docker
-DOCKER_REGISTRY_NAMESPACE=images/oracle-weblogic
-IMAGE_NAME=weblogic-admin-12.2.1.4
+DOCKER_REGISTRY_NAMESPACE=images
+IMAGE_NAME=oracle-weblogic-admin-12.2.1.4
 IMAGE_VERSION=1.0.0
 PUSH_IMAGE=${1:-false}
 

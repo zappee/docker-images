@@ -1,5 +1,5 @@
 # ******************************************************************************
-#  Apache-Tomcat compose file.
+#  Oracle Database Enterprise 12.2.0.1 Docker compose file.
 #
 #  Since : February, 2021
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
@@ -9,14 +9,8 @@
 # ******************************************************************************
 version: '3'
 services:
-    tomcat-server-1:
-        container_name: tomcat-server-1
-        image: docker/images/apache-tomcat-10.0:1.0.0
-        ports:
-            - "8001:8080"
-
-    tomcat-server-2:
-        container_name: tomcat-server-2
-        image: docker/images/apache-tomcat-10.0:1.0.0
-        ports:
-            - "8002:8080"
+  oracle-db:
+    image: store/oracle/database-enterprise:12.2.0.1
+    container_name: oracle-db
+    ports:
+      - "1521:1521" # database listening port

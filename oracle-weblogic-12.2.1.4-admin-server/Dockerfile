@@ -8,7 +8,7 @@
 #  BSD (2-clause) licensed
 # ******************************************************************************
 
-FROM docker/images/oracle-weblogic/weblogic-12.2.1.4:1.0.0
+FROM docker/images/oracle-weblogic-12.2.1.4:1.0.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 # common environment variables with default values required for this build
