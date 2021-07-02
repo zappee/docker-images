@@ -4,11 +4,11 @@
 #  Since : November, 2020
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-#  Copyright (c) 2020 Remal Software and Arnold Somogyi All rights reserved
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
 FROM oraclelinux:7-slim
-LABEL authors="Arnold Somogyi <arnold.somogyi@ext.ec.europa.eu>"
+LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 # install tools
 USER root

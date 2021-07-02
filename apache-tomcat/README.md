@@ -16,6 +16,6 @@ $ ./build.sh
 * Credentials: `admin`/`admin`
 
 ## 4) License
-Copyright (c) 2020 Remal Software, Arnold Somogyi. All rights reserved.
+Copyright (c) 2020-2021 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed

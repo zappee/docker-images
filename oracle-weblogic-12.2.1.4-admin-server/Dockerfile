@@ -4,10 +4,9 @@
 #  Since : February, 2021
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-#  Copyright (c) 2020 Remal Software and Arnold Somogyi All rights reserved
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-
 FROM docker/images/oracle-weblogic-12.2.1.4:1.0.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
