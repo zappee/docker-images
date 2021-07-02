@@ -10,7 +10,7 @@
 #
 #  Usage:
 #     $ ./build.sh           build the image locally
-#     $ ./build.sh true      build and push the image to the image registry                                  **
+#     $ ./build.sh true      build and push the image to the image registry
 # ******************************************************************************
 DOCKER_REGISTRY=docker
 DOCKER_REGISTRY_NAMESPACE=images

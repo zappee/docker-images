@@ -277,7 +277,7 @@ Another variables:
 | server log  |`<DOMAIN-HOME>/servers/<ADMIN-SERVER-NAME>/logs`    | The directory where the admin server's logfiles locates. |
 
 ## 10) Example how to build WebLogic Images with  automated deployment 
-The [oracle-weblogic-demo-application](../oracle-weblogic-demo-application) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
+The [oracle-weblogic-demo-application](../hello-weblogic-world) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
 
 ## 11) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.

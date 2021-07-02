@@ -1,5 +1,7 @@
 # Docker Images
 
+_keywords: java, weblogic, docker, docker-compose, automated deployment_
+
 * [Apache Tomcat](/apache-tomcat)
 * [Oracle Java 8](/oracle-java-8)
 * [Oracle Weblogic 12.2.1.4](/oracle-weblogic-12.2.1.4)

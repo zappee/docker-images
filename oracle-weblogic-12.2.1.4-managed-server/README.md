@@ -77,142 +77,7 @@ The tool is available from the image, the installation directory is  `/home/orac
 
 For more info about the tool, please read [this](https://github.com/zappee/jms-message-sender).
 
-## 7) common-utils.sh library
-The `common-utils` is a collection of bash functions that you can use from any of the four WebLogic lifecycle methods, mentioned in the previous chapters.
-The functions simplify the usage of some often used commands like
-* create a new Oracle database schema when you use Oracle Database Docker image
-* keep up to date your database schema with the [Liquibase](https://www.liquibase.org)
-* execution of any SQL command
-* execution of external SQL/DDL file
-* JAR, WAR, or EAR deployment to WebLogic server as a library or application
-* read values from standard `*.properties` files
-
-In order to you can use the collection of these bash functions, you need to include the `common-utils.sh` library to your bash script with the `source ./common-utils.sh` command.
-
-The library can be found within in the `/home/oracle` directory.
-
-### 8.1) Create Oracle database schema
-* Command: `createDbSchema <username> <password>`
-* Parameters:
-    * `username`: the new database user
-    * `password`: password for the new database user
-* Used environment variables:
-    * `DB_HOST`: name of the database server
-    * `DB_PORT`: number of the port where the server listens for requests
-    * `DB_NAME`: name of the particular database on the server, also known as the SID in Oracle terminology
-    * `DB_USER`: the connecting database user
-    * `DB_PASSWORD`: password for the connecting user
-* Example:
-    ~~~
-    $ DB_HOST=localhost
-    $ DB_PORT=1521
-    $ DB_NAME=ORCLPDB1.localdomain
-    $ DB_USER=SYS as SYSDBA
-    $ DB_PASSWORD=Oradoc_db1
-    
-    createDbSchema authorization password
-    ~~~
-
-### 8.2) SQL command executor
-* Command: `sqlCommandExecutor <username> <password> <sql>`
-* Parameters:
-    * `username`: the schema user
-    * `password`: password for the schema user
-    * `sql`: the SQL command to be executed
-* Used environment variables:
-    * `DB_HOST`: name of the database server
-    * `DB_PORT`: number of the port where the server listens for requests
-    * `DB_NAME`: name of the particular database on the server, also known as the SID in Oracle terminology
-* Example:
-    ~~~
-    $ DB_HOST=localhost
-    $ DB_PORT=1521
-    $ DB_NAME=ORCLPDB1.localdomain
-    
-    sqlCommandExecutor authorization password "select * from user"
-    ~~~
-
-### 8.3) SQL script file executor
-* Command: `sqlScriptFileExecutor <username> <password> <sql-script-file>`
-* Parameters:
-    * `username`: the schema user
-    * `password`: password for the schema user
-    * `sql-script-file`: path of the sql script file
-* Used environment variables:
-    * `DB_HOST`: name of the database server
-    * `DB_PORT`: number of the port where the server listens for requests
-    * `DB_NAME`: name of the particular database on the server, also known as the SID in Oracle terminology
-* Example:
-    ~~~
-    $ DB_HOST=localhost
-    $ DB_PORT=1521
-    $ DB_NAME=ORCLPDB1.localdomain
-    
-    sqlCommandExecutor authorization password ../sql/init-db.sql
-    ~~~
-
-### 8.4) Liquibase executor
-* Command: `executeLiquibase <directory>>`
-* Parameters:
-   * `directory`: the directory where the `pom.xml` that contains the Liquibase execution locates
-* Example:
-    ~~~
-    executeLiquibase  $ORACLE_HOME/liquibase/liquibase-app
-    ~~~
-
-### 8.5) Application deployment
-* Command: `deployApplication <artifact>`
-* Parameters:
-    * `artifact`: the file that will be deployed to the WebLogic cluster as an application
-* Used environment variables:
-    * `ADMIN_SERVER_PORT`: the port of the T3 protocol
-    * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
-    * `ADMIN_SERVER_PASSWORD`: the password for the connecting user
-    * `CLUSTER_NAME`: the name of the WebLogic cluser
-    * the hostname is always `localhost` because this function is called from the WebLogic Admin Server Docker container where the Admin Server runs
-* Example:
-    ~~~
-    $ ADMIN_SERVER_PORT=7001
-    $ ADMIN_SERVER_USER=weblogic
-    $ ADMIN_SERVER_PASSWORD=weblogic12
-    $ CLUSTER_NAME=DEV_CLUSTER
-    
-    deployApplication $ORACLE_HOME/bin/app/hello-0.1.0-SNAPSHOT.war
-    ~~~
-
-### 8.6) Shared library deployment
-* Command: `deployLibrary <artifact>`
-* Parameters:
-    * `artifact`: the file that will be deployed to the WebLogic cluster as a library
-* Used environment variables:
-    * `ADMIN_SERVER_PORT`: the port of the T3 protocol
-    * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
-    * `ADMIN_SERVER_PASSWORD`: the password for the connecting user
-    * `CLUSTER_NAME`: the name of the WebLogic cluser
-    * the hostname is always `localhost` because this function is called from the WebLogic Admin Server Docker container where the Admin Server runs
-* Example:
-    ~~~
-    $ ADMIN_SERVER_PORT=7001
-    $ ADMIN_SERVER_USER=weblogic
-    $ ADMIN_SERVER_PASSWORD=weblogic12
-    $ CLUSTER_NAME=DEV_CLUSTER
-    
-    deployLibrary $ORACLE_HOME/bin/app/hello-common-0.1.0-SNAPSHOT.jar
-    ~~~
-
-### 8.7) Read value from properties file
-* Command: `getValue <properties-file> <key>`
-* Parameters:
-    * `properties-file`: the *.properties file
-    * `key`: the key in the file
-* Example:
-    ~~~
-    PROPERTIES_FILE=$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/security/boot.properties
-    USERNAME=$(getValue $PROPERTIES_FILE "username")
-    PASSWORD=$(getValue $PROPERTIES_FILE "password")
-    ~~~
-
-## 9) Environment variables used by the build
+## 7) Environment variables used by the build
 The Docker image is built based on the environment variables.
 These variables have default values, but they can be changed before starting the build process.
 In this section, you can find information about the variables and their default values.
@@ -244,10 +109,10 @@ Another variables:
 | managed server log               | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/servers/<MANAGED-SERVER>/logs` | The directory where the managed server's logfiles locates. |
 | node manager server start script | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/bin/startNodeManager.sh`       | The Node Manager starting bash script. |
 
-## 10) Example how to build WebLogic Images with  automated deployment
-The [oracle-weblogic-demo-application](../oracle-weblogic-demo-application) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
+## 8) Example how to build WebLogic Images with  automated deployment
+The [oracle-weblogic-demo-application](../hello-weblogic-world) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
 
-## 11) License
+## 9) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
 
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
