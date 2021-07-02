@@ -90,14 +90,15 @@ function executeLiquibase {
 # ------------------------------------------------------------------------------
 function deployApplication() {
     local _ARTIFACT=$1
+    local _TARGETS=${2}${3:+,$3} # concat params only when the 2nd param is defined
     local _ADMIN_SERVER_URL="t3://localhost:$ADMIN_SERVER_PORT"
     echo
     echo "deploying '$_ARTIFACT' artifact to '$_ADMIN_SERVER_URL' as an application..."
-    echo "   admin URL:    $_ADMIN_SERVER_URL"
-    echo "   user:         $ADMIN_SERVER_USER"
-    echo "   password:     $ADMIN_SERVER_PASSWORD"
-    echo "   cluster name: $CLUSTER_NAME"
-    echo "   artifact:     $_ARTIFACT"
+    echo "   admin URL: $_ADMIN_SERVER_URL"
+    echo "   user:      $ADMIN_SERVER_USER"
+    echo "   password:  $ADMIN_SERVER_PASSWORD"
+    echo "   target:    $_TARGETS"
+    echo "   artifact:  $_ARTIFACT"
 
     source $ORACLE_HOME/wlserver/server/bin/setWLSEnv.sh
     java weblogic.Deployer -verbose \
@@ -105,7 +106,7 @@ function deployApplication() {
                            -username $ADMIN_SERVER_USER \
                            -password $ADMIN_SERVER_PASSWORD \
                            -usenonexclusivelock \
-                           -targets $CLUSTER_NAME \
+                           -targets $_TARGETS \
                            -deploy $_ARTIFACT
 
     local _RETURN_VALUE=$?

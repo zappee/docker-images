@@ -199,9 +199,11 @@ The library can be found within in the `/home/oracle` directory.
     ~~~
 
 ### 8.5) Application deployment
-* Command: `deployApplication <artifact>`
+* Command: `deployApplication <artifact> <target1> <target2>`
 * Parameters:
    * `artifact`: the file that will be deployed to the WebLogic cluster as an application
+   * `target1`: deploying to one target
+   * `target2`: optional parameter, deploying to more targets
 * Used environment variables:
     * `ADMIN_SERVER_PORT`: the port of the T3 protocol
     * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
@@ -215,7 +217,7 @@ The library can be found within in the `/home/oracle` directory.
     $ ADMIN_SERVER_PASSWORD=weblogic12
     $ CLUSTER_NAME=DEV_CLUSTER
     
-    deployApplication $ORACLE_HOME/bin/app/hello-0.1.0-SNAPSHOT.war
+    deployApplication $ORACLE_HOME/bin/app/hello-0.1.0-SNAPSHOT.war $ADMIN_SERVER_NAME $CLUSTER_NAME
     ~~~
 
 ### 8.6) Shared library deployment
