@@ -1,17 +1,19 @@
 # Oracle WebLogic 12.2.1.4 Docker Compose files
 
-Single WebLogic domain with two managed servers:
+__Single WebLogic domain with two managed servers__
 * Start: `docker-compuse up`
 * WebLogic console URL: [http://localhost:7001/console](http://localhost:7001/console)
 * WebLogic credentials: `weblogic`/`weblogic12`
 
-Multiply WebLogic domains with managed servers:
+__Multiply WebLogic domains with managed servers__
 * Start: `docker-compose -f docker-compose-multiserver.yml  up`
 * WebLogic-1 console URL: [http://localhost:7101/console](http://localhost:7101/console)
 * WebLogic-2 console URL: [http://localhost:7201/console](http://localhost:7201/console)
 * WebLogic credentials: `weblogic`/`weblogic12`
 
-Single WebLogic domain with two managed servers + Oracle Database Server
+This docker compose file demonstrates how to customize the WebLogic console via the `WEB_CONSOLE_COLOR` variable and how to use the WebLogic lifecycle methods mentioned [here](../../oracle-weblogic-12.2.1.4-admin-server). 
+
+__Single WebLogic domain with two managed servers + Oracle Database Server__
 * Start: `docker-compose -f docker-compose-with-database.yml up`
 * WebLogic console URL: [http://localhost:7001/console](http://localhost:7001/console)
 * WebLogic credentials: `weblogic`/`weblogic12`
