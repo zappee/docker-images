@@ -1,8 +1,8 @@
 #!/bin/sh
 # ******************************************************************************
-#  AOracle WebLogic 12.2.1.4.0 Docker image build file.
+#  Oracle WebLogic Managed Server Docker image build file.
 #
-#  Since : February, 2021
+#  Since : July, 2021
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
@@ -12,11 +12,17 @@
 #     $ ./build.sh           build the image locally
 #     $ ./build.sh true      build and push the image to the image registry
 # ******************************************************************************
-DOCKER_REGISTRY=docker
-DOCKER_REGISTRY_NAMESPACE=remal
-IMAGE_NAME=oracle-weblogic-12.2.1.4
-IMAGE_VERSION=1.0.0
-PUSH_IMAGE=${1:-false}
+DOCKER_REGISTRY=$1
+DOCKER_REGISTRY_NAMESPACE=$2
+IMAGE_NAME=$3
+IMAGE_VERSION=$4
+PUSH_IMAGE=$5
+
+echo "DOCKER_REGISTRY:           "$DOCKER_REGISTRY
+echo "DOCKER_REGISTRY_NAMESPACE: "$DOCKER_REGISTRY_NAMESPACE
+echo "IMAGE_NAME:                "$IMAGE_NAME
+echo "IMAGE_VERSION:             "$IMAGE_VERSION
+echo "PUSH_IMAGE:                "$PUSH_IMAGE
 
 docker build --no-cache -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_VERSION .
 docker rmi $(docker image ls -qf dangling=true)

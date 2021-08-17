@@ -11,12 +11,12 @@ version: '3'
 services:
     tomcat-server-1:
         container_name: tomcat-server-1
-        image: docker/images/apache-tomcat-10.0:1.0.0
+        image: docker/remal/apache-tomcat-10.0:1.0.0
         ports:
             - "8001:8080"
 
     tomcat-server-2:
         container_name: tomcat-server-2
-        image: docker/images/apache-tomcat-10.0:1.0.0
+        image: docker/remal/apache-tomcat-10.0:1.0.0
         ports:
             - "8002:8080"

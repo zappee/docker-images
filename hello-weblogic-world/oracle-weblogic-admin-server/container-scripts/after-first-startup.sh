@@ -54,3 +54,4 @@ ADMIN_SERVER_HOST=localhost
 
 showVariables
 $ORACLE_HOME/deploy-fips-checker.sh
+$ORACLE_HOME/deploy-hello-weblogic-world.sh

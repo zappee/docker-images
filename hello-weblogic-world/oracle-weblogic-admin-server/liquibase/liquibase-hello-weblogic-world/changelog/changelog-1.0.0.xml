@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1.0.0_CREATE_TABLES" author="arnold.somogyi" created="06/jun/2021">
+        <sql>
+            CREATE SEQUENCE CONTACT_SEQ
+                MINVALUE 1
+                NOMAXVALUE
+                INCREMENT BY 1
+                NOCACHE
+                NOORDER
+                NOCYCLE
+                NOKEEP;
+
+            CREATE TABLE CONTACT (
+                ID number(19) NOT NULL,
+                NAME varchar2(50),
+                EMAIL varchar2(60),
+                CONSTRAINT PK_CONTACT PRIMARY KEY (ID),
+                CONSTRAINT UNIQUE_NAME UNIQUE (NAME)
+            );
+        </sql>
+        <rollback>
+            DROP TABLE CONTACT CASCADE CONSTRAINTS;
+            DROP SEQUENCE CONTACT_SEQ;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

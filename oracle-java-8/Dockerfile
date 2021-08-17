@@ -22,6 +22,7 @@ RUN yum install gzip -y && \
     yum install git -y && \
     yum install curl -y && \
     yum install iproute -y && \
+    yum install nmap -y && \
     yum install unzip -y
 
 RUN rm -rf /var/cache/yum

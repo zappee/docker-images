@@ -1,5 +1,5 @@
 # ******************************************************************************
-#  Apache-Tomcat compose file.
+#  Oracle WebLogic Server Managed Server Dockerfile.
 #
 #  Since : February, 2021
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
@@ -7,12 +7,7 @@
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-version: '3'
-services:
-    tomcat-server:
-        container_name: tomcat-server
-        image: docker/remal/apache-tomcat-10.0:1.0.0
-        ports:
-            - "80:8080"
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/TOMCAT/upload:/home/tomcat/upload
+FROM docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
+LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
+
+# calling the default CMD command defined in the previous image layer

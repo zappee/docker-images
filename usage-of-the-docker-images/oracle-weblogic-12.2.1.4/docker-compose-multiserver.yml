@@ -12,7 +12,7 @@ version: '3'
 services:
     # ----- WebLogic Domain 1 --------------------------------------------------
     weblogic-1-admin-server:
-        image: docker/images/oracle-weblogic-admin-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.0.0
         container_name: weblogic-1-admin-server
         hostname: weblogic-1-admin-server
         ports:
@@ -25,7 +25,7 @@ services:
             - ~/dev/workspace/docker/shared-volumes/weblogic-1-admin-server-1/upload:/home/oracle/upload
 
     weblogic-1-managed-server-1:
-        image: docker/images/oracle-weblogic-managed-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
         container_name: weblogic-1-managed-server-1
         hostname: weblogic-1-managed-server-1
         ports:
@@ -39,7 +39,7 @@ services:
             - ~/dev/workspace/docker/shared-volumes/weblogic-1-managed-server-1/upload:/home/oracle/upload
 
     weblogic-1-managed-server-2:
-        image: docker/images/oracle-weblogic-managed-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
         container_name: weblogic-1-managed-server-2
         hostname: weblogic-1-managed-server-2
         ports:
@@ -54,7 +54,7 @@ services:
 
     # ----- WebLogic Domain 2 --------------------------------------------------
     weblogic-2-admin-server:
-        image: docker/images/oracle-weblogic-admin-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.0.0
         container_name: weblogic-2-admin-server
         hostname: weblogic-2-admin-server
         ports:
@@ -67,7 +67,7 @@ services:
             - ~/dev/workspace/docker/shared-volumes/weblogic-2-admin-server-1/upload:/home/oracle/upload
 
     weblogic-2-managed-server-1:
-        image: docker/images/oracle-weblogic-managed-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
         container_name: weblogic-2-managed-server-1
         hostname: weblogic-2-managed-server-1
         ports:
@@ -81,7 +81,7 @@ services:
             - ~/dev/workspace/docker/shared-volumes/weblogic-2-managed-server-1/upload:/home/oracle/upload
 
     weblogic-2-managed-server-2:
-        image: docker/images/oracle-weblogic-managed-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
         container_name: weblogic-2-managed-server-2
         hostname: weblogic-2-managed-server-2
         ports:

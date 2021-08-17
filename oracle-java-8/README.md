@@ -4,18 +4,19 @@
 This image is based on `oraclelinux:7-slim` image.
 
 The following tools have been installed in this image:
-* JDK™ 8u231 (`JAVA_HOME=/usr/java/jdk-8`)
-* gzip and tar
-* vi editor
-* Midnight Commander
-* GNU Wget
-* Telnet client
-* IP utils, ex. ping
+* Apache Maven
 * cURL
 * Git client
-* Apache Maven
+* GNU Wget
+* gzip and tar
+* IP utils, ex. ping
+* JDK™ 8u231 (`JAVA_HOME=/usr/java/jdk-8`)
+* Midnight Commander
 * Network configuration tool: ip
+* nmap
+* Telnet client
 * Unzip
+* vi editor
 
 Available Unix aliases:
 * `ll`: `ls -all`

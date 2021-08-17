@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0  http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.remal.poc.hello</groupId>
+    <artifactId>liquibase-hello-weblogic-world</artifactId>
+    <version>1.0</version>
+    <description>liquibase executor</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>19.7.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.9.0</version>
+                <configuration>
+                    <changeLogFile>changelog/changelog-master.xml</changeLogFile>
+                    <driver>oracle.jdbc.driver.OracleDriver</driver>
+                    <url>jdbc:oracle:thin:@${DB_HOST}:${DB_PORT}/${DB_NAME}</url>
+                    <username>${DB_SCHEMA_USER_HELLO}</username>
+                    <password>${DB_SCHEMA_PASSWORD}</password>
+                    <outputChangeLogFile>liquibase-log.xml</outputChangeLogFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
