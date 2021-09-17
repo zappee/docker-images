@@ -5,6 +5,7 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 * [Apache Tomcat](/apache-tomcat)
 * [Oracle Java 8](/oracle-java-8)
 * [Oracle Weblogic 12.2.1.4](/oracle-weblogic-12.2.1.4)
+* [Oracle Database Enterprise 12.2.0.1](/oracle-database-enterprise-12.2.0.1)
 * [Oracle Weblogic 12.2.1.4 - administration server](/oracle-weblogic-12.2.1.4-admin-server)
 * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic-12.2.1.4-managed-server)
 * [Dockerization of a WebLogic application](/hello-weblogic-world)
