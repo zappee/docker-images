@@ -1,7 +1,8 @@
 # Oracle Java 8 Docker Image
 
 ## 1) Image description
-This image is based on `oraclelinux:7-slim` image.
+This image is based on `oraclelinux:7-slim` image and can only be used as a base image of another images.
+I use this image as a base image of the Remal WebLogic images.
 
 The following tools have been installed in this image:
 * Apache Maven
@@ -22,7 +23,7 @@ Available Unix aliases:
 * `ll`: `ls -all`
 
 ## 2) Build
-Download the Oracle JDK install kit (`server-jre-8u231-linux-x64.tar.gz`) from the Oracle website and copy it under the `bin/` directory.
+Download the Oracle JDK install kit (`server-jre-8u231-linux-x64.tar.gz`) from the Oracle website and copy that file under the `bin/` directory.
 
 Then build the image using:
 ~~~
@@ -34,6 +35,7 @@ $ ./build.sh
 * Run the image
     * `docker run --name java-8 -d docker/images/oracle-java-8:1.0.0 tail -f /dev/null`
 
+
 * Login into the running container
     * as an ordinary user: `docker exec -it java-8 /bin/bash`
     * as root: `docker exec -it -u root -w /root java-8 /bin/bash`
@@ -44,3 +46,18 @@ Before the build, you must download the `Oracle JDK` install kit from the Oracle
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
+
+
+
+
+# Oracle Java 8 Docker Image
+
+This image can only be used as a base image of another images.
+Despite this fact, if you would like to deploy this Java 8 image and see what is in it then use the following commands:
+
+* Run the image
+  * `docker run --name java-8 -d docker/images/oracle-java-8:1.0.0 tail -f /dev/null`
+
+* Login into the running container
+  * as an ordinary user: `docker exec -it java-8 /bin/bash`
+  * as root: `docker exec -it -u root -w /root java-8 /bin/bash`
