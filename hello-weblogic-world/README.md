@@ -67,8 +67,9 @@ The web application is deployed to the Admin server and the WebLogic cluster as 
 * Managed server 1 URL: [http://localhost:8001/fips-checker-1.0](http://localhost:8001/fips-checker-1.0)
 * Managed server 2 URL: [http://localhost:8002/fips-checker-1.0](http://localhost:8002/fips-checker-1.0)
 
-More information available about the FIPS [here](https://www.wolfssl.com/license/fips) and [here](https://en.wikipedia.org/wiki/FIPS_140-2).
-This step-by-step instruction [here](https://docs.oracle.com/middleware/1213/wls/SECMG/fips.htm#SECMG768) describes how to enable FIPS mode on the Oracle WebLogic server.
+>More information available about the FIPS [here](https://www.wolfssl.com/license/fips) and [here](https://en.wikipedia.org/wiki/FIPS_140-2).
+>
+>This step-by-step instruction [here](https://docs.oracle.com/middleware/1213/wls/SECMG/fips.htm#SECMG768) describes how to enable FIPS mode on the Oracle WebLogic server.
 
 #### 4.4.2) Hello WebLogic World Web application
 This is a simple web application contains only one static HTML page.
