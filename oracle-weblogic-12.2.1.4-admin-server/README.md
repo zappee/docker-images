@@ -119,19 +119,19 @@ The tool is available in the image, from the `/home/oracle/bin/jms-message-sende
 
 For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/jms-message-sender).
 
-## 8) common-utils.sh library
+## 8) The `common-utils` bash library
 The `common-utils` is a collection of bash functions that you can use from any of the four WebLogic lifecycle methods, mentioned in the previous chapters.
 The functions simplify the usage of some often used commands like
-* create a new Oracle database schema when you use Oracle Database Docker image
+* create a new Oracle database schema
 * keep up to date your database schema with the [Liquibase](https://www.liquibase.org)
 * execution of any SQL command
 * execution of external SQL/DDL file
 * JAR, WAR, or EAR deployment to WebLogic server as a library or application
 * read values from standard `*.properties` files
 
-In order to you can use the collection of these bash functions, you need to include the `common-utils.sh` library to your bash script with the `source ./common-utils.sh` command.
+In order to you can use bash functions, you need to include the `common-utils.sh` library to your bash script with the `source ./common-utils.sh` command.
 
-The library can be found within in the `/home/oracle` directory.
+The library in the Docker image sits under the `/home/oracle` directory.
 
 ### 8.1) Create Oracle database schema
 * Command: `createDbSchema <username> <password>`
