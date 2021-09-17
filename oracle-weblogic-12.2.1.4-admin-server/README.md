@@ -133,7 +133,7 @@ In order to you can use bash functions, you need to include the `common-utils.sh
 
 The library in the Docker image sits under the `/home/oracle` directory.
 
-### 8.1) Create Oracle database schema
+### 8.1) Create an Oracle database schema
 * Command: `createDbSchema <username> <password>`
 * Parameters:
     * `username`: the new database user
@@ -171,7 +171,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     $ DB_PORT=1521
     $ DB_NAME=ORCLPDB1.localdomain
     
-    sqlCommandExecutor authorization password "select * from user"
+    sqlCommandExecutor authorization password "INSERT INTO USER (username, email) VALUES ('Arnold Somogyi', 'arnold.somogyi@gmail.com')"
     ~~~
 
 ### 8.3) SQL script file executor
