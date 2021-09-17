@@ -61,18 +61,7 @@ If you would like to jump into the deep water you can skip this document and con
     ```
 
 ## 3) How to use this image
-You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](/usage-of-the-docker-images) directory.
-
-* Run the image
-   * normal mode: `docker run -d -p 7001:7001 --name weblogic-admin-server weblogic-admin-server-12.2.1.4:1.0.0`
-   * without starting the admin server: `docker run -d --name weblogic-admin-server weblogic-admin-server-12.2.1.4:1.0.0 tail -f /dev/null`
-
-* Login into the running container
-   * as an ordinary user: `docker exec -it weblogic-admin-server /bin/bash`
-   * as root: `docker exec -it -u root -w /root weblogic-admin-server /bin/bash`
-
-* Displays and follow log output
-   *  `docker logs -f weblogic-admin-server`
+You can find multiply docker-compose sample files under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project.
 
 ## 4) Automated application deployment
 The WebLogic Admin Server and the [WebLogic Managed Server](/oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
