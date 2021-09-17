@@ -2,6 +2,7 @@
 
 _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 
+## 1) Ready for use Remal Docker images
 * [Apache Tomcat](/apache-tomcat)
 * [Oracle Java 8](/oracle-java-8)
 * [Oracle Weblogic 12.2.1.4](/oracle-weblogic-12.2.1.4)
@@ -10,7 +11,10 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic-12.2.1.4-managed-server)
 * [Dockerization of a WebLogic application](/hello-weblogic-world)
 
-## Contributing, improvements and bug report
+## 2) Remal Docker image hierarchy
+   ![Remal Docker image hierarchy](docker-images.png)
+
+## 3) Contributing, improvements and bug report
 * Do you like organizing?
 * Do you like to code?
 * Do you like helping people?
@@ -23,6 +27,13 @@ Then please
 * Contact with us
 
 Contact: [arnold.somogyi@gmail.com](arnold.somogyi@gmail.com)
+
+## 4) License
+Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
+
+Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
+
+BSD (2-clause) licensed
 
 ## Appendix A) Docker cheat sheet
 * Start Docker daemon on Centos: `sudo systemctl start docker`
