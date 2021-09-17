@@ -51,14 +51,10 @@ If you would like to jump into the deep water you can skip this document and con
 
 ## 2) Build
 1) Pull all the following images from the docker repository or build them locally:
-    * Remal Oracle Java 8 image
-    * Remal Oracle WebLogic image
+    * [Remal Oracle Java 8](../oracle-java-8) Docker image
+    * [Remal Oracle WebLogic](../oracle-weblogic-12.2.1.4) Docker image
 
-2) Before building this image the followings needs to be checked and set properly:
-    * in `Dockerfile`: base image name and version (`FROM`)
-    * in the `build.sh` script: the name and the version of the image you are building
-
-3) Build it using:
+2) Build this image using:
     ```
     $ cd oracle-weblogic-admin-server
     $ ./build.sh
