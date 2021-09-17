@@ -96,15 +96,14 @@ This example demonstrates the usage of the blocking scripts: [hello-weblogic-wor
 
 ## 6) SQL Runner command line tool
 The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
-The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE` commands.
-You can use this tool for example to create a new database schema during the application deployment and insert initial data into databases.
+The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE`.
+You can use this tool to create a new database schema during the application deployment in the Docker environment and insert initial data into databases.
 
-This can be run from any WebLogic lifecycle script easily to prepare the database before the application deployment.
-You can find sample code in `chapter 10`.
+This tool can be use from any WebLogic lifecycle script easily to prepare the database before the application deployment.
 
-The tool is available from the image, the installation directory is  `/home/oracle/bin`.
+The tool is available in the image from the `/home/oracle/bin/sql-runner` directory.
 
-For more info about the tool, please read [this](https://github.com/zappee/sql-runner).
+For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/sql-runner).
 
 ## 7) JMS Message Sender command line tool
 The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to any kind of JMS Queue.
