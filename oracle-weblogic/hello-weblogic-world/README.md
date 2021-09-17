@@ -28,7 +28,7 @@ The project shows best practices as well to cover the typical use cases.
 
 ## 3) Build
 1) Pull all the following images from the docker repository or build them locally:
-    * [Remal Oracle Java 8](../oracle-java-8) Docker image
+    * [Remal Oracle Java 8](../../java/oracle-java-8) Docker image
     * [Remal Oracle WebLogic](../oracle-weblogic-12.2.1.4) Docker image
     * [Remal Oracle WebLogic Admin Server](../oracle-weblogic-12.2.1.4-admin-server) Docker image
     * [Remal Oracle WebLogic Managed Server](../oracle-weblogic-12.2.1.4-managed-server) Docker image

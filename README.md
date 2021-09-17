@@ -4,22 +4,22 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 
 ## 1) Ready for use Remal Docker images
 * Java Docker Images
-  * [Oracle Java 8](/oracle-java-8)
+  * [Oracle Java 8](/java/oracle-java-8)
 
 
 * Apache-Tomcat Docker Images
-  * [Apache Tomcat](/apache-tomcat)
+  * [Apache Tomcat](/apache-tomcat/apache-tomcat-10.0)
 
 
 * Database Docker Images
-    * [Oracle Database Enterprise 12.2.0.1](/oracle-database-enterprise-12.2.0.1)
+    * [Oracle Database Enterprise 12.2.0.1](/database/oracle-database-enterprise-12.2.0.1)
 
 
 * Oracle Weblogic Docker Images
-  * [Oracle Weblogic 12.2.1.4](/oracle-weblogic-12.2.1.4)
-  * [Oracle Weblogic 12.2.1.4 - administration server](/oracle-weblogic-12.2.1.4-admin-server)
-  * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic-12.2.1.4-managed-server)
-  * [Dockerization of a WebLogic application](/hello-weblogic-world)
+  * [Oracle Weblogic 12.2.1.4](/oracle-weblogic/oracle-weblogic-12.2.1.4)
+  * [Oracle Weblogic 12.2.1.4 - administration server](/oracle-weblogic/oracle-weblogic-12.2.1.4-admin-server)
+  * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic/oracle-weblogic-12.2.1.4-managed-server)
+  * [Dockerization of a WebLogic application](/oracle-weblogic/hello-weblogic-world)
 
 ## 2) Remal Docker image hierarchy
    ![Remal Docker image hierarchy](docker-images.png)

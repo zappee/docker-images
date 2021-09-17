@@ -14,9 +14,9 @@ ENV ADMIN_SERVER_JAVA_OPTIONS="$ADMIN_SERVER_JAVA_OPTIONS -Denv.name=dev"
 
 USER oracle:oracle
 
-COPY --chown=oracle:oracle bin/fips-checker/ $ORACLE_HOME/bin/fips-checker/
-COPY --chown=oracle:oracle bin/hello-weblogic-world/ $ORACLE_HOME/bin/hello-weblogic-world/
-COPY --chown=oracle:oracle container-scripts  $ORACLE_HOME/
+COPY --chown=oracle:oracle bin/fips-checker/* $ORACLE_HOME/bin/fips-checker/
+COPY --chown=oracle:oracle bin/hello-weblogic-world/* $ORACLE_HOME/bin/hello-weblogic-world/
+COPY --chown=oracle:oracle container-scripts/*  $ORACLE_HOME/
 COPY --chown=oracle:oracle liquibase $ORACLE_HOME/liquibase/
 
 # calling the default CMD command defined in the previous image layer

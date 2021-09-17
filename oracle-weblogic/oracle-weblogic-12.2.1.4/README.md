@@ -1,7 +1,7 @@
 # Oracle WebLogic Server 12.2.1.4.0 Docker Image
 
 ## 1) Image Description
-The image is based on the Remal [`oracle-java-8`](../oracle-java-8) image and can only be used for extension.
+The image is based on the Remal [`oracle-java-8`](../../java/oracle-java-8) image and can only be used for extension.
 
 The image contains
 * a fresh installation of WebLogic Server 12.2.1.4.0
