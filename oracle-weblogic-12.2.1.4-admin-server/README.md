@@ -94,7 +94,7 @@ To handle this case or any similar situations described above, you can use the f
 
 This example demonstrates the usage of the blocking scripts: [hello-weblogic-world](../hello-weblogic-world/docker-compose.yml)
 
-## 6) SQL Runner command line tool
+## 6) Remal SQL-Runner command line tool
 The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
 The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE`.
 You can use this tool to create a new database schema during the application deployment in the Docker environment and insert initial data into databases.
@@ -105,19 +105,19 @@ The tool is available in the image from the `/home/oracle/bin/sql-runner` direct
 
 For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/sql-runner).
 
-## 7) JMS Message Sender command line tool
-The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to any kind of JMS Queue.
+## 7) Remal JMS-Message-Sender command line tool
+The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to JMS Queue.
 This is a command line tool can be run from bash or windows scripts and command line as well.
 
-You can use this command line tool in the Docker environment to
+You can use this tool in the Docker environment to
 * send test messages to any JMS queue
 * test SAF connection
-* simulate external system while executing integration tests
+* simulate response messages from external system while executing integration tests in docker
 * etc.
 
-The tool is available from the image, the installation directory is  `/home/oracle/bin`.
+The tool is available in the image, from the `/home/oracle/bin/jms-message-sender` directory.
 
-For more info about the tool, please read [this](https://github.com/zappee/jms-message-sender).
+For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/jms-message-sender).
 
 ## 8) common-utils.sh library
 The `common-utils` is a collection of bash functions that you can use from any of the four WebLogic lifecycle methods, mentioned in the previous chapters.
