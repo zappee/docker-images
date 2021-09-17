@@ -11,7 +11,6 @@ $ ./build.sh
 ~~~
 
 ## 3) Usage
-
 __Single Apache-Tomcat server__
 * Start: `docker-compose up`
 * Managing console URL: [http://localhost](http://localhost)
