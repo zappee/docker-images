@@ -1,8 +1,8 @@
 # Apache Tomcat Docker Image
 
 ## 1) Image description
-The image is based on `tomcat:10.0` image.
-The difference between the official Tomcat image available from [here](https://hub.docker.com/_/tomcat) and this image is that this has a configured administration user.
+The image is based on the `tomcat:10.0` image.
+The difference between the official Tomcat image available from [here](https://hub.docker.com/_/tomcat) and this image is that Remal Tomcat Docker image has a configured administration user.
 
 ## 2) Build
 ~~~
