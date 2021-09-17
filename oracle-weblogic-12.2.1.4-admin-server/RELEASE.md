@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file.
 * Move the Remal `sql-runner` tool to the parent `oracle-weblogic` image.
 * Move Oracle JDBC driver to the parent `oracle-weblogic` image.
 * Add a function that removes dangling images after the image build.
-* Extract the hardcoded _wait for database_ function to the `wait-for-database.sh` script. This can be used when an external database is used so blocking the WebLogic server startup is necessary until the database server is up and ready to receive requests.
+* Extract the hardcoded _wait for database_ function to the `wait-for-database.sh` script. This can be used when we use an external database with the WebLogic Images so blocking the WebLogic server startup is necessary until the database server is up and ready to receive requests.
 * Add `before-first-startup.sh` script that is executed once, before the first startup of the WebLogic admin server.
 * Add `before-startup.sh` script that is executed before each startup of the WebLogic admin server.
 * Add `after-first-startup.sh` script that is executed once, after the first startup of the WebLogic admin server.
