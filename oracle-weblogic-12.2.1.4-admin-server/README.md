@@ -257,7 +257,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     ~~~
 
 ## 9) Environment variables used by the build
-The Docker image is built based on the environment variables.
+The WebLogic Admin server in the docker image is installed during the first startup of the docker container based on environment variables.
 These variables have default values, but they can be changed before starting the build process.
 In this section, you can find information about the variables and their default values.
 
@@ -273,17 +273,8 @@ Variables used from the `Dockerfile`:
 | ORACLE_HOME               | /home/oracle  | The home directory of the `oracle` user. |
 | PRODUCTION_MODE           | true          | Boolean value, set it true if the production mode is used. |
 
-Another variables:
-
-| variables   | default value                                      | description |
-|-------------|----------------------------------------------------|-------------|
-| username    | weblogic                                           | The WebLogic console user, defined in the `boot.properties`. |
-| password    | weblogic12                                         | The password for the console user, defined in the `boot.properties`. |
-| domain home | `/home/oracle/user_projects/domains/<DOMAIN-NAME>` | The WebLogic domain home directory. |
-| server log  |`<DOMAIN-HOME>/servers/<ADMIN-SERVER-NAME>/logs`    | The directory where the admin server's logfiles locates. |
-
-## 10) Example how to build WebLogic Images with  automated deployment 
-The [oracle-weblogic-demo-application](../hello-weblogic-world) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
+## 10) How to dockerize an existing application
+The [hello-weblogic-world](../hello-weblogic-world) is a project that shows the steps to dockerize an existing application running in WebLogic used the Remal Docker images and shows how to build an Admin and a Managed server images that contain a deployed application.
 
 ## 11) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
