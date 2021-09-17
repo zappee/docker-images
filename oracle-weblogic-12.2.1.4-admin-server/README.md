@@ -49,7 +49,7 @@ If you would like to jump into the deep water you can skip this document and con
 
 * Block the WebLogic server startup and wait for an event before continue with the `wait-for-*.sh` bash scripts.
 
-## 2) Build
+## 3) Build
 1) Pull all the following images from the docker repository or build them locally:
     * [Remal Oracle Java 8](../oracle-java-8) Docker image
     * [Remal Oracle WebLogic](../oracle-weblogic-12.2.1.4) Docker image
@@ -60,10 +60,10 @@ If you would like to jump into the deep water you can skip this document and con
     $ ./build.sh
     ```
 
-## 3) How to use this image
+## 4) How to use this image
 You can find multiply docker-compose sample files under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project.
 
-## 4) WebLogic server lifecycle methods
+## 5) WebLogic server lifecycle methods
 The WebLogic Admin Server and the [WebLogic Managed Server](..//oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and deploy/run applications easily on WebLogic server.
 
 The application deployment can be automated easily using the four built-in admin server lifecycle methods.
@@ -75,7 +75,7 @@ The four WebLogic server lifecycle scripts, and their execution order is the fol
 1.  `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
 1.  `after-startup.sh`: executed after each startup of the WebLogic Admin server
 
-## 5) Block the server startup and wait for an event before continue
+## 6) Block the server startup and wait for an event before continue
 In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for an event or the startup of another server.
 
 The following use case is a good example that demonstrates when you need to block the WebLogic server startup:
@@ -94,7 +94,7 @@ To handle this case or any similar situations described above, you can use the f
 
 This example demonstrates the usage of the blocking scripts: [hello-weblogic-world](../hello-weblogic-world/docker-compose.yml)
 
-## 6) Remal SQL-Runner command line tool
+## 7) Remal SQL-Runner command line tool
 The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
 The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE`.
 You can use this tool to create a new database schema during the application deployment in the Docker environment and insert initial data into databases.
@@ -105,7 +105,7 @@ The tool is available in the image from the `/home/oracle/bin/sql-runner` direct
 
 For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/sql-runner).
 
-## 7) Remal JMS-Message-Sender command line tool
+## 8) Remal JMS-Message-Sender command line tool
 The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to JMS Queue.
 This is a command line tool can be run from bash or windows scripts and command line as well.
 
@@ -119,7 +119,7 @@ The tool is available in the image, from the `/home/oracle/bin/jms-message-sende
 
 For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/jms-message-sender).
 
-## 8) The `common-utils` bash library
+## 9) The `common-utils` bash library
 The `common-utils` is a collection of bash functions that you can use from any of the four WebLogic lifecycle methods, mentioned in the previous chapters.
 The functions simplify the usage of some often used commands like
 * create a new Oracle database schema
@@ -133,7 +133,7 @@ In order to you can use bash functions, you need to include the `common-utils.sh
 
 The library in the Docker image sits under the `/home/oracle` directory.
 
-### 8.1) Create an Oracle database schema
+### 9.1) Create an Oracle database schema
 * Command: `createDbSchema <username> <password>`
 * Parameters:
     * `username`: the new database user
@@ -155,7 +155,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     createDbSchema authorization password
     ~~~
 
-### 8.2) SQL command executor
+### 9.2) SQL command executor
 * Command: `sqlCommandExecutor <username> <password> <sql>`
 * Parameters:
     * `username`: the schema user
@@ -174,7 +174,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     sqlCommandExecutor authorization password "INSERT INTO USER (username, email) VALUES ('Arnold Somogyi', 'arnold.somogyi@gmail.com')"
     ~~~
 
-### 8.3) SQL script file executor
+### 9.3) SQL script file executor
 * Command: `sqlScriptFileExecutor <username> <password> <sql-script-file>`
 * Parameters:
     * `username`: the schema user
@@ -193,7 +193,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     sqlCommandExecutor authorization password ../sql/init-db.sql
     ~~~
 
-### 8.4) Liquibase executor
+### 9.4) Liquibase executor
 * Command: `executeLiquibase <directory>>`
 * Parameters:
    * `directory`: the directory where the `pom.xml` that contains the Liquibase execution locates
@@ -202,7 +202,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     executeLiquibase  $ORACLE_HOME/liquibase/liquibase-app
     ~~~
 
-### 8.5) Application deployment
+### 9.5) Application deployment
 * Command: `deployApplication <artifact> <target1> <target2>`
 * Parameters:
    * `artifact`: the file that will be deployed to the WebLogic cluster as an application
@@ -224,7 +224,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     deployApplication $ORACLE_HOME/bin/app/hello-0.1.0-SNAPSHOT.war $ADMIN_SERVER_NAME $CLUSTER_NAME
     ~~~
 
-### 8.6) Shared library deployment
+### 9.6) Shared library deployment
 * Command: `deployLibrary <artifact>`
 * Parameters:
    * `artifact`: the file that will be deployed to the WebLogic cluster as a library
@@ -256,12 +256,12 @@ The library in the Docker image sits under the `/home/oracle` directory.
     PASSWORD=$(getValue $PROPERTIES_FILE "password")
     ~~~
 
-## 9) Environment variables used by the build
+## 10) Environment variables used by the build
 The WebLogic Admin server in the docker image is installed during the first startup of the docker container based on environment variables.
 These variables have default values, but they can be changed before starting the build process.
 In this section, you can find information about the variables and their default values.
 
-Variables used from the `Dockerfile`:
+Variables used in the `Dockerfile`:
 
 | variables                 | default value | description |
 |---------------------------|---------------|-------------|
@@ -273,10 +273,10 @@ Variables used from the `Dockerfile`:
 | ORACLE_HOME               | /home/oracle  | The home directory of the `oracle` user. |
 | PRODUCTION_MODE           | true          | Boolean value, set it true if the production mode is used. |
 
-## 10) How to dockerize an existing application
+## 11) How to dockerize an existing application
 The [hello-weblogic-world](../hello-weblogic-world) is a project that shows the steps to dockerize an existing application running in WebLogic used the Remal Docker images and shows how to build an Admin and a Managed server images that contain a deployed application.
 
-## 11) License
+## 12) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
 
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.

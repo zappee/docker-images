@@ -1,18 +1,32 @@
 # Oracle WebLogic Managed Server Docker Image
 
 ## 1) Image Description
-This is a Dockerfile for _Oracle WebLogic Managed Server_ built at the top of the [WebLogic base image](/oracle-weblogic-12.2.1.4).
+This is a _Oracle WebLogic Managed Server_ Docker image, built at the top of the [Oracle WebLogic 12.2.1.4](/oracle-weblogic-12.2.1.4) image.
 Developers can use this image as the main building block of a WebLogic environment.
+If you would like to jump into the deep water you can skip this document and continue with the [hello-weblogic-world](../hello-weblogic-world) which is a step-by-step guide explains how to dockerize an existing application running on WebLogic server using the  Remal's images.
 
-The main technical details of the image:
+## 2) Image overview
 * The WebLogic Managed server will start automatically with the container.
+
+
 * If the NodeManager is stopped or killed then the docker container will stop too because the main process that keeps alive the container is the NodeManager process.
-* Multiply WebLogic Managed servers can be started paralelly. You can find examples under the [usage-of-the-docker-images](/usage-of-the-docker-images) directory.
-* The WebLogic Managed servers will join automatically to the cluster without any additional configuration after they start.
-* FIPS 140-2 is enabled in the managed server
-    * If you see in log the `<Changing the default Random Number Generator in RSA CryptoJ from ECDRBG128 to HMACDRBG. To disable this change, specify -Dweblogic.security.allowCryptoJDefaultPRNG=true.>` entry, then it means that the `FIPS 140-2` is enabled properly.
-* The `JMS-Message-Sender` command line tool to can be used to send text messages to JMS and SAF queues.
-* Use the `SQL-Runner` command line tool to execute SQL commands like `SELECT`, `INSERT`, `UPDATE` or `CREATE`.
+
+
+* Multiply WebLogic Managed servers can be started parallelly. You can find examples under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project.
+
+
+* The WebLogic Managed servers will join automatically to the WebLogic cluster without any additional configuration after they start.
+
+
+* FIPS 140-2 is enabled in the managed server image. If you see in log the `<Changing the default Random Number Generator in RSA CryptoJ from ECDRBG128 to HMACDRBG. To disable this change, specify -Dweblogic.security.allowCryptoJDefaultPRNG=true.>` entry, then it means that the `FIPS 140-2` is enabled properly.
+
+
+* The [Remal JMS-Message-Sender](https://github.com/zappee/jms-message-sender) command line tool to can be used to send text messages to JMS and SAF queues.
+
+
+* Use the [Remal SQL-Runner](https://github.com/zappee/sql-runner) command line tool to execute SQL commands like `SELECT`, `INSERT`, `UPDATE` or `CREATE`.
+
+
 * The `common-utils.sh` bash script contains reusable functions that can be used to
     * deploy an artifact (WAR, EAR) as an application
     * deploy an artifact (WAR, JAR) as a shared library
@@ -20,69 +34,57 @@ The main technical details of the image:
     * create a new database schema
     * execute SQL commands
     * run Liquibase and update your database
-* Use the WebLogic lifecycle bash scripts to automate the application deployment. There is one lifecycle methods that you can use:
+
+
+* Use the WebLogic lifecycle bash scripts to automate the application deployment.
     * `before-startup.sh`: executed before each startup of the WebLogic Managed server
 
-## 2) Build
+## 3) Build
 1) Pull all the following images from the docker repository or build them locally:
-    * Remal Oracle Java 8 image
-    * Remal Oracle WebLogic image
+    * [Remal Oracle Java 8](../oracle-java-8) Docker image
+    * [Remal Oracle WebLogic](../oracle-weblogic-12.2.1.4) Docker image
 
-1) Before building this image the followings needs to be checked and set properly:
-    * in `Dockerfile`: base image name and version (`FROM`)
-    * in the `build.sh` script: the name and the version of the image you are building
-
-1) Build it using:
+2) Build this image using:
     ```
-    $ cd oracle-weblogic-managed-server
+    $ cd oracle-weblogic-admin-server
     $ ./build.sh
     ```
 
-## 3) How to use this image
-You can find multiply `docker-compose.yml` sample files under the [usage-of-the-docker-images](/usage-of-the-docker-images) directory.
+## 4) How to use this image
+You can find multiply docker-compose sample files under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project.
 
-## 4) Automated application deployment
-The [WebLogic Admin Server](/oracle-weblogic-12.2.1.4-admin-server) and the WebLogic Managed Server Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
-This image set can be used at all environment levels: `PRODUCTION`, `ACCEPTANCE`, `TEST`, and `DEVELOPMENT`.
+## 5) WebLogic server lifecycle methods
+The [WebLogic Admin Server](../oracle-weblogic-12.2.1.4-admin-server) and the WebLogic Managed Server Docker images help technicians to build scalable Oracle WebLogic environments and deploy/run application easily on WebLogic server.
 
-The application deployment can be automated easily using the built-in managed server lifecycle method.
-The lifecycle method is actually a bash script, and they can execute any Unix commands that you need to prepare the environment and deploy the application or applications.
+The application deployment can be automated easily using the four built-in admin server lifecycle methods.
+These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need in order to prepare the environment properly and deploy the application or applications.
 
-The mentioned lifecycle script is the following:
-    1. `before-startup.sh`
+The available WebLogic server lifecycle scripts in this Docker image:
+1. `before-startup.sh`: executed before each startup of the WebLogic Admin server
 
-## 5) SQL Runner command line tool
-The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
-The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE` commands.
-You can use this tool for example to create a new database schema during the application deployment and insert initial data into databases.
+## 6) Block the server startup and wait for an event before continue
+Often the Managed Server startup must be blocked and wait for the startup of the Admin server.
 
-This can be run from any WebLogic lifecycle script easily to prepare the database before the application deployment.
-You can find sample code in `chapter 10`.
+To handle this case or any similar situations, you can use the following script:
+* `wait-for-admin-server.sh`
 
-The tool is available from the image, the installation directory is  `/home/oracle/bin`.
+This example demonstrates the usage of the blocking scripts: [hello-weblogic-world](../hello-weblogic-world/docker-compose.yml)
 
-For more info about the tool, please read [this](https://github.com/zappee/sql-runner).
+## 7) Remal SQL-Runner command line tool
+Please visit the [oracle-weblogic-12.2.1.4-admin-server](../oracle-weblogic-12.2.1.4-admin-server) project for more info.
 
-## 6) JMS Message Sender command line tool
-The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to any kind of JMS Queue.
-This is a command line tool can be run from bash or windows scripts and command line as well.
+## 8) Remal JMS-Message-Sender command line tool
+Please visit the [oracle-weblogic-12.2.1.4-admin-server](../oracle-weblogic-12.2.1.4-admin-server) project for more info.
 
-You can use this command line tool in the Docker environment to
-* send test messages to any JMS queue
-* test SAF connection
-* simulate external system while executing integration tests
-* etc.
+## 9) The `common-utils` bash library
+Please visit the [oracle-weblogic-12.2.1.4-admin-server](../oracle-weblogic-12.2.1.4-admin-server) project for more info.
 
-The tool is available from the image, the installation directory is  `/home/oracle/bin`.
-
-For more info about the tool, please read [this](https://github.com/zappee/jms-message-sender).
-
-## 7) Environment variables used by the build
-The Docker image is built based on the environment variables.
+## 10) Environment variables used by the build
+The WebLogic Managed server in the docker image is installed during the first startup of the docker container based on environment variables.
 These variables have default values, but they can be changed before starting the build process.
 In this section, you can find information about the variables and their default values.
 
-Variables used from the `Dockerfile`:
+Variables used in the `Dockerfile`:
 
 | variables                   | default value         | description |
 |-----------------------------|-----------------------|-------------|
@@ -99,20 +101,11 @@ Variables used from the `Dockerfile`:
 | ORACLE_HOME                 | /home/oracle        | The home directory of the `oracle` user.  |
 | PRODUCTION_MODE             | true                  | Boolean value, set it true if the production mode is used. |
 
-Another variables:
 
-| variables                        | default value                                                                    | description |
-|----------------------------------|----------------------------------------------------------------------------------|-------------|
-| username                         | weblogic                                                                         | The WebLogic console user, defined in the `boot.properties`. |
-| password                         | weblogic12                                                                       | The password for the console user, defined in the `boot.properties`. |
-| managed server home              | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/servers/<MANAGED-SERVER>`      | The WebLogic managed server home directory. |
-| managed server log               | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/servers/<MANAGED-SERVER>/logs` | The directory where the managed server's logfiles locates. |
-| node manager server start script | `/home/oracle/user_projects/domains/<DOMAIN-NAME>/bin/startNodeManager.sh`       | The Node Manager starting bash script. |
+## 11) How to dockerize an existing application
+The [hello-weblogic-world](../hello-weblogic-world) is a project that shows the steps to dockerize an existing application running in WebLogic used the Remal Docker images and shows how to build an Admin and a Managed server images that contain a deployed application.
 
-## 8) Example how to build WebLogic Images with  automated deployment
-The [oracle-weblogic-demo-application](../hello-weblogic-world) is a project that shows how to dockerize an existing application and build Admin and Managed server images that contain a deployed WAR file with a dockerized database.
-
-## 9) License
+## 12) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
 
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
