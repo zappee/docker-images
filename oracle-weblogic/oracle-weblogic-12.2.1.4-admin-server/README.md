@@ -81,7 +81,7 @@ In some special use cases, you need to block the startup of the WebLogic server 
 The following use case is a good example that demonstrates when you need to block the WebLogic server startup:
 * In the production environment we always use external database servers (not the Oracle Database Docker Image).
   However, during the application development, each developer works on a separate Docker environment running everything on `localhost`.
-  In the development environment the Oracle Database Docker Image is used together with the Remal WebLogic Docker images, like in this sample [docker-compose.yml](../oracle-weblogic-12.2.1.4/docker-compose-with-database) file.
+  In the development environment the Oracle Database Docker Image is used together with the Remal WebLogic Docker images, like in this sample [docker-compose.yml](../oracle-weblogic-12.2.1.4/docker-compose-with-database.yml) file.
   
   Unfortunately, the database server startup takes longer than the WebLogic server startup, so you may need to block the WebLogic startup until the database server is up and able to serve requests.
   Otherwise, e.g. the connection pool WLST deployment from the `after-first-startup.sh` script will fail because the connection-pool deployment will be executed before the database server able to serve requests.
