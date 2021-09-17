@@ -12,8 +12,8 @@ services:
     # ----- WebLogic Admin server ----------------------------------------------
     hello-welogic-world-admin-server:
         image: docker/remal/hello-welogic-world-admin-server:1.0.0
-        container_name: hello-welogic-world-wl-admin-server
-        hostname: hello-welogic-world-wl-admin-server
+        container_name: hello-welogic-world-admin-server
+        hostname: hello-welogic-world-admin-server
         ports:
             - "7001:7001" # weblogic listening port
             - "4001:4001" # debug port
