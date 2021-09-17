@@ -47,7 +47,7 @@ If you would like to jump into the deep water you can skip this document and con
 * The `WEB_CONSOLE_COLOR` variable can be used to customize the color of the WebLogic web console. This feature is useful when multiple WebLogic domains are started.
 
 
-* Block the WebLogic server execution and wait for an event before continue with the `wait-for-*.sh` bash scripts.
+* Block the WebLogic server startup and wait for an event before continue with the `wait-for-*.sh` bash scripts.
 
 ## 2) Build
 1) Pull all the following images from the docker repository or build them locally:
@@ -75,25 +75,24 @@ The four WebLogic server lifecycle scripts, and their execution order is the fol
 1.  `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
 1.  `after-startup.sh`: executed after each startup of the WebLogic Admin server
 
-## 5) Block the server startup
-In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for another server or signal.
+## 5) Block the server startup and wait for an event before continue
+In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for an event or the startup of another server.
 
-The following use case is a good example that demonstrates when you need to block the WebLogic server startup.
-In the production environment always external database servers are used (not the Oracle Database Docker Image).
-But during the application development, each developer works on a separate environment with their own servers running on the `localhost`.
-That means an Oracle Database Docker Image is used often together with this WebLogic Docker image in the same `docker-compose.yml` file.
-Unfortunately, the database server startup time takes longer than the WebLogic server startup, so you may need to block the WebLogic startup until the database server is up and able to serve requests.
-Otherwise, the connection pool deployment with the WLST tool from e.g., the `after-first-startup.sh` bash script will fail because the WebLogic Admin server starts before the database server.
-As it is known, one of the main important pre-requirement to create a WebLogic connection pool is that the database must be up during the creation time of the connection pool.
+The following use case is a good example that demonstrates when you need to block the WebLogic server startup:
+* In the production environment we always use external database servers (not the Oracle Database Docker Image).
+  However, during the application development, each developer works on a separate Docker environment running everything on `localhost`.
+  In the development environment the Oracle Database Docker Image is used together with the Remal WebLogic Docker images, like in this sample [docker-compose.yml](../oracle-weblogic-12.2.1.4/docker-compose-with-database) file.
+  
+  Unfortunately, the database server startup takes longer than the WebLogic server startup, so you may need to block the WebLogic startup until the database server is up and able to serve requests.
+  Otherwise, e.g. the connection pool WLST deployment from the `after-first-startup.sh` script will fail because the connection-pool deployment will be executed before the database server able to serve requests.
 
-Another situation that required to block the execution of the `after-*.sh` lifecycle bash scripts is that when you would like to create a WebLogic resource and deploy it to the managed server or servers.
-For example, to create file persistent stores with WLST from the `after-first-startup.sh` script and deploy them to the managed servers must require that the managed servers must be running at the creation time of the File Persistent Store.
-
-To handle the cases or any similar situations described above, you can use the following scripts:
+To handle this case or any similar situations described above, you can use the following scripts:
 * `wait-for-admin-server.sh`: this script returns only if the admin server is up and running
 * `wait-for-database-server.sh`: this script returns only if the database server is up and running
 * `wait-for-managed-server.sh`: this script waits until the managed server or servers up and running
 * `wait-for-database-and-managed-server.sh`: this script is a combination of two scripts
+
+This example demonstrates the usage of the blocking scripts: [hello-weblogic-world](../hello-weblogic-world/docker-compose.yml)
 
 ## 6) SQL Runner command line tool
 The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
