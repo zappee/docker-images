@@ -20,7 +20,7 @@ The image contains
 ## 3) Usage
 __WebLogic image__
 
-This WebLogic image can only be used as a base image of the [Oracle WebLogic Admin server](../oracle-weblogic-12.2.1.4-admin-server) and [Managed server](oracle-weblogic-12.2.1.4-managed-server) images.
+This WebLogic image can only be used as a base image of the [Oracle WebLogic Admin server](../oracle-weblogic-12.2.1.4-admin-server) and [Managed server](../oracle-weblogic-12.2.1.4-managed-server) images.
 However, in some special cases, you may need to deploy this image and login into the container.
 In this situation the following commands will help you.
 
@@ -43,7 +43,7 @@ __Start multiply WebLogic domains with managed servers__
 * WebLogic Domain-2 console URL: [http://localhost:7201/console](http://localhost:7201/console)
 * WebLogic credentials: `weblogic`/`weblogic12`
 
-This docker compose file demonstrates how to customize the WebLogic console via the `WEB_CONSOLE_COLOR` variable and how to use the WebLogic lifecycle methods mentioned [here](../../oracle-weblogic-12.2.1.4-admin-server).
+This docker compose file demonstrates how to customize the WebLogic console via the `WEB_CONSOLE_COLOR` variable and how to use the WebLogic lifecycle methods mentioned [here](../oracle-weblogic-12.2.1.4-admin-server).
 
 __Start a single WebLogic domain with two managed servers + Oracle Database Server__
 * Command: `docker-compose -f docker-compose-with-database.yml up`
@@ -56,7 +56,7 @@ __Start a single WebLogic domain with two managed servers + Oracle Database Serv
   * Password: `Oradoc_db1`
 * Oracle Database JDBC URL: `jdbc:oracle:thin:@localhost:1521/ORCLPDB1.localdomain`
 
-> _Info: Before you start working with the WebLogic images, please have a look at the documentation of the [Oracle WebLogic Admin server](../oracle-weblogic-12.2.1.4-admin-server) and [Managed server](oracle-weblogic-12.2.1.4-managed-server) images._
+> _Info: Before you start working with the Remal WebLogic images, please have a look at the documentation of the [Oracle WebLogic Admin server](../oracle-weblogic-12.2.1.4-admin-server) and [Managed server](../oracle-weblogic-12.2.1.4-managed-server) images._
 > _They contain useful information about the usege of the images._
 > 
 > _If you do not want to read a lot, check the [hello-weblogic-world](../hello-weblogic-world) project that is actually a step-by-step guide how to dockerize an existing WebLogic application using the Remal Docker image._
