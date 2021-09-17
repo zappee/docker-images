@@ -9,6 +9,19 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic-12.2.1.4-managed-server)
 * [Dockerization of a WebLogic application](/hello-weblogic-world)
 
+## Contributing, improvements and bug report
+* Do you like organizing?
+* Do you like to code?
+* Do you like helping people?
+* Do you like helping others code?
+* Do you like fixing bugs?
+
+Then please
+* Open an issue
+* Open a pull request
+
+Contact: [arnold.somogyi@gmail.com](arnold.somogyi@gmail.com)
+
 ## Appendix A) Docker cheat sheet
 * Start Docker daemon on Centos: `sudo systemctl start docker`
 

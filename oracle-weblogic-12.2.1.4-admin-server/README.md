@@ -1,17 +1,33 @@
-# Oracle WebLogic Administration Server Docker Image
+# Oracle WebLogic Admin Server Docker Image
 
 ## 1) Image Description
-This is a Dockerfile for _Oracle WebLogic Administration Server_, built at the top of the [WebLogic base image](/oracle-weblogic-12.2.1.4).
+This is a _Oracle WebLogic Administration Server_ Docker image, built at the top of the [Oracle WebLogic 12.2.1.4](/oracle-weblogic-12.2.1.4) image.
 Developers can use this image as the main building block of a WebLogic environment.
+If you would like to jump into the deep water you can skip this document and continue with the [hello-weblogic-world](../hello-weblogic-world) which is a step-by-step guide explains how to dockerize an existing application running on WebLogic server using the  Remal's images.
 
-The main technical details of the image:
+## 2) Image overview
+
 * The WebLogic Admin server will start automatically with the container.
+
+
 * If the WebLogic admin server is stopped or killed then the docker container will stop too because the main process that keeps alive the container is the WebLogic process itself.
-* Multiply WebLogic Admin servers can be started paralelly on the same host machine using one or multiply `docker-compose.yml`. You can find examples under the [usage-of-the-docker-images](/usage-of-the-docker-images) directory. 
+
+
+* Multiply WebLogic Admin servers can be started parallelly on the same host machine using one or multiply `docker-compose.yml`. You can find examples under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project. 
+
+
 * The current installation contains a WebLogic Cluster.
+
+
 * The WebLogic Managed servers will join automatically to the cluster without any additional configuration after they start.
-* The `JMS-Message-Sender` command line tool to can be used to send text messages to JMS and SAF queues.
-* Use the `SQL-Runner` command line tool to execute SQL commands like `SELECT`, `INSERT`, `UPDATE` or `CREATE`.
+
+
+* The [Remal JMS-Message-Sender](https://github.com/zappee/jms-message-sender) command line tool to can be used to send text messages to JMS and SAF queues.
+
+
+* Use the [Remal SQL-Runner](https://github.com/zappee/sql-runner) command line tool to execute SQL commands like `SELECT`, `INSERT`, `UPDATE` or `CREATE`.
+
+
 * The `common-utils.sh` bash script contains reusable functions that can be used to
     * deploy an artifact (WAR, EAR) as an application
     * deploy an artifact (WAR, JAR) as a shared library
@@ -19,13 +35,19 @@ The main technical details of the image:
     * create a new database schema
     * execute SQL commands
     * run Liquibase and update your database
+
+
 * Use the WebLogic lifecycle bash scripts to automate the application deployment. There are four lifecycle methods that you can use:
     * `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
     * `before-startup.sh`: executed before each startup of the WebLogic Admin server
     * `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
     * `after-startup.sh`: executed after each startup of the WebLogic Admin server
+
+
 * The `WEB_CONSOLE_COLOR` variable can be used to customize the color of the WebLogic web console. This feature is useful when multiple WebLogic domains are started.
-* The execution of the `after-*.sh` lifecycle scripts can be controlled by the four `wait-for-*.sh` bash scripts.
+
+
+* Block the WebLogic server execution and wait for an event before continue with the `wait-for-*.sh` bash scripts.
 
 ## 2) Build
 1) Pull all the following images from the docker repository or build them locally:
