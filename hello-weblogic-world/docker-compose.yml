@@ -10,10 +10,10 @@
 version: '3'
 services:
     # ----- WebLogic Admin server ----------------------------------------------
-    hello-welogic-world-admin-server:
+    admin-server:
         image: docker/remal/hello-welogic-world-admin-server:1.0.0
-        container_name: hello-welogic-world-admin-server
-        hostname: hello-welogic-world-admin-server
+        container_name: admin-server
+        hostname: admin-server
         ports:
             - "7001:7001" # weblogic listening port
             - "4001:4001" # debug port
@@ -34,8 +34,8 @@ services:
     # ----- WebLogic Managed servers -------------------------------------------
     hello-welogic-world-managed-server-1:
         image: docker/remal/hello-welogic-world-managed-server:1.0.0
-        container_name: hello-welogic-world-managed-server-1
-        hostname: hello-welogic-world-managed-server-1
+        container_name: managed-server-1
+        hostname: managed-server-1
         ports:
             - "8001:8001" # weblogic listening port
             - "5001:4001" # debug port
@@ -43,13 +43,13 @@ services:
             - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
-            - ADMIN_SERVER_HOST=hello-welogic-world-admin-server
+            - ADMIN_SERVER_HOST=admin-server
             - MANAGED_SERVER_NAME=MANAGED_SERVER_1
 
     hello-welogic-world-managed-server-2:
         image: docker/remal/hello-welogic-world-managed-server:1.0.0
-        container_name: hello-welogic-world-managed-server-2
-        hostname: hello-welogic-world-managed-server-2
+        container_name: managed-server-2
+        hostname: managed-server-2
         ports:
             - "8002:8001" # weblogic listening port
             - "5002:4001" # debug port
@@ -57,7 +57,7 @@ services:
             - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
-            - ADMIN_SERVER_HOST=hello-welogic-world-admin-server
+            - ADMIN_SERVER_HOST=admin-server
             - MANAGED_SERVER_NAME=MANAGED_SERVER_2
 
     # ----- Oracle Database server ---------------------------------------------

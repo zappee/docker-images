@@ -174,7 +174,7 @@ jmsModuleName = 'dev-jms-module'
 jmsModuleSubDeploymentName = 'dev-jms-module-subdeployment'
 createJmsServer(jmsServerName, clusterName, 'Cluster')
 createJmsModule(jmsServerName, jmsModuleName, jmsModuleSubDeploymentName, clusterName, 'Cluster')
-createConnectionFactory(jmsModuleName, jmsModuleSubDeploymentName, 'jms-connection-factory', 'jms/qcf')
+createConnectionFactory(jmsModuleName, jmsModuleSubDeploymentName, 'jms-connection-factory', 'qcf')
 createDistributedJmsQueue(jmsModuleName, jmsModuleSubDeploymentName, 'hello-incoming-queue', 'jms/incoming')
 createDistributedJmsQueue(jmsModuleName, jmsModuleSubDeploymentName, 'hello-outgoing-queue', 'jms/outgoing')
 

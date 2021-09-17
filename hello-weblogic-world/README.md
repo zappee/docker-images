@@ -85,5 +85,37 @@ During the automated deployment the following resources will be created:
   * some WebLogic distributed JMS queue
 
 Once the docker containers are up and running you can use the Remal [jms-message-sender](https://github.com/zappee/jms-message-sender) command line tool to send test text messages to the queue.
-* ``
-* ``
+In the following example we log in to the WebLogic Admin server Docker container and we use the tool from there to send a test text message to the `Managed Server-1`.
+```
+$ docker exec -it admin-server /bin/bash
+
+$cd /home/oracle/bin/jms-message-sender
+$ java -jar jms-message-sender-0.2.0-with-dependencies.jar |
+    --verbose |
+    --host managed-server-1 |
+    --port 8001 |
+    --user weblogic |
+    --password weblogic12 |
+    --cf jms/jms/qcf |
+    --queue jms/incoming |
+    --message "hello developer"
+```
+
+Expected result:
+```
+getting initial context (t3://managed-server-1:8001, user: weblogic)...
+looking up for 'jms/jms/qcf' queue connection factory...
+creating a queue connection...
+creating queue session...
+looking up for 'jms/incoming' queue...
+sending a text message to queue...
+message: 'hello developer'
+message has been sent successfully
+closing the resources...
+   closing queue-session...
+   closing queue-connection...
+   closing context...
+
+Return code: 0
+```
+
