@@ -2,47 +2,87 @@
 
 ## 1) Image Description
 This is a sample project that demonstrates the usage of the Remal's WebLogic [Admin](../oracle-weblogic-12.2.1.4-admin-server) and [Managed](../oracle-weblogic-12.2.1.4-managed-server) server images.
-The project give a step-by-step guide how to dockerize an existing application running on WebLogic server using the Remal Docker images.
+The project give a step-by-step guide how to build easily a dockerized WebLogic cluster with automated application deployment using the Remal Docker images.
 The project shows best practices as well to cover the typical use cases.
 
 ## 2) Image overview
+* WebLogic cluster Docker environment with Admin and Managed servers
 
-__The sample docker-compose file starts the following containers:__
-* WebLogic Admin server
-* Two WebLogic Managed servers
-* Oracle Database Server instance
 
-The WebLogic web console URL is [http://localhost:7001/console](http://localhost:7001/console) and the username password that you can use to log-in is `weblogic`/`weblogic12`.
+* WebLogic resource deployment: `Conection Pool`, `Connection Factory` `Distributed JMS Queues`
 
-__During the first startup (`docker-compose up`) two web applications will be deployed automatically:__
-* [FIPS checker](https://github.com/zappee/fips-checker)
-* Hello web-application
 
-# 2) Applications deployed in this image
-## 2.1) FIPS checker
+* two `*.WAR` application deployment to the WebLogic cluster
+
+
+* Database schema creation for the application
+
+
+* Initialize the database and keep up to date the scheme with Liquibase
+
+
+* Insert initial master data to the database during the automated deployment
+
+
+* Sending test messages to the JMS queues to simulate the responses from an external system
+
+## 3) Build
+1) Pull all the following images from the docker repository or build them locally:
+    * [Remal Oracle Java 8](../oracle-java-8) Docker image
+    * [Remal Oracle WebLogic](../oracle-weblogic-12.2.1.4) Docker image
+    * [Remal Oracle WebLogic Admin Server](../oracle-weblogic-12.2.1.4-admin-server) Docker image
+    * [Remal Oracle WebLogic Managed Server](../oracle-weblogic-12.2.1.4-managed-server) Docker image
+
+2) Build this image using:
+    ```
+    $ cd hello-weblogic-world
+    $ ./build.sh
+    ```
+
+## 4) Usage
+### 4.1) Start the demo
+* Command: `docker-compose up`
+
+### 4.2) WeLogic server details
+* WebLogic console URL: [http://localhost:7001/console](http://localhost:7001/console)
+* WebLogic credentials: `weblogic`/`weblogic12`
+
+### 4.3) Oracle database details
+* Oracle Database listening port: `1521`
+* SYSDBA connection parameters
+    * Database: `ORCLPDB1.localdomain`
+    * User: `SYS as SYSDBA`
+    * Password: `Oradoc_db1`
+* Application user details
+  * User: `hello`
+  * Password: `password`
+* JDBC URL: `jdbc:oracle:thin:@localhost:1521/ORCLPDB1.localdomain`
+
+### 4.4) Deployed applications
+#### 4.4.1) FIPS checker
 This is a web application that checks whether the FIPS mode is enabled or disabled on the server where the WAR is deployed.
-More information available about the FIPS [here](https://www.wolfssl.com/license/fips) and [here](https://en.wikipedia.org/wiki/FIPS_140-2).
-The step-by-step instruction that describes how to enable FIPS mode on the Oracle WebLogic server is available [here](https://docs.oracle.com/middleware/1213/wls/SECMG/fips.htm#SECMG768).
-  
-The web application is deployed to the Admin server and the WebLogic cluster (the two managed servers) and it shows that the FIPS is enabled on which server.
-* Admin server: FIPS is not enabled, URL: [http://localhost:7001/fips-checker-1.0](http://localhost:7001/fips-checker-1.0)
-* Managed server 1: FIPS is enabled here, URL: [http://localhost:8001/fips-checker-1.0](http://localhost:8001/fips-checker-1.0)
-* Managed server 2: FIPS is enabled here, URL: [http://localhost:8002/fips-checker-1.0](http://localhost:8002/fips-checker-1.0)
 
-## 2.2) Hello web-application
-This is a simple web application contains only one static index HTML page.
-The aim of the deployment of this WAR is to demonstrate the dockerization process of a complex WAR file with a database connection, and a JMS queue.
+The web application is deployed to the Admin server and the WebLogic cluster as well, and it shows that the FIPS is enabled or not there.
+* Admin server URL (no FIPS): [http://localhost:7001/fips-checker-1.0](http://localhost:7001/fips-checker-1.0)
+* Managed server 1 URL: [http://localhost:8001/fips-checker-1.0](http://localhost:8001/fips-checker-1.0)
+* Managed server 2 URL: [http://localhost:8002/fips-checker-1.0](http://localhost:8002/fips-checker-1.0)
+
+More information available about the FIPS [here](https://www.wolfssl.com/license/fips) and [here](https://en.wikipedia.org/wiki/FIPS_140-2).
+This step-by-step instruction [here](https://docs.oracle.com/middleware/1213/wls/SECMG/fips.htm#SECMG768) describes how to enable FIPS mode on the Oracle WebLogic server.
+
+#### 4.4.2) Hello WebLogic World Web application
+This is a simple web application contains only one static HTML page.
+The aim of this application is to demonstrate the multiply WAR deployment in the same WebLogic custer in Docker using the Remal's Docker images.
+That deployment also demonstrates the deployment of a connection-pool and some JMS queues.
 
 During the automated deployment the following resources will be created:
-* a new database schema
-* initialize the schema with some tables and initial data
-* [Liquibase](https://www.liquibase.org) execution
-* a new WebLogic database pool
-* a new WebLogic JMS connection factory
-* a new WebLogic distributed JMS queue
+  * a new database schema
+  * initialize the schema with some tables and initial data
+  * [Liquibase](https://www.liquibase.org) execution
+  * a new WebLogic database pool
+  * a WebLogic JMS connection factory
+  * some WebLogic distributed JMS queue
 
-Once the docker containers are up and running you can use the [jms message sender](https://github.com/zappee/jms-message-sender) to test the queue.
-The following comand sends a test message to the queue that was created during the deployment:
-
-`aaaaa`
-
+Once the docker containers are up and running you can use the Remal [jms-message-sender](https://github.com/zappee/jms-message-sender) command line tool to send test text messages to the queue.
+* ``
+* ``

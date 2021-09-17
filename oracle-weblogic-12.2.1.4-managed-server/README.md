@@ -46,7 +46,7 @@ If you would like to jump into the deep water you can skip this document and con
 
 2) Build this image using:
     ```
-    $ cd oracle-weblogic-admin-server
+    $ cd oracle-weblogic-12.2.1.4-managed-server
     $ ./build.sh
     ```
 
