@@ -46,6 +46,8 @@ function showVariables {
     echo "   WebLogic domain name          : $DOMAIN_NAME"
     echo "   WebLogic cluster name         : $CLUSTER_NAME"
     echo "   WebLogic admin server port    : $ADMIN_SERVER_PORT"
+    echo "   WebLogic admin server user    : $ADMIN_SERVER_USER"
+    echo "   WebLogic admin server password: $ADMIN_SERVER_PASSWORD"
     echo "   database host                 : $DB_HOST"
     echo "   database port                 : $DB_PORT"
     echo "   database name                 : $DB_NAME"
@@ -67,6 +69,8 @@ function createWeblogicResources {
 # ------------------------------------------------------------------------------
 source ./common-utils.sh
 PROPERTIES_FILE=$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/security/boot.properties
+ADMIN_SERVER_USER=$(getValue $PROPERTIES_FILE "username")
+ADMIN_SERVER_PASSWORD=$(getValue $PROPERTIES_FILE "password")
 
 showVariables
 

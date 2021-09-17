@@ -84,6 +84,10 @@ During the automated deployment the following resources will be created:
   * a WebLogic JMS connection factory
   * some WebLogic distributed JMS queue
 
+The web application is deployed to the WebLogic cluster so it is available from the wto managed servers:
+* Managed server 1 URL: [http://localhost:8001/hello-weblogic-world-0.1.0](http://localhost:8001/hello-weblogic-world-0.1.0)
+* Managed server 2 URL: [http://localhost:8002/hello-weblogic-world-0.1.0](http://localhost:8002/hello-weblogic-world-0.1.0)
+
 Once the docker containers are up and running you can use the Remal [jms-message-sender](https://github.com/zappee/jms-message-sender) command line tool to send test text messages to the queue.
 In the following example we log in to the WebLogic Admin server Docker container and we use the tool from there to send a test text message to the `Managed Server-1`.
 ```
