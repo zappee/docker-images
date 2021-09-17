@@ -1,6 +1,6 @@
-# Docker Images
+# Remal Docker Images
 
-_keywords: java, weblogic, docker, docker-compose, automated deployment_
+_keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 
 * [Apache Tomcat](/apache-tomcat)
 * [Oracle Java 8](/oracle-java-8)
