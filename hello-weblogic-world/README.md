@@ -1,8 +1,11 @@
-# Hello-WebLogic-World docker image
+# Hello-WebLogic-World Docker image
 
 ## 1) Image Description
-This is a sample project that demonstrates the usage of the WebLogic [Administration](../oracle-weblogic-12.2.1.4-admin-server) and [Managed](../oracle-weblogic-12.2.1.4-managed-server) server base images and shows best practices.
-The belonging `docker-compose.yml` file that deploy the containers locates under the [usage-of-the-docker-images](../usage-of-the-docker-images/hello-weblogic-world) directory.
+This is a sample project that demonstrates the usage of the Remal's WebLogic [Admin](../oracle-weblogic-12.2.1.4-admin-server) and [Managed](../oracle-weblogic-12.2.1.4-managed-server) server images.
+The project give a step-by-step guide how to dockerize an existing application running on WebLogic server using the Remal Docker images.
+The project shows best practices as well to cover the typical use cases.
+
+## 2) Image overview
 
 __The sample docker-compose file starts the following containers:__
 * WebLogic Admin server
