@@ -63,18 +63,17 @@ If you would like to jump into the deep water you can skip this document and con
 ## 3) How to use this image
 You can find multiply docker-compose sample files under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project.
 
-## 4) Automated application deployment
-The WebLogic Admin Server and the [WebLogic Managed Server](/oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and run application easily on WebLogic server.
-This image set can be used at all environment levels: `PRODUCTION`, `ACCEPTANCE`, `TEST`, and `DEVELOPMENT`.
+## 4) WebLogic server lifecycle methods
+The WebLogic Admin Server and the [WebLogic Managed Server](..//oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and deploy/run applications easily on WebLogic server.
 
 The application deployment can be automated easily using the four built-in admin server lifecycle methods.
-These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need to prepare the environment and deploy the application or applications.
+These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need in order to prepare the environment properly and deploy the application or applications.
 
-The mentioned four lifecycle scripts, and their execution order is the following:
-1. `before-first-startup.sh`
-1. `before-startup.sh`
-1. `after-first-startup.sh`
-1. `after-startup.sh`
+The four WebLogic server lifecycle scripts, and their execution order is the following:
+1.  `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
+1.  `before-startup.sh`: executed before each startup of the WebLogic Admin server
+1.  `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
+1.  `after-startup.sh`: executed after each startup of the WebLogic Admin server
 
 ## 5) Block the server startup
 In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for another server or signal.
