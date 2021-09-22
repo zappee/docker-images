@@ -23,7 +23,7 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
 
 
 * Spluk Docker Images
-    * [Splunk x.x server](/splunk/splunk-x.x)
+    * [Splunk 8.2 server](/splunk/splunk-8.2)
     * [Oracle Weblogic administration server + Splunk forwarder](/splunk/oracle-weblogic-admin-server+splunk)
     * [Oracle Weblogic managed server + Splunk forwarder](/splunk/oracle-weblogic-managed-server+splunk)
 
