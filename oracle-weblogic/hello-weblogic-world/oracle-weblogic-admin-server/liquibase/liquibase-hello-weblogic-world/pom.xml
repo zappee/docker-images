@@ -7,6 +7,26 @@
     <version>1.0</version>
     <description>liquibase executor</description>
 
+    <licenses>
+        <license>
+            <url>Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved</url>
+            <comments>
+                BSD (2-clause) licensed.
+            </comments>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Arnold Somogyi</name>
+            <email>arnold.somogyi@gmail.com</email>
+            <roles>
+                <role>project owner</role>
+                <role>contributor</role>
+            </roles>
+        </developer>
+    </developers>
+
     <dependencies>
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>

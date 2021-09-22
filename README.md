@@ -21,6 +21,12 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
   * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic/oracle-weblogic-12.2.1.4-managed-server)
   * [Hello WebLogic World: dockerization of a WebLogic application](/oracle-weblogic/hello-weblogic-world)
 
+
+* Spluk Docker Images
+    * [Splunk x.x server](/splunk/splunk-x.x)
+    * [Oracle Weblogic administration server + Splunk forwarder](/splunk/oracle-weblogic-admin-server+splunk)
+    * [Oracle Weblogic managed server + Splunk forwarder](/splunk/oracle-weblogic-managed-server+splunk)
+
 ## 2) Remal Docker image hierarchy
    ![Remal Docker image hierarchy](docker-images.png)
 

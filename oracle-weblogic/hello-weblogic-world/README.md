@@ -1,6 +1,6 @@
 # Hello-WebLogic-World Docker image
 
-## 1) Image Description
+## 1) Image description
 This is a sample project that demonstrates the usage of the Remal's WebLogic [Admin](../oracle-weblogic-12.2.1.4-admin-server) and [Managed](../oracle-weblogic-12.2.1.4-managed-server) server images.
 The project give a step-by-step guide how to build easily a dockerized WebLogic cluster with automated application deployment using the Remal Docker images.
 The project shows best practices as well to cover the typical use cases.
@@ -123,3 +123,9 @@ closing the resources...
 Return code: 0
 ```
 
+## 5) License
+Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
+
+Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
+
+BSD (2-clause) licensed

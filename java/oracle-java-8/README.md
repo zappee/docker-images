@@ -2,7 +2,7 @@
 
 ## 1) Image description
 This image is based on `oraclelinux:7-slim` image and can only be used as a base image of another images.
-I use this image as a base image of the Remal WebLogic images.
+This image is used as a base image of the Remal WebLogic images.
 
 The following tools have been installed in this image:
 * Apache Maven

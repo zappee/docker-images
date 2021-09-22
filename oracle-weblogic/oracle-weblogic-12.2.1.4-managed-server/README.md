@@ -1,6 +1,6 @@
 # Oracle WebLogic Managed Server Docker Image
 
-## 1) Image Description
+## 1) Image description
 This is a _Oracle WebLogic Managed Server_ Docker image, built at the top of the [Oracle WebLogic 12.2.1.4](../oracle-weblogic-12.2.1.4) image.
 Developers can use this image as the main building block of a WebLogic environment.
 If you would like to jump into the deep water you can skip this document and continue with the [hello-weblogic-world](../hello-weblogic-world) which is a step-by-step guide explains how to dockerize an existing application running on WebLogic server using the  Remal's images.

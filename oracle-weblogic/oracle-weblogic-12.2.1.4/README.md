@@ -1,6 +1,6 @@
 # Oracle WebLogic Server 12.2.1.4.0 Docker Image
 
-## 1) Image Description
+## 1) Image description
 The image is based on the Remal [`oracle-java-8`](../../java/oracle-java-8) image and can only be used for extension.
 
 The image contains
@@ -33,7 +33,7 @@ In this situation the following commands will help you.
    * as root: `docker exec -it -u root -w /root weblogic-12.2.1.4 /bin/bash`
 
 __Start a single WebLogic domain with two managed servers__
-* Command: `docker-compuse up`
+* Command: `docker-compose up`
 * WebLogic console URL: [http://localhost:7001/console](http://localhost:7001/console)
 * WebLogic credentials: `weblogic`/`weblogic12`
 
