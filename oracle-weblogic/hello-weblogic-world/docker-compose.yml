@@ -11,13 +11,13 @@ version: '3'
 services:
     # ----- WebLogic Admin server ----------------------------------------------
     admin-server:
-        image: docker/remal/hello-welogic-world-admin-server:1.0.0
+        image: docker/remal/oracle-weblogic-admin-with-splunk:1.0.0
         container_name: admin-server
         hostname: admin-server
         ports:
             - "7001:7001" # weblogic listening port
             - "4001:4001" # debug port
-        command: ["/home/oracle/wait-for-database-and-managed-server.sh", "1"]
+        command: ["/home/oracle/wait-for-database-and-managed-server.sh", "2"]
         environment:
             - WEB_CONSOLE_COLOR=#9575CD
             - DB_HOST=oracle-db
