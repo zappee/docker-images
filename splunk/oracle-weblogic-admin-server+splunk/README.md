@@ -16,7 +16,7 @@ Details:
 ## 2) Build
 Build it using:
 ~~~
-$ cd oracle-weblogic-admin-server+splunk
+$ cd splunk/oracle-weblogic-admin-server+splunk
 $ ./build.sh
 ~~~
 
