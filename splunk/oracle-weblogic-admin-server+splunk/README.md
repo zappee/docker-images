@@ -1,7 +1,7 @@
 # Oracle WebLogic Admin Server + Splunk Forwarder Docker Image
 
 ## 1) Image description
-The image is built at the top of the Remal _docker/remal/oracle-weblogic-12.2.1.4_ image and additionally it contains a pre-configured Splunk Forwarder.
+This image is built at the top of the Remal _docker/remal/oracle-weblogic-12.2.1.4_ image and additionally it contains a pre-configured Splunk Forwarder.
 The forwarder is configured to send the WebLogic log entries to the Splunk server so logs can be watched from the Splunk web console.
 
 Details:
