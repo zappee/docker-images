@@ -1,4 +1,4 @@
-# Splunk 8.2 Docker Image
+# Oracle WebLogic Admin Server + Splunk Forwarder Docker Image
 
 ## 1) Image description
 The image is based on the official _splunk:8.2_ image.
