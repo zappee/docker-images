@@ -92,7 +92,7 @@ getValue() {
 }
 
 # ------------------------------------------------------------------------------
-# if this is the first run then the manage server will be created
+# execute commands if this is the first run
 # ------------------------------------------------------------------------------
 function executeFirstRun() {
     local _MARKER_FILE=$ORACLE_HOME/.server-created
@@ -101,24 +101,42 @@ function executeFirstRun() {
     else
         createAdminServer
         createManagedServer
+        executeBeforeFirstStartup
         touch $_MARKER_FILE
     fi
 }
 
+
 # ------------------------------------------------------------------------------
-# call an external script if it is exist in order to a
-# before-managed-server-startup actions can be executed
+# run the before-first-startup.sh script
+# ------------------------------------------------------------------------------
+function executeBeforeFirstStartup() {
+    local _EXTERNAL_SCRIPT=$ORACLE_HOME/before-startup.sh
+    if [ -f "$_EXTERNAL_SCRIPT" ]; then
+        echo "-------------------------------------------------------------------------"
+        echo "--                               step  1                               --"
+        echo "--                           MANAGED-SERVER                            --"
+        echo "--                        BEFORE-FIRST-STARTUP                         --"
+        echo "-------------------------------------------------------------------------"
+        $_EXTERNAL_SCRIPT
+        echo "------------------ end of step 1: BEFORE-FIRST-STARTUP ------------------"
+        echo
+    fi
+}
+
+# ------------------------------------------------------------------------------
+# run the before-startup.sh script
 # ------------------------------------------------------------------------------
 function executeBeforeStartup() {
-    local _BEFORE_STARTUP_SCRIPT=$ORACLE_HOME/before-startup.sh
-    if [ -f "$_BEFORE_STARTUP_SCRIPT" ]; then
+    local _EXTERNAL_SCRIPT=$ORACLE_HOME/before-first-startup.sh
+    if [ -f "$_EXTERNAL_SCRIPT" ]; then
         echo "-------------------------------------------------------------------------"
-        echo "--                               step  4                               --"
+        echo "--                               step 2                                --"
         echo "--                           MANAGED-SERVER                            --"
         echo "--                           BEFORE-STARTUP                            --"
         echo "-------------------------------------------------------------------------"
-        $_BEFORE_STARTUP_SCRIPT
-        echo "--------------------- end of step 4: BEFORE-STARTUP ---------------------"
+        $_EXTERNAL_SCRIPT
+        echo "--------------------- end of step 2: BEFORE-STARTUP ---------------------"
         echo
     fi
 }

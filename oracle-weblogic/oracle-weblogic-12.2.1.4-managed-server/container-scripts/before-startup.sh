@@ -3,7 +3,7 @@
 # This is a lifecycle-bash script, executed BEFORE each startup of the WebLogic
 # managed server.
 #
-# While this script is running, the managed server is still stopped.
+# While this script is running, the managed server is not running yet.
 #
 # WLST offline-mode commands or database operations can be executed by this
 # bash script.
@@ -12,7 +12,8 @@
 # each server startup.
 #
 # Execution order of the lifecycle bash scripts:
-#     1) before-startup.sh
+#     1) before-first-startup.sh
+#     2) before-startup.sh
 #
 # Since : February, 2021
 # Author: Arnold Somogyi <arnold.somogyi@gmail.com>

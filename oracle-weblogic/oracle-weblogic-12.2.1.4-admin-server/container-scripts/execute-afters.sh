@@ -16,6 +16,7 @@
 function showAfterFirstStartupInfo() {
     echo "-------------------------------------------------------------------------"
     echo "--                               step  3                               --"
+    echo "--                            ADMIN-SERVER                             --"
     echo "--                         AFTER-FIRST-STARTUP                         --"
     echo "-------------------------------------------------------------------------"
 }
@@ -50,6 +51,7 @@ function executeAfterFirstStartup() {
 function showAfterStartupInfo() {
     echo "-------------------------------------------------------------------------"
     echo "--                               step  4                               --"
+    echo "--                            ADMIN-SERVER                             --"
     echo "--                            AFTER-STARTUP                            --"
     echo "-------------------------------------------------------------------------"
 }

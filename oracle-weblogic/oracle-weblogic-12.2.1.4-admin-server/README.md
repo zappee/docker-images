@@ -70,10 +70,10 @@ The application deployment can be automated easily using the four built-in admin
 These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need in order to prepare the environment properly and deploy the application or applications.
 
 The four WebLogic server lifecycle scripts, and their execution order is the following:
-1.  `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
-1.  `before-startup.sh`: executed before each startup of the WebLogic Admin server
-1.  `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
-1.  `after-startup.sh`: executed after each startup of the WebLogic Admin server
+1. `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
+1. `before-startup.sh`: executed before each startup of the WebLogic Admin server
+1. `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
+1. `after-startup.sh`: executed after each startup of the WebLogic Admin server
 
 ## 6) Block the server startup and wait for an event before continue
 In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for an event or the startup of another server.

@@ -1,5 +1,5 @@
 # ******************************************************************************
-#  Dockerfile for Splunk 8.2.
+#  Oracle WebLogic Server 12.2.1.4.0 Administration Server + Splunk dockerfile.
 #
 #  Since : September, 2021
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>

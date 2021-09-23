@@ -11,7 +11,7 @@ version: '3'
 services:
     # ----- WebLogic Admin server ----------------------------------------------
     admin-server:
-        image: docker/remal/oracle-weblogic-admin-with-splunk:1.0.0
+        image: docker/remal/hello-welogic-world-admin-server:1.0.0
         container_name: admin-server
         hostname: admin-server
         ports:

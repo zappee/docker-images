@@ -5,7 +5,7 @@
 #          Console Cookie Name
 #
 # Since : January, 2021
-# Author: Arnold Somogyi <arnold.somogyi@ext.ec.europa.eu>
+# Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 # Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 # BSD (2-clause) licensed

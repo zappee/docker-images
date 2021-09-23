@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
   * expected result: `Changing the default Random Number Generator in RSA CryptoJ from ECDRBG128 to HMACDRBG.`
 #### Added
 * remove dangling image after the build
-* add the `before-startup.sh` WebLogic lifecycle script: it is executed before each startup of the WebLogic admin server
+* add the `before-first-startup.sh` WebLogic lifecycle script: it is executed once, before the first startup of the WebLogic managed server
+* add the `before-startup.sh` WebLogic lifecycle script: it is executed before each startup of the WebLogic managed server
 #### Removed
 * the `upload` directory for sharing files between the host and Docker container was moved to the `java-8` image because this directory is needed for each image

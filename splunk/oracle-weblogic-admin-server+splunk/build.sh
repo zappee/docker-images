@@ -1,8 +1,8 @@
 #!/bin/sh
 # ******************************************************************************
-#  AOracle WebLogic 12.2.1.4.0 Docker image build file.
+#  Oracle WebLogic 12.2.1.4.0 Docker image build file.
 #
-#  Since : February, 2021
+#  Since : September, 2021
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved

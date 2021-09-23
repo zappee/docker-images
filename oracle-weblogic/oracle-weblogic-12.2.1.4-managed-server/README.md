@@ -37,6 +37,7 @@ If you would like to jump into the deep water you can skip this document and con
 
 
 * Use the WebLogic lifecycle bash scripts to automate the application deployment.
+    * `before-first-startup.sh`: executed once, before the first startup of the WebLogic Managed server
     * `before-startup.sh`: executed before each startup of the WebLogic Managed server
 
 ## 3) Build
@@ -60,7 +61,8 @@ The application deployment can be automated easily using the four built-in admin
 These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need in order to prepare the environment properly and deploy the application or applications.
 
 The available WebLogic server lifecycle scripts in this Docker image:
-1. `before-startup.sh`: executed before each startup of the WebLogic Admin server
+1. `before-first-startup.sh`: executed once, before the first startup of the WebLogic Managed server
+1. `before-startup.sh`: executed before each startup of the WebLogic Managed server
 
 ## 6) Block the server startup and wait for an event before continue
 Often the Managed Server startup must be blocked and wait for the startup of the Admin server.
