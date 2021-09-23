@@ -4,6 +4,12 @@
 The image is based on the official _splunk:8.2_ image.
 In this image the disk usage by the Splunk Indexer is limited to 200 MB.
 
+* Figure 1: Splunk web console - hosts
+![Splunk web console - hosts](screenshots/splunk-screenshot-01.png)
+
+* Figure 2: Splunk web console - incoming log entries
+  ![Splunk web console - hosts](screenshots/splunk-screenshot-02.png)
+
 ## 2) Build
 Build it using:
 ~~~
