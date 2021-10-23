@@ -101,3 +101,7 @@ BSD (2-clause) licensed
 * `alias cs='docker container stop $(docker container ls -a -q)'`
 * `alias rmc='docker container rm $(docker container ls -a -q)'`
 * `alias rmi='docker volume rm $(docker volume ls -qf dangling=true) ; docker rmi $(docker image ls -qf dangling=true)'`
+
+<a href="https://trackgit.com">
+<img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv43y72uc04cmhai1a5k" alt="trackgit-views" />
+</a>
