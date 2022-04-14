@@ -15,17 +15,17 @@ _keywords: automated deployment, docker, docker-compose, java, tomcat, weblogic_
     * [Oracle Database Enterprise 12.2.0.1](/database/oracle-database-enterprise-12.2.0.1)
 
 
-* Oracle Weblogic Docker Images
-  * [Oracle Weblogic 12.2.1.4](/oracle-weblogic/oracle-weblogic-12.2.1.4)
-  * [Oracle Weblogic 12.2.1.4 - administration server](/oracle-weblogic/oracle-weblogic-12.2.1.4-admin-server)
-  * [Oracle Weblogic 12.2.1.4 - managed server](/oracle-weblogic/oracle-weblogic-12.2.1.4-managed-server)
+* Oracle WebLogic Docker Images
+  * [Oracle WebLogic 12.2.1.4](/oracle-weblogic/oracle-weblogic-12.2.1.4)
+  * [Oracle WebLogic 12.2.1.4 - administration server](/oracle-weblogic/oracle-weblogic-12.2.1.4-admin-server)
+  * [Oracle WebLogic 12.2.1.4 - managed server](/oracle-weblogic/oracle-weblogic-12.2.1.4-managed-server)
   * [Hello WebLogic World: dockerization of a WebLogic application](/oracle-weblogic/hello-weblogic-world)
 
 
 * Spluk Docker Images
     * [Splunk 8.2 server](/splunk/splunk-8.2)
-    * [Oracle Weblogic administration server + Splunk forwarder](/splunk/oracle-weblogic-admin-server+splunk)
-    * [Oracle Weblogic managed server + Splunk forwarder](/splunk/oracle-weblogic-managed-server+splunk)
+    * [Oracle WebLogic administration server + Splunk forwarder](/splunk/oracle-weblogic-admin-server+splunk)
+    * [Oracle WebLogic managed server + Splunk forwarder](/splunk/oracle-weblogic-managed-server+splunk)
 
 ## 2) Remal Docker image hierarchy
    ![Remal Docker image hierarchy](docker-images.png)
@@ -42,7 +42,7 @@ Then please
 * Open a pull request
 * Contact with us
 
-Contact: [arnold.somogyi@gmail.com](arnold.somogyi@gmail.com)
+Contact: [arnold.somogyi@gmail.com](mailto:arnold.somogyi@gmail.com)
 
 ## 4) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
@@ -74,7 +74,7 @@ BSD (2-clause) licensed
 * Oracle Database in Docker
   * Run: `docker run -p 1521:1521 --network="host" --name oracle-db store/oracle/database-enterprise:12.2.0.1`
   * Port: `1521`
-  * Sercive name: `ORCLPDB1.localdomain`
+  * Schema: `ORCLPDB1.localdomain`
   * User: `SYS as SYSDBA`
   * Password: `Oradoc_db1`
 
@@ -102,6 +102,4 @@ BSD (2-clause) licensed
 * `alias rmc='docker container rm $(docker container ls -a -q)'`
 * `alias rmi='docker volume rm $(docker volume ls -qf dangling=true) ; docker rmi $(docker image ls -qf dangling=true)'`
 
-<a href="https://trackgit.com">
-<img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" />
-</a>
+<a href="https://trackgit.com"><img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" /></a>

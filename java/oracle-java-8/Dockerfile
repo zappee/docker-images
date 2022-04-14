@@ -10,6 +10,9 @@
 FROM oraclelinux:7-slim
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
+ENV	JAVA_HOME=/usr/java/jdk-8
+ENV PATH $JAVA_HOME/bin:$PATH
+
 # install tools
 USER root
 RUN yum install gzip -y && \
@@ -23,6 +26,7 @@ RUN yum install gzip -y && \
     yum install curl -y && \
     yum install iproute -y && \
     yum install nmap -y && \
+    yum install nc -y && \
     yum install unzip -y
 
 RUN rm -rf /var/cache/yum
@@ -32,12 +36,9 @@ RUN curl -fsSL https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-
     ln -s /usr/share/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
 
 # install java 8
-ENV JAVA_VERSION=1.8.0_231 \
-	JAVA_PKG=server-jre-8u231-linux-x64.tar.gz \
-	JAVA_SHA256=1d59a0ea3ef302d5851370b838693b0b6bde4c3f32015a4de0a9e4d202a988fc \
-	JAVA_HOME=/usr/java/jdk-8
-
-ENV PATH $JAVA_HOME/bin:$PATH
+ARG JAVA_VERSION=1.8.0_231
+ARG JAVA_PKG=server-jre-8u231-linux-x64.tar.gz
+ARG	JAVA_SHA256=1d59a0ea3ef302d5851370b838693b0b6bde4c3f32015a4de0a9e4d202a988fc
 
 COPY bin/$JAVA_PKG /tmp/jdk.tgz
 RUN set -eux; \
