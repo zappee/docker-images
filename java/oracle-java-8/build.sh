@@ -19,7 +19,7 @@ IMAGE_VERSION=1.1.0
 PUSH_IMAGE=${1:-false}
 
 docker build --no-cache -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_VERSION .
-docker rmi $(docker image ls -qf dangling=true)
+docker rmi "$(docker image ls -qf dangling=true)"
 
 if [ "$PUSH_IMAGE" = true ] ; then
     echo "pushing the image to the registry..."
