@@ -1,8 +1,8 @@
 # ******************************************************************************
-#  Compose file for an Oracle WebLogic environment with two domains and managed
-#  servers.
+#  Compose file for an Oracle WebLogic environment with two domains and
+#  multiple managed servers.
 #
-#  Since : February, 2021
+#  Since : February, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
@@ -11,85 +11,85 @@
 version: '3'
 services:
     # ----- WebLogic Domain 1 --------------------------------------------------
-    weblogic-1-admin-server:
-        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.0.0
-        container_name: weblogic-1-admin-server
-        hostname: weblogic-1-admin-server
+    weblogic-a-admin-server:
+        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.1.0
+        container_name: weblogic-a-admin-server
+        hostname: weblogic-a-admin-server
         ports:
             - "7101:7001" # weblogic listening port
             - "4101:4001" # debug port
-        command: ["/home/oracle/wait-for-managed-server.sh", "2"]
         environment:
+            - MANAGED_SERVER_HOSTNAMES=weblogic-a-managed-server-1, weblogic-a-managed-server-2
             - WEB_CONSOLE_COLOR=#FF5252
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/weblogic-1-admin-server-1/upload:/home/oracle/upload
+            - ~/dev/workspace/docker/shared-volumes/weblogic-a-admin-server-1/upload:/home/oracle/upload
 
-    weblogic-1-managed-server-1:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
-        container_name: weblogic-1-managed-server-1
-        hostname: weblogic-1-managed-server-1
+    weblogic-a-managed-server-1:
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.1.0
+        container_name: weblogic-a-managed-server-1
+        hostname: weblogic-a-managed-server-1
         ports:
             - "8101:8001" # weblogic listening port
             - "5101:4001" # debug port
-        command: ["/home/oracle/wait-for-admin-server.sh"]
+        depends_on:
+            - "weblogic-a-admin-server"
         environment:
-            - ADMIN_SERVER_HOST=weblogic-1-admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_1
+            - ADMIN_SERVER_HOST=weblogic-a-admin-server
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/weblogic-1-managed-server-1/upload:/home/oracle/upload
+            - ~/dev/workspace/docker/shared-volumes/weblogic-a-managed-server-1/upload:/home/oracle/upload
 
-    weblogic-1-managed-server-2:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
-        container_name: weblogic-1-managed-server-2
-        hostname: weblogic-1-managed-server-2
+    weblogic-a-managed-server-2:
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.1.0
+        container_name: weblogic-a-managed-server-2
+        hostname: weblogic-a-managed-server-2
         ports:
             - "8102:8001" # weblogic listening port
             - "5102:4001" # debug port
-        command: ["/home/oracle/wait-for-admin-server.sh"]
+        depends_on:
+            - "weblogic-a-admin-server"
         environment:
-            - ADMIN_SERVER_HOST=weblogic-1-admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_2
+            - ADMIN_SERVER_HOST=weblogic-a-admin-server
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/weblogic-1-managed-server-2/upload:/home/oracle/upload
+            - ~/dev/workspace/docker/shared-volumes/weblogic-a-managed-server-2/upload:/home/oracle/upload
 
     # ----- WebLogic Domain 2 --------------------------------------------------
-    weblogic-2-admin-server:
-        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.0.0
-        container_name: weblogic-2-admin-server
-        hostname: weblogic-2-admin-server
+    weblogic-b-admin-server:
+        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.1.0
+        container_name: weblogic-b-admin-server
+        hostname: weblogic-b-admin-server
         ports:
             - "7201:7001" # weblogic listening port
             - "4201:4001" # debug port
-        command: ["/home/oracle/wait-for-managed-server.sh", "2"]
         environment:
+            - MANAGED_SERVER_HOSTNAMES=weblogic-b-managed-server-1, weblogic-b-managed-server-2
             - WEB_CONSOLE_COLOR=#76FF03
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/weblogic-2-admin-server-1/upload:/home/oracle/upload
+            - ~/dev/workspace/docker/shared-volumes/weblogic-b-admin-server-1/upload:/home/oracle/upload
 
-    weblogic-2-managed-server-1:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
-        container_name: weblogic-2-managed-server-1
-        hostname: weblogic-2-managed-server-1
+    weblogic-b-managed-server-1:
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.1.0
+        container_name: weblogic-b-managed-server-1
+        hostname: weblogic-b-managed-server-1
         ports:
             - "8201:8001" # weblogic listening port
             - "5201:4001" # debug port
-        command: ["/home/oracle/wait-for-admin-server.sh"]
+        depends_on:
+            - "weblogic-a-admin-server"
         environment:
-            - ADMIN_SERVER_HOST=weblogic-2-admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_1
+            - ADMIN_SERVER_HOST=weblogic-b-admin-server
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/weblogic-2-managed-server-1/upload:/home/oracle/upload
+            - ~/dev/workspace/docker/shared-volumes/weblogic-b-managed-server-1/upload:/home/oracle/upload
 
-    weblogic-2-managed-server-2:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
-        container_name: weblogic-2-managed-server-2
-        hostname: weblogic-2-managed-server-2
+    weblogic-b-managed-server-2:
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.1.0
+        container_name: weblogic-b-managed-server-2
+        hostname: weblogic-b-managed-server-2
         ports:
             - "8202:8001" # weblogic listening port
             - "5202:4001" # debug port
-        command: ["/home/oracle/wait-for-admin-server.sh"]
+        depends_on:
+            - "weblogic-a-admin-server"
         environment:
-            - ADMIN_SERVER_HOST=weblogic-2-admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_2
+            - ADMIN_SERVER_HOST=weblogic-b-admin-server
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/weblogic-2-managed-server-2/upload:/home/oracle/upload
+            - ~/dev/workspace/docker/shared-volumes/weblogic-b-managed-server-2/upload:/home/oracle/upload

@@ -1,8 +1,8 @@
 # ******************************************************************************
-#  Compose file for a single Oracle WebLogic domain with two managed servers and
-#  an Oracle Database server.
+#  Compose file for a single Oracle WebLogic domain with two managed servers
+#  and an Oracle Database server.
 #
-#  Since : February, 2021
+#  Since : April, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
@@ -11,46 +11,49 @@
 version: '3'
 services:
     weblogic-admin-server:
-        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-admin-12.2.1.4:1.1.0
         container_name: weblogic-admin-server
         hostname: weblogic-admin-server
         ports:
             - "7001:7001" # weblogic listening port
             - "4001:4001" # debug port
-        command: ["/home/oracle/wait-for-managed-server.sh", "2"]
+        depends_on:
+            - "oracle-db"
+        command: ["/home/oracle/wait-for-database-server.sh"]
+        environment:
+            - MANAGED_SERVER_HOSTNAMES=weblogic-managed-server-1, weblogic-managed-server-2
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/admin-server/config:/home/oracle/user_projects/domains/DEV_DOMAIN/app-config
             - ~/dev/workspace/docker/shared-volumes/admin-server/upload:/home/oracle/upload
 
     weblogic-managed-server-1:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.1.0
         container_name: weblogic-managed-server-1
         hostname: weblogic-managed-server-1
         ports:
             - "8001:8001" # weblogic listening port
             - "5001:4001" # debug port
+        depends_on:
+            - "weblogic-admin-server"
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-1/config:/home/oracle/app-config
             - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_1
 
     weblogic-managed-server-2:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:1.1.0
         container_name: weblogic-managed-server-2
         hostname: weblogic-managed-server-2
         ports:
             - "8002:8001" # weblogic listening port
             - "5002:4001" # debug port
+        depends_on:
+            - "weblogic-admin-server"
         volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-2/config:/home/oracle/app-config
             - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_2
 
     # ----- Oracle Database Server ---------------------------------------------
     oracle-db:

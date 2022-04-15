@@ -1,26 +1,26 @@
 # ******************************************************************************
 #  Oracle WebLogic Server 12.2.1.4.0 Dockerfile.
 #
-#  Since : February, 2021
+#  Since : April, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/remal/oracle-java-8:1.0.0
+FROM docker/remal/oracle-java-8:1.1.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 # common environment variables required for this build
 ENV ORACLE_HOME=/home/oracle
+ENV WL_HOME=${ORACLE_HOME}/wlserver
+ENV PATH=$PATH:${JAVA_HOME}/bin:${ORACLE_HOME}/oracle_common/common/bin:${ORACLE_HOME}/wlserver/common/bin
 
-ENV WL_HOME=${ORACLE_HOME}/wlserver \
-    PATH=$PATH:${JAVA_HOME}/bin:${ORACLE_HOME}/oracle_common/common/bin:${ORACLE_HOME}/wlserver/common/bin \
-    FMW_PKG=fmw_12.2.1.4.0_wls_Disk1_1of1.zip \
-    FMW_JAR=fmw_12.2.1.4.0_wls.jar \
-    RESPONSEFILE=responses.txt \
-    INVENTORY_LOCATION_FILE=oraInst.loc
+ARG FMW_PKG=fmw_12.2.1.4.0_wls_Disk1_1of1.zip
+ARG FMW_JAR=fmw_12.2.1.4.0_wls.jar
+ARG RESPONSEFILE=responses.txt
+ARG INVENTORY_LOCATION_FILE=oraInst.loc
 
-# create a new system user
+# create a new system user: oracle
 RUN groupadd -r oracle -g 901 && \
     useradd -b /home -d $ORACLE_HOME -m -s /bin/bash -u 901 -r -g oracle oracle
 USER oracle:oracle
@@ -28,7 +28,7 @@ USER oracle:oracle
 # copy weblogic install files
 RUN mkdir -p $ORACLE_HOME/temp
 COPY --chown=oracle:oracle properties/domain.properties $ORACLE_HOME/properties/
-COPY --chown=oracle:oracle bin/oracle/$FMW_PKG properties/$RESPONSEFILE properties/$INVENTORY_LOCATION_FILE $ORACLE_HOME/temp/
+COPY --chown=oracle:oracle bin/oracle/weblogic/$FMW_PKG properties/$RESPONSEFILE properties/$INVENTORY_LOCATION_FILE $ORACLE_HOME/temp/
 
 # copy tools
 COPY --chown=oracle:oracle bin/sql-runner/*.* $ORACLE_HOME/bin/sql-runner/
