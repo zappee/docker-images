@@ -1,16 +1,15 @@
-# Oracle WebLogic Admin Server Docker Image
+# Remal Docker Image: Oracle WebLogic Administration Server
 
 ## 1) Image description
 This is a _Oracle WebLogic Administration Server_ Docker image, built at the top of the [Oracle WebLogic 12.2.1.4](../oracle-weblogic-12.2.1.4) image.
 Developers can use this image as the main building block of a WebLogic environment.
-If you would like to jump into the deep water you can skip this document and continue with the [hello-weblogic-world](../hello-weblogic-world) which is a step-by-step guide explains how to dockerize an existing application running on WebLogic server using the  Remal's images.
 
 ## 2) Image overview
 
 * The WebLogic Admin server will start automatically with the container.
 
 
-* If the WebLogic admin server is stopped or killed then the docker container will stop too because the main process that keeps alive the container is the WebLogic process itself.
+* The `tail` command that shows the server log files keeps alive the container.
 
 
 * Multiply WebLogic Admin servers can be started parallelly on the same host machine using one or multiply `docker-compose.yml`. You can find examples under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project. 
@@ -19,7 +18,7 @@ If you would like to jump into the deep water you can skip this document and con
 * The current installation contains a WebLogic Cluster.
 
 
-* The WebLogic Managed servers will join automatically to the cluster without any additional configuration after they start.
+* The WebLogic Managed servers will join automatically to the cluster without any additional configuration after the start.
 
 
 * The [Remal JMS-Message-Sender](https://github.com/zappee/jms-message-sender) command line tool to can be used to send text messages to JMS and SAF queues.
@@ -37,11 +36,7 @@ If you would like to jump into the deep water you can skip this document and con
     * run Liquibase and update your database
 
 
-* Use the WebLogic lifecycle bash scripts to automate the application deployment. There are four lifecycle methods that you can use:
-    * `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
-    * `before-startup.sh`: executed before each startup of the WebLogic Admin server
-    * `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
-    * `after-startup.sh`: executed after each startup of the WebLogic Admin server
+* Use the server lifecycle bash scripts to automate your application deployment. There are six lifecycle methods that you can use before and after the server and domain start.
 
 
 * The `WEB_CONSOLE_COLOR` variable can be used to customize the color of the WebLogic web console. This feature is useful when multiple WebLogic domains are started.
@@ -56,7 +51,7 @@ If you would like to jump into the deep water you can skip this document and con
 
 2) Build this image using:
     ```
-    $ cd oracle-weblogic-12.2.1.4-admin-server
+    $ cd oracle-weblogic-admin-server
     $ ./build.sh
     ```
 
@@ -69,35 +64,39 @@ The WebLogic Admin Server and the [WebLogic Managed Server](..//oracle-weblogic-
 The application deployment can be automated easily using the four built-in admin server lifecycle methods.
 These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need in order to prepare the environment properly and deploy the application or applications.
 
-The four WebLogic server lifecycle scripts, and their execution order is the following:
-1. `before-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
-1. `before-startup.sh`: executed before each startup of the WebLogic Admin server
-1. `after-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
-1. `after-startup.sh`: executed after each startup of the WebLogic Admin server
+The six server lifecycle scripts, and their execution order is the following:
+1. `before-server-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
+2. `before-server-startup.sh`: executed before each startup of the WebLogic Admin server
+3. `after-server-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
+4. `after-server-startup.sh`: executed after each startup of the WebLogic Admin server
+5. `after-domain-first-startup.sh`: executed once, after the startup of the complete WebLogic Domain
+6. `after-domain-startup.sh`: executed after the startup of the complete WebLogic Domain
 
 ## 6) Block the server startup and wait for an event before continue
-In some special use cases, you need to block the startup of the WebLogic server (and the execution of the lifecycle bash scripts) and wait for an event or the startup of another server.
+In some special use cases, you need to block the startup of the WebLogic server (and the execution of the server lifecycle bash scripts) and wait for an event or the startup of another server.
 
 The following use case is a good example that demonstrates when you need to block the WebLogic server startup:
-* In the production environment we always use external database servers (not the Oracle Database Docker Image).
+* In the production environment we always use external database server (not the Oracle Database Docker Image).
   However, during the application development, each developer works on a separate Docker environment running everything on `localhost`.
-  In the development environment the Oracle Database Docker Image is used together with the Remal WebLogic Docker images, like in this sample [docker-compose.yml](../oracle-weblogic-12.2.1.4/docker-compose-with-database.yml) file.
+  In the development environment usually the Oracle Database Docker Image is used with the Remal WebLogic Docker images, like in this sample [docker-compose.yml](../oracle-weblogic-12.2.1.4/docker-compose-with-database.yml).
   
   Unfortunately, the database server startup takes longer than the WebLogic server startup, so you may need to block the WebLogic startup until the database server is up and able to serve requests.
-  Otherwise, e.g. the connection pool WLST deployment from the `after-first-startup.sh` script will fail because the connection-pool deployment will be executed before the database server able to serve requests.
+  Otherwise, e.g. the connection pool WLST deployment from the `after-domain-first-startup.sh` script will fail because the deployment will be executed before the database server able to serve requests.
 
-To handle this case or any similar situations described above, you can use the following scripts:
-* `wait-for-admin-server.sh`: this script returns only if the admin server is up and running
-* `wait-for-database-server.sh`: this script returns only if the database server is up and running
-* `wait-for-managed-server.sh`: this script waits until the managed server or servers up and running
-* `wait-for-database-and-managed-server.sh`: this script is a combination of two scripts
+To handle this case or any similar situations described above, you can use the following server lifecycle scripts:
+1. `before-server-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
+2. `before-server-startup.sh`: executed before each startup of the WebLogic Admin server
+3. `after-server-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
+4. `after-server-startup.sh`: executed after each startup of the WebLogic Admin server
+5. `after-domain-first-startup.sh`: executed once, after the startup of the complete WebLogic Domain
+6. `after-domain-startup.sh`: executed after the startup of the complete WebLogic Domain
 
 This example demonstrates the usage of the blocking scripts: [hello-weblogic-world](../hello-weblogic-world/docker-compose.yml)
 
 ## 7) Remal SQL-Runner command line tool
-The `SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
-The tool can be used to execute any SQL commands, especially it is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE`.
-You can use this tool to create a new database schema during the application deployment in the Docker environment and insert initial data into databases.
+The `Remal SQL-Runner` is a small command-line tool written in Java and can be used on all platforms where Java is available.
+The tool can be used to execute any SQL commands. It is suitable for executing SQL `SELECT`, `UPDATE`, `DELETE`, and `CREATE`.
+You can use this tool to create a new database schema during the application deployment in the Docker environment and insert initial data into the databases.
 
 This tool can be use from any WebLogic lifecycle script easily to prepare the database before the application deployment.
 
@@ -106,13 +105,13 @@ The tool is available in the image from the `/home/oracle/bin/sql-runner` direct
 For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/sql-runner).
 
 ## 8) Remal JMS-Message-Sender command line tool
-The JMS Message Sender is a flexible command-line Java tool that can be used to send text messages to JMS Queue.
+The Remal JMS-Message-Sender is a flexible command-line Java tool that can be used to send text messages to JMS Queue.
 This is a command line tool can be run from bash or windows scripts and command line as well.
 
 You can use this tool in the Docker environment to
 * send test messages to any JMS queue
 * test SAF connection
-* simulate response messages from external system while executing integration tests in docker
+* simulate response messages coming from an external system while executing integration tests in docker
 * etc.
 
 The tool is available in the image, from the `/home/oracle/bin/jms-message-sender` directory.
@@ -120,18 +119,18 @@ The tool is available in the image, from the `/home/oracle/bin/jms-message-sende
 For more info about the tool, please visit the tool's [homepage](https://github.com/zappee/jms-message-sender).
 
 ## 9) The `common-utils` bash library
-The `common-utils` is a collection of bash functions that you can use from any of the four WebLogic lifecycle methods, mentioned in the previous chapters.
+The `common-utils` is a collection of bash functions that you can use from the server lifecycle scripts, mentioned in the previous chapters.
 The functions simplify the usage of some often used commands like
 * create a new Oracle database schema
 * keep up to date your database schema with the [Liquibase](https://www.liquibase.org)
 * execution of any SQL command
-* execution of external SQL/DDL file
-* JAR, WAR, or EAR deployment to WebLogic server as a library or application
-* read values from standard `*.properties` files
+* execution of an external SQL/DDL file
+* JAR, WAR, or EAR deployment to WebLogic server as a library or an application
+* read values from a standard `*.properties` file
 
 In order to you can use bash functions, you need to include the `common-utils.sh` library to your bash script with the `source ./common-utils.sh` command.
 
-The library in the Docker image sits under the `/home/oracle` directory.
+The library locates under the `/home/oracle` directory.
 
 ### 9.1) Create an Oracle database schema
 * Command: `createDbSchema <username> <password>`
@@ -212,7 +211,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     * `ADMIN_SERVER_PORT`: the port of the T3 protocol
     * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
     * `ADMIN_SERVER_PASSWORD`: the password for the connecting user
-    * `CLUSTER_NAME`: the name of the WebLogic cluser
+    * `CLUSTER_NAME`: the name of the WebLogic cluster
     * the hostname is always `localhost` because this function is called from the WebLogic Admin Server Docker container where the Admin Server runs
 * Example:
     ~~~
@@ -232,7 +231,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
     * `ADMIN_SERVER_PORT`: the port of the T3 protocol
     * `ADMIN_SERVER_USER`: the user who has the proper access to the WebLogic server
     * `ADMIN_SERVER_PASSWORD`: the password for the connecting user
-    * `CLUSTER_NAME`: the name of the WebLogic cluser
+    * `CLUSTER_NAME`: the name of the WebLogic cluster
     * the hostname is always `localhost` because this function is called from the WebLogic Admin Server Docker container where the Admin Server runs
 * Example:
     ~~~
@@ -258,7 +257,7 @@ The library in the Docker image sits under the `/home/oracle` directory.
 
 ## 10) Environment variables used by the build
 The WebLogic Admin server in the docker image is installed during the first startup of the docker container based on environment variables.
-These variables have default values, but they can be changed before starting the build process.
+These variables have default values, but they can be changed before starting the image build process.
 In this section, you can find information about the variables and their default values.
 
 Variables used in the `Dockerfile`:
@@ -282,3 +281,5 @@ Before the build, you must download the `Oracle JDK` install kit from the Oracle
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
+
+<a href="https://trackgit.com"><img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" /></a>

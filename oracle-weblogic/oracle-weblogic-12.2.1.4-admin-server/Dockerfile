@@ -7,7 +7,7 @@
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/remal/oracle-weblogic-12.2.1.4:1.0.0
+FROM docker/remal/oracle-weblogic-12.2.1.4:1.1.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 # common environment variables with default values required for this build
@@ -18,6 +18,9 @@ ENV CLUSTER_NAME=DEV_CLUSTER
 ENV DOMAIN_NAME=DEV_DOMAIN
 ENV ORACLE_HOME=/home/oracle
 ENV PRODUCTION_MODE=true
+ENV MANAGED_SERVER_PORT=8001
+ENV NODE_MANAGER_PORT=5556
+ENV READY_SIGNAL_PORT=1331
 
 # JVM specific variables
 ENV ADMIN_SERVER_JAVA_OPTIONS="-Dweblogic.rjvm.enableprotocolswitch=true -Dweblogic.data.canTransferAnyFile=true -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=4001 -XX:+UnlockCommercialFeatures -XX:+ResourceManagement"
