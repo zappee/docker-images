@@ -1,13 +1,13 @@
 # ******************************************************************************
 #  Oracle WebLogic Server 12.2.1.4.0 Dockerfile.
 #
-#  Since : April, 2022
+#  Since : Jun, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/remal/oracle-java-8:1.1.0
+FROM docker/remal/oracle-java-8:2.0.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 # common environment variables required for this build

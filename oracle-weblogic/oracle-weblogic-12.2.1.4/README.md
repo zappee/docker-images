@@ -24,7 +24,7 @@ However, in some special cases, you may need to deploy this image and login into
 In this situation the following commands will help.
 
 * Run the image
-  * `docker run --name weblogic-12.2.1.4 -d docker/images/oracle-weblogic/weblogic-12.2.1.4:1.1.0 tail -f /dev/null`
+  * `docker run --name weblogic-12.2.1.4 -d docker/remal/oracle-weblogic/weblogic-12.2.1.4:2.0.0 tail -f /dev/null`
 
 
 * Login into the running container
@@ -64,7 +64,7 @@ In this situation the following commands will help.
 ## 4) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
 
-Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
+Copyright (c) 2022 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
 

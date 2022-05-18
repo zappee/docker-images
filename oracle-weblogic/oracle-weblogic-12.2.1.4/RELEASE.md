@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 * Install the Oracle JDBC Driver to the locale Maven repository.
 * Remove WebLogic installation kit after the installation. This reduces the Docker image size by 1 GB.
 
-## [weblogic-12.2.1.4:1.1.0] - 15/Apr/2022
+## [weblogic-12.2.1.4:2.0.0] - 13/Jun/2022
 #### Modified
-* Use the latest `oracle-8:1.1.0` java image as a base image.
+* Use the latest `oracle-8:2.0.0` java image as a base image.
 * Optimize the unix environment variables defined in `Dockerfile`.
+* Improve the build bash script.
