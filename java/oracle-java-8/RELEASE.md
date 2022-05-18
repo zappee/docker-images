@@ -9,10 +9,14 @@ All notable changes to this project will be documented in this file.
 #### Modified
 * Fix the broken Maven download link.
 
-## [1.1.0] - 14/Apr/2022
+## [2.0.0] - 13/Jun/2022
 #### Added
-* Added the Netcat tool to the image
+* Added `Netcat` tool to the image.
+* Added `Nmap` tool to the image.
+* Added `tree` tool to the image.
 #### Modified
 * Optimize the unix environment variables defined in `Dockerfile`.
+* Update Java from `server-jre-8u231-linux-x64` to `jdk-8u331-linux-x64`.
+* Improve the build bash script.
 
 <a href="https://trackgit.com"><img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" /></a>

@@ -6,25 +6,26 @@ This image is used as a base image of the Remal WebLogic images.
 
 The following tools have been installed in this image:
 * Apache Maven
-* cURL
-* Git client
 * GNU Wget
-* gzip and tar
+* Git client
 * IP utils, ex. ping
-* JDK™ 8u231 (`JAVA_HOME=/usr/java/jdk-8`)
+* JDK™ 8u331 (`JAVA_HOME=/usr/java/jdk-8`)
 * Midnight Commander
+* Netcat
 * Network configuration tool: ip
 * Nmap
 * Telnet client
 * Unzip
+* cURL
+* gzip and tar
+* tree
 * vi editor
-* Netcat
 
 Available Unix aliases:
 * `ll`: `ls -all`
 
 ## 2) Build
-Download the Oracle JDK install kit (`server-jre-8u231-linux-x64.tar.gz`) from the Oracle website and copy that file under the `bin/` directory.
+Download the Java™ SE Development Kit 8, Update 331 (JDK 8u331), `jdk-8u331-linux-x64.tar.gz` from the Oracle website and copy that file under the `bin/` directory.
 
 Then build the image using:
 ~~~
@@ -34,7 +35,7 @@ $ ./build.sh
 
 ## 3) Usage
 * Run the image
-    * `docker run --name java-8 -d docker/images/oracle-java-8:1.1.0 tail -f /dev/null`
+    * `docker run --name java-8 -d docker/remal/oracle-java-8:2.0.0 tail -f /dev/null`
 
 
 * Login into the running container
@@ -44,7 +45,7 @@ $ ./build.sh
 ## 4) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
 
-Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
+Copyright (c) 2020-2022 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
 

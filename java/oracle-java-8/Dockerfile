@@ -27,7 +27,8 @@ RUN yum install gzip -y && \
     yum install iproute -y && \
     yum install nmap -y && \
     yum install nc -y && \
-    yum install unzip -y
+    yum install unzip -y && \
+    yum install tree -y
 
 RUN rm -rf /var/cache/yum
 
@@ -36,14 +37,11 @@ RUN curl -fsSL https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-
     ln -s /usr/share/apache-maven-3.6.3/bin/mvn /usr/bin/mvn
 
 # install java 8
-ARG JAVA_VERSION=1.8.0_231
-ARG JAVA_PKG=server-jre-8u231-linux-x64.tar.gz
-ARG	JAVA_SHA256=1d59a0ea3ef302d5851370b838693b0b6bde4c3f32015a4de0a9e4d202a988fc
+ARG JAVA_VERSION=1.8.0_331
+ARG JAVA_PKG=jdk-8u331-linux-x64.tar.gz
 
 COPY bin/$JAVA_PKG /tmp/jdk.tgz
 RUN set -eux; \
-	\
-	echo "$JAVA_SHA256 */tmp/jdk.tgz" | sha256sum -c -; \
 	mkdir -p "$JAVA_HOME"; \
 	tar --extract --file /tmp/jdk.tgz --directory "$JAVA_HOME" --strip-components 1; \
 	rm /tmp/jdk.tgz; \
