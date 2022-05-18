@@ -13,13 +13,13 @@ $ ./build.sh
 ## 3) Usage
 __Single Apache-Tomcat server__
 * Command: `docker-compose up`
-* Managing console URL: [http://localhost](http://localhost)
+* Managing console URL: [http://localhost:8080](http://localhost:8080)
 * Credentials: `admin`/`admin`
 
 __Multiply Apache-Tomcat servers__
 * Command: `docker-compose -f docker-compose-multiserver.yml up`
-* Managing console URL 1: [http://localhost:8001](http://localhost:8001)
-* Managing console URL 2: [http://localhost:8002](http://localhost:8002)
+* Managing console URL 1: [http://localhost:8081](http://localhost:8081)
+* Managing console URL 2: [http://localhost:8082](http://localhost:8082)
 * Credentials: `admin`/`admin`
 
 ## 4) License

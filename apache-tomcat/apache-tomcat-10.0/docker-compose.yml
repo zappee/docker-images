@@ -13,6 +13,6 @@ services:
         container_name: tomcat-server
         image: docker/remal/apache-tomcat-10.0:2.0.0
         ports:
-            - "80:8080"
+            - "8080:8080"
         volumes:
             - ~/dev/workspace/docker/shared-volumes/TOMCAT/upload:/home/tomcat/upload
