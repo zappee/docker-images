@@ -9,8 +9,8 @@
 # ******************************************************************************
 version: '3'
 services:
-  oracle-db:
-    image: store/oracle/database-enterprise:12.2.0.1
-    container_name: oracle-db
-    ports:
-      - "1521:1521" # database listening port
+    oracle-db:
+        image: store/oracle/database-enterprise:12.2.0.1
+        container_name: oracle-db
+        ports:
+            - "1521:1521" # database listening port
