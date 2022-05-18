@@ -23,6 +23,8 @@ __Multiply Apache-Tomcat servers__
 * Credentials: `admin`/`admin`
 
 ## 4) License
-Copyright (c) 2020-2021 Remal Software, Arnold Somogyi. All rights reserved.
+Copyright (c) 2020-2022 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
+
+<a href="https://trackgit.com"><img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" /></a>
