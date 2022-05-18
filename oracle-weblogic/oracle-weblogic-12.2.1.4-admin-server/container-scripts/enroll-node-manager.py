@@ -1,11 +1,11 @@
 # ******************************************************************************
-# ** WLST script for enroll the NodeManager using nmEnroll() command.
-# **
-# ** Since : April, 2022
-# ** Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  WLST script for enroll the NodeManager using nmEnroll() command.
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 
 

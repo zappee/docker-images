@@ -1,18 +1,18 @@
 # ******************************************************************************
-# WLST script for creating a new administration server in the WebLogic domain.
+#  WLST script for creating a new administration server in the WebLogic domain.
 #
-# Since : April, 2022
-# Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 import socket
 
 
 # ------------------------------------------------------------------------------
 # generate the cluster address based on the hostnames and port
-# e.g. "managed1.company.com:8001,managed1.company.com:8001"
+# e.g. "managed1.company.com:8001,managed2.company.com:8001"
 # ------------------------------------------------------------------------------
 def build_cluster_address(_managed_server_hostnames, _managed_server_port):
     _hosts = [x.strip() for x in _managed_server_hostnames.split(',')]

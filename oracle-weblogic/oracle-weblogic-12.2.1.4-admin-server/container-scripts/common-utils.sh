@@ -1,13 +1,13 @@
 #!/bin/bash
 # ******************************************************************************
-# This bash script contains common functions that can be called from another
-# bash scripts.
+#  This bash script contains common functions that can be called from another
+#  bash scripts.
 #
-# Since : April, 2022
-# Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 
 # ------------------------------------------------------------------------------
@@ -109,29 +109,52 @@ function executeLiquibase {
 
 # ------------------------------------------------------------------------------
 # deploy the given WAR or EAR to WebLogic as an application
+#
+# arguments:
+#    param 1: admin server host
+#    param 2: path to the artifact
+#    param 3: path to the plan.xml file (optional)
 # ------------------------------------------------------------------------------
 function deployApplication() {
-    local adminServerHost artifact adminServerUrl
+    local adminServerHost artifact adminServerUrl deploymentPlan
     adminServerHost="$1"
     artifact="$2"
+    deploymentPlan=$3
+
     adminServerUrl="t3://$adminServerHost:$ADMIN_SERVER_PORT"
 
     echo
     echo "deploying $artifact artifact to $adminServerUrl as an application..."
-    echo "   admin URL:    $adminServerUrl"
-    echo "   user:         $ADMIN_SERVER_USER"
-    echo "   password:     $ADMIN_SERVER_PASSWORD"
-    echo "   cluster name: $CLUSTER_NAME"
-    echo "   artifact:     $artifact"
+    echo "   admin URL:       $adminServerUrl"
+    echo "   user:            $ADMIN_SERVER_USER"
+    echo "   password:        $ADMIN_SERVER_PASSWORD"
+    echo "   cluster name:    $CLUSTER_NAME"
+    echo "   artifact:        $artifact"
+    echo "   deployment plan: $deploymentPlan"
 
     source "$ORACLE_HOME/wlserver/server/bin/setWLSEnv.sh"
-    java weblogic.Deployer -verbose \
-                           -adminurl "$adminServerUrl" \
-                           -username "$ADMIN_SERVER_USER" \
-                           -password "$ADMIN_SERVER_PASSWORD" \
-                           -usenonexclusivelock \
-                           -targets "$CLUSTER_NAME" \
-                           -deploy "$artifact"
+    if [ -z "$deploymentPlan" ]; then
+        echo "deploying without plan.xml..."
+        java weblogic.Deployer \
+            -verbose \
+            -adminurl "$adminServerUrl" \
+            -username "$ADMIN_SERVER_USER" \
+            -password "$ADMIN_SERVER_PASSWORD" \
+            -usenonexclusivelock \
+            -targets "$CLUSTER_NAME" \
+            -deploy "$artifact"
+    else
+        echo "deploying with plan.xml..."
+        java weblogic.Deployer \
+            -verbose \
+            -adminurl "$adminServerUrl" \
+            -username "$ADMIN_SERVER_USER" \
+            -password "$ADMIN_SERVER_PASSWORD" \
+            -usenonexclusivelock \
+            -targets "$CLUSTER_NAME" \
+            -deploy "$artifact" \
+            -plan "$deploymentPlan"
+   fi
 
     local returnValue=$?
     if [ $returnValue -ne 0 ]; then
@@ -180,10 +203,113 @@ function deployLibrary() {
 # ------------------------------------------------------------------------------
 # read value from property file
 # ------------------------------------------------------------------------------
-getValue() {
+function getValue() {
     local propertiesFile key value
     propertiesFile=$1
     key=$2
     value=$(awk '{print $1}' "$propertiesFile" | grep "$key" | cut -d "=" -f2)
     echo "$value"
+}
+
+# ------------------------------------------------------------------------------
+# restart all the managed servers in the domain
+#
+# usage:
+#    $1: path to the 'boot.properties' file
+# ------------------------------------------------------------------------------
+function restartManagedServers() {
+    local propertiesFile adminServerUsername adminServerPassword
+    propertiesFile="$1"
+    adminServerUsername=$(getValue "$propertiesFile" "username")
+    adminServerPassword=$(getValue "$propertiesFile" "password")
+
+    local adminServerHost
+    adminServerHost="$HOSTNAME"
+
+    echo
+    echo "*************************************************************************"
+    echo "**  restarting all the managed servers..."
+    echo "**     boot.properties:   $propertiesFile"
+    echo "**     admin server host: $adminServerHost"
+    echo "**     admin server port: $ADMIN_SERVER_PORT"
+    echo "**     user:              $adminServerUsername"
+    echo "**     password:          $adminServerPassword"
+    echo "*************************************************************************"
+
+    wlst.sh \
+        -skipWLSModuleScanning \
+        "$ORACLE_HOME/restart-managed-servers.py" \
+            "$ADMIN_SERVER_NAME" \
+            "$adminServerHost" \
+            "$ADMIN_SERVER_PORT" \
+            "$adminServerUsername" \
+            "$adminServerPassword"
+}
+
+# ------------------------------------------------------------------------------
+# restart the admin server
+# it can be run only from the admin server host machine
+# ------------------------------------------------------------------------------
+function restartAdminServer() {
+    local adminServerHost adminServerPort adminServerName domainName domainHome adminServerUrl
+    adminServerHost="$1"
+    adminServerPort="$2"
+    adminServerName="$3"
+    domainName="$4"
+    domainHome="$ORACLE_HOME/user_projects/domains/$domainName"
+    adminServerUrl="t3://$adminServerHost:$adminServerPort"
+
+    local propertiesFile adminServerUsername adminServerPassword
+    propertiesFile="$5"
+    adminServerUsername=$(getValue "$propertiesFile" "username")
+    adminServerPassword=$(getValue "$propertiesFile" "password")
+
+    echo
+    echo "*************************************************************************"
+    echo "**  stopping the admin server..."
+    echo "**     user:              $adminServerUsername"
+    echo "**     password:          $adminServerPassword"
+    echo "**     admin server url:  $adminServerUrl"
+    echo "**     domain home:       $domainHome"
+    echo "*************************************************************************"
+    "$domainHome/bin/stopWebLogic.sh" "$adminServerUsername" "$adminServerPassword" "$adminServerUrl"
+
+    echo
+    echo "*************************************************************************"
+    echo "**  starting the admin server..."
+    echo "**     domain name:       $domainName"
+    echo "**     admin server name: $adminServerName"
+    echo "**     admin server host: $adminServerHost"
+    echo "**     admin server port: $adminServerPort"
+    echo "**     boot.properties:   $propertiesFile"
+    echo "*************************************************************************"
+    local logHome
+    logHome="$ORACLE_HOME/user_projects/domains/$domainName/servers/$adminServerName/logs"
+    "$ORACLE_HOME/user_projects/domains/$domainName/bin/startWebLogic.sh" > "$logHome/$adminServerName.out" 2>&1 &
+    waitForAdminServer "$adminServerHost" "$adminServerPort" "$adminServerName" "$propertiesFile"
+}
+
+# ------------------------------------------------------------------------------
+# waiting for server to startup
+# ------------------------------------------------------------------------------
+function waitForAdminServer() {
+    local adminServerHost adminServerPort adminServerName
+    adminServerHost="$1"
+    adminServerPort="$2"
+    adminServerName="$3"
+
+    local propertiesFile adminServerUsername adminServerPassword
+    propertiesFile="$4"
+    adminServerUsername=$(getValue "$propertiesFile" "username")
+    adminServerPassword=$(getValue "$propertiesFile" "password")
+
+    echo "checking whether the $adminServerName is up and running..."
+    echo "$adminServerName is not running yet, waiting..."
+
+    local command
+    command="wget --timeout=1 --tries=1 -qO- --user $adminServerUsername --password $adminServerPassword http://$adminServerHost:$adminServerPort/management/tenant-monitoring/servers/$adminServerName"
+    while [[ $($command) != *"RUNNING"* ]]; do
+        sleep 2
+    done
+    echo "$adminServerName is up and running"
 }

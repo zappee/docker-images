@@ -9,10 +9,10 @@ Developers can use this image as the main building block of a WebLogic environme
 * The WebLogic Admin server will start automatically with the container.
 
 
-* The `tail` command that shows the server log files keeps alive the container.
+* A `tail` command keeps alive the container that shows the server log files.
 
 
-* Multiply WebLogic Admin servers can be started parallelly on the same host machine using one or multiply `docker-compose.yml`. You can find examples under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project. 
+* Multiply WebLogic Admin servers can be started parallely on the same host machine using one or multiply `docker-compose.yml`. You can find examples under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project. 
 
 
 * The current installation contains a WebLogic Cluster.
@@ -34,9 +34,10 @@ Developers can use this image as the main building block of a WebLogic environme
     * create a new database schema
     * execute SQL commands
     * run Liquibase and update your database
+    * restart WebLogic admin and managed server
 
 
-* Use the server lifecycle bash scripts to automate your application deployment. There are six lifecycle methods that you can use before and after the server and domain start.
+* Use the server lifecycle bash scripts to automate your application deployment. There are scripts that are executed before/after the server first start, before/after each server start and before/after the completely WebLogic domain start.
 
 
 * The `WEB_CONSOLE_COLOR` variable can be used to customize the color of the WebLogic web console. This feature is useful when multiple WebLogic domains are started.
@@ -59,7 +60,7 @@ Developers can use this image as the main building block of a WebLogic environme
 You can find multiply docker-compose sample files under the [oracle-weblogic-12.2.1.4](../oracle-weblogic-12.2.1.4) project.
 
 ## 5) WebLogic server lifecycle methods
-The WebLogic Admin Server and the [WebLogic Managed Server](..//oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and deploy/run applications easily on WebLogic server.
+The WebLogic Admin Server and the [WebLogic Managed Server](../oracle-weblogic-12.2.1.4-managed-server) Docker images help technicians to build scalable Oracle WebLogic environments and deploy/run applications easily on WebLogic server.
 
 The application deployment can be automated easily using the four built-in admin server lifecycle methods.
 These lifecycle methods are actually bash scripts, and they can execute any Unix commands that you need in order to prepare the environment properly and deploy the application or applications.
@@ -83,13 +84,41 @@ The following use case is a good example that demonstrates when you need to bloc
   Unfortunately, the database server startup takes longer than the WebLogic server startup, so you may need to block the WebLogic startup until the database server is up and able to serve requests.
   Otherwise, e.g. the connection pool WLST deployment from the `after-domain-first-startup.sh` script will fail because the deployment will be executed before the database server able to serve requests.
 
-To handle this case or any similar situations described above, you can use the following server lifecycle scripts:
-1. `before-server-first-startup.sh`: executed once, before the first startup of the WebLogic Admin server
-2. `before-server-startup.sh`: executed before each startup of the WebLogic Admin server
-3. `after-server-first-startup.sh`: executed once, after the first startup of the WebLogic Admin server
-4. `after-server-startup.sh`: executed after each startup of the WebLogic Admin server
-5. `after-domain-first-startup.sh`: executed once, after the startup of the complete WebLogic Domain
-6. `after-domain-startup.sh`: executed after the startup of the complete WebLogic Domain
+
+You can block the WebLogic admin server startup with the `wait-for-database-server.sh` script and wait until the database server in the Docker container will be up and ready to serve requests.
+You can also block the manager server startup and wait for the admin server using the `wait-for-admin-server.sh` script that is available in the managed server container.
+Using the `wait-*.sh` scripts, you can solve all problems that are related to the parallel container startup.
+
+Example:
+```
+version: '3'
+services:
+    weblogic-admin-server:
+    image: docker/remal/oracle-weblogic-admin-12.2.1.4:2.0.0
+    container_name: weblogic-admin-server
+    hostname: weblogic-admin-server
+    ports:
+        - "7001:7001" # weblogic listening port
+        - "4001:4001" # debug port
+    depends_on:
+        - "oracle-db"
+    command: ["/home/oracle/wait-for-database-server.sh"]
+    environment:
+        - MANAGED_SERVER_HOSTNAMES=weblogic-managed-server-1, weblogic-managed-server-2
+
+    weblogic-managed-server-1:
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:2.0.0
+        container_name: weblogic-managed-server-1
+        hostname: weblogic-managed-server-1
+        ports:
+            - "8001:8001" # weblogic listening port
+            - "5001:4001" # debug port
+        depends_on:
+            - "weblogic-admin-server"
+        command: ["/home/oracle/wait-for-admin-server.sh"]
+        environment:
+            - ADMIN_SERVER_HOST=weblogic-admin-server
+```
 
 This example demonstrates the usage of the blocking scripts: [hello-weblogic-world](../hello-weblogic-world/docker-compose.yml)
 
@@ -127,6 +156,7 @@ The functions simplify the usage of some often used commands like
 * execution of an external SQL/DDL file
 * JAR, WAR, or EAR deployment to WebLogic server as a library or an application
 * read values from a standard `*.properties` file
+* restart WebLogic admin and managed server
 
 In order to you can use bash functions, you need to include the `common-utils.sh` library to your bash script with the `source ./common-utils.sh` command.
 
@@ -201,7 +231,7 @@ The library locates under the `/home/oracle` directory.
     executeLiquibase  $ORACLE_HOME/liquibase/liquibase-app
     ~~~
 
-### 9.5) Application deployment
+### 9.5) Application deployment with or without deployment plan
 * Command: `deployApplication <artifact> <target1> <target2>`
 * Parameters:
    * `artifact`: the file that will be deployed to the WebLogic cluster as an application

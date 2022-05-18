@@ -1,12 +1,12 @@
 #!/bin/bash 
 # ******************************************************************************
-# This script returns only if the database server is up and running.
+#  This script returns only if the database server is up and running.
 #
-# Since : April, 2022
-# Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 
 # ------------------------------------------------------------------------------

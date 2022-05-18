@@ -1,13 +1,13 @@
 #!/bin/bash
 # ******************************************************************************
-# This startup script is executed automatically by Docker when a container
-# starts.
+#  This startup script is executed automatically by Docker when a container
+#  starts.
 #
-# Since : April, 2022
-# Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 
 # ------------------------------------------------------------------------------
@@ -43,6 +43,7 @@ function executeStep1Tasks() {
         echo "executing some tasks before the server's first startup..."
         createAdminServer
         configureNodeManager
+        configureSplunkForwarder
 
         if [ -f "$fileToExecute" ]; then
             echo "---------------------------------------------------------------------"
@@ -89,7 +90,7 @@ function executeStep3Tasks() {
     markerFile="$ORACLE_HOME/.after-first-server-startup.marker"
     fileToExecute="$ORACLE_HOME/after-server-first-startup.sh"
 
-    waitForAdminServer
+    waitForAdminServer "$HOSTNAME" "$ADMIN_SERVER_PORT" "$ADMIN_SERVER_NAME" "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/security/boot.properties"
 
     if [ -f "$markerFile" ]; then
          echo "skipping the execution of the after server's first startup tasks..."
@@ -106,6 +107,7 @@ function executeStep3Tasks() {
 
         enrollNodeManager
         generateServerTemplate
+        startSplunkForwarder
 
         if [ -f "$fileToExecute" ]; then
             echo "-------------------------------------------------------------------------"
@@ -337,6 +339,40 @@ function enrollNodeManager() {
 }
 
 # ------------------------------------------------------------------------------
+# configure the Splunk Universal Forwarder to send log entries to the Splunk
+# server
+# ------------------------------------------------------------------------------
+function configureSplunkForwarder() {
+    echo "configuring Splunk Universal Forwarder...";
+    local logHome
+    logHome=$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$ADMIN_SERVER_NAME/logs
+
+    mkdir -p "$logHome"
+    touch "$logHome/$ADMIN_SERVER_NAME.out"
+    touch "$logHome/$ADMIN_SERVER_NAME.log"
+    touch "$logHome/$DOMAIN_NAME.log"
+
+    "$SPLUNK_HOME/bin/splunk" \
+        add monitor "$logHome/$ADMIN_SERVER_NAME.out" \
+        -index main \
+        -sourcetype "$ADMIN_SERVER_NAME" \
+        -auth "$SPLUNK_USERNAME:$SPLUNK_PASSWORD"
+
+    "$SPLUNK_HOME/bin/splunk" \
+        add monitor "$logHome/$ADMIN_SERVER_NAME.log" \
+        -index main \
+        -sourcetype "$ADMIN_SERVER_NAME" \
+        -auth "$SPLUNK_USERNAME:$SPLUNK_PASSWORD"
+
+    "$SPLUNK_HOME/bin/splunk" \
+        add monitor "$logHome/$DOMAIN_NAME.log" \
+        -index main \
+        -sourcetype "$ADMIN_SERVER_NAME" \
+        -auth "$SPLUNK_USERNAME:$SPLUNK_PASSWORD"
+    echo
+}
+
+# ------------------------------------------------------------------------------
 # customize the WebLogic console
 # ------------------------------------------------------------------------------
 function customizeWebLogicConsole() {
@@ -406,6 +442,15 @@ function exposeTemplateJar() {
 }
 
 # ------------------------------------------------------------------------------
+# start Splunk Universal Forwarder
+# ------------------------------------------------------------------------------
+function startSplunkForwarder() {
+    echo "starting Splunk Universal Forwarder..."
+    "$SPLUNK_HOME/bin/splunk" start --accept-license
+    echo "Splunk Universal Forwarder is up and running"
+}
+
+# ------------------------------------------------------------------------------
 # start the Node Manager
 # ------------------------------------------------------------------------------
 function startNodeManager() {
@@ -427,26 +472,6 @@ function startAdminServer() {
     logHome="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$ADMIN_SERVER_NAME/logs"
     mkdir -p "$logHome"
     "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/bin/startWebLogic.sh" > "$logHome/$ADMIN_SERVER_NAME.out" 2>&1 &
-}
-
-# ------------------------------------------------------------------------------
-# waiting for server to be up and ready to serve requests
-# ------------------------------------------------------------------------------
-function waitForAdminServer() {
-    echo "checking whether the $ADMIN_SERVER_NAME is up and running..."
-
-    local propertiesFile adminServerUsername adminServerPassword command
-    propertiesFile="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/security/boot.properties"
-    adminServerUsername=$(getValue "$propertiesFile" "username")
-    adminServerPassword=$(getValue "$propertiesFile" "password")
-    command="wget --timeout=1 --tries=1 -qO- --user ${adminServerUsername} --password ${adminServerPassword} http://${HOSTNAME}:${ADMIN_SERVER_PORT}/management/tenant-monitoring/servers/${ADMIN_SERVER_NAME}"
-
-    echo "$ADMIN_SERVER_NAME is not running yet, waiting..."
-    while [[ $($command) != *"RUNNING"* ]]; do
-        sleep 2
-    done
-
-    echo "$ADMIN_SERVER_NAME is up and running"
 }
 
 # ------------------------------------------------------------------------------

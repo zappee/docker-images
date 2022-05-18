@@ -1,12 +1,12 @@
 # ******************************************************************************
-# ** WLST script for creating a new managed server in an existing WebLogic
-# ** domain.
-# **
-# ** Since : April, 2022
-# ** Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  WLST script for creating a new managed server in an existing WebLogic
+#  domain.
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 
 
