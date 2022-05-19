@@ -22,6 +22,11 @@ services:
         command: ["/home/oracle/wait-for-database-server.sh"]
         environment:
             - MANAGED_SERVER_HOSTNAMES=weblogic-managed-server-1, weblogic-managed-server-2
+            - DB_HOST=oracle-db
+            - DB_PORT=1521
+            - DB_NAME=ORCLPDB1.localdomain
+            - DB_USER=SYS as SYSDBA
+            - DB_PASSWORD=Oradoc_db1
         volumes:
             - ~/dev/workspace/docker/shared-volumes/admin-server/upload:/home/oracle/upload
 
@@ -34,11 +39,11 @@ services:
             - "5001:4001" # debug port
         depends_on:
             - "weblogic-admin-server"
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-admin-server
+        volumes:
+            - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
 
     weblogic-managed-server-2:
         image: docker/remal/oracle-weblogic-managed-12.2.1.4:2.0.0
@@ -49,11 +54,11 @@ services:
             - "5002:4001" # debug port
         depends_on:
             - "weblogic-admin-server"
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-admin-server
+        volumes:
+            - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload
 
     # ----- Oracle Database Server ---------------------------------------------
     oracle-db:

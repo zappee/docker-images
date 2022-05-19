@@ -30,10 +30,11 @@ services:
             - "5001:4001" # debug port
         depends_on:
             - "weblogic-admin-server"
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
+        command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-admin-server
+        volumes:
+            - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
 
     weblogic-managed-server-2:
         image: docker/remal/oracle-weblogic-managed-12.2.1.4:2.0.0
@@ -44,7 +45,8 @@ services:
             - "5002:4001" # debug port
         depends_on:
             - "weblogic-admin-server"
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload
+        command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-admin-server
+        volumes:
+            - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload

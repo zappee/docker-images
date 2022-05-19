@@ -33,6 +33,7 @@ services:
             - "5101:4001" # debug port
         depends_on:
             - "weblogic-a-admin-server"
+        command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-a-admin-server
         volumes:
@@ -47,6 +48,7 @@ services:
             - "5102:4001" # debug port
         depends_on:
             - "weblogic-a-admin-server"
+        command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-a-admin-server
         volumes:
@@ -74,7 +76,8 @@ services:
             - "8201:8001" # weblogic listening port
             - "5201:4001" # debug port
         depends_on:
-            - "weblogic-a-admin-server"
+            - "weblogic-b-admin-server"
+        command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-b-admin-server
         volumes:
@@ -88,7 +91,8 @@ services:
             - "8202:8001" # weblogic listening port
             - "5202:4001" # debug port
         depends_on:
-            - "weblogic-a-admin-server"
+            - "weblogic-b-admin-server"
+        command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
             - ADMIN_SERVER_HOST=weblogic-b-admin-server
         volumes:
