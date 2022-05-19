@@ -47,7 +47,7 @@ Contact: [arnold.somogyi@gmail.com](mailto:arnold.somogyi@gmail.com)
 ## 4) License
 Before the build, you must download the `Oracle JDK` install kit from the Oracle website and accept the license indicated on that page.
 
-Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
+Copyright (c) 2022 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
 

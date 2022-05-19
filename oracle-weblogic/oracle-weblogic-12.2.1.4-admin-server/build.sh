@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # ******************************************************************************
 #  Oracle WebLogic Server 12.2.1.4.0 Administration Server Dockerfile.
 #

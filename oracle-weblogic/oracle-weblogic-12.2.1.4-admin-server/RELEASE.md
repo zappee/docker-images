@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
 
 ## [weblogic-admin-12.2.1.4:2.0.0] - 13/Jun/2022
 #### Modified
-* Use the latest `weblogic-12.2.1.4:1.1.0` image.
+* Use the latest `weblogic-12.2.1.4:2.0.0` image.
 * Improvements in bash scripts: better naming conventions for functions and variables, quoting properly, etc.
 * Improvements in python scripts.
 * Simplify the container startup.
