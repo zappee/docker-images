@@ -5,12 +5,12 @@
 #  Since : Jun, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
-#  BSD (2-clause) licensed
-#
 #  Usage:
 #     $ ./build.sh           build the image locally
 #     $ ./build.sh true      build and push the image to the image registry
+#
+#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 DOCKER_REGISTRY=docker
 DOCKER_REGISTRY_NAMESPACE=remal
