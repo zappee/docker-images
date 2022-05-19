@@ -2,29 +2,32 @@
 
 ## 1) Image description
 This is a sample project that demonstrates the usage of the Remal's WebLogic [Admin](../oracle-weblogic-12.2.1.4-admin-server) and [Managed](../oracle-weblogic-12.2.1.4-managed-server) server images.
-The project give a step-by-step guide how to build easily a dockerized WebLogic cluster with automated application deployment using the Remal Docker images.
+The project gives a step-by-step guide how to build easily a dockerized WebLogic cluster with automated application deployment using the Remal Docker images.
 The project shows best practices as well to cover the typical use cases.
 
 ## 2) Image overview
-* WebLogic cluster Docker environment with Admin and Managed servers
+* WebLogic cluster Docker environment with Admin and Managed servers.
 
 
-* WebLogic resource deployment: `Conection Pool`, `Connection Factory` `Distributed JMS Queues`
+* Splunk server to check easily the server and application logs.
 
 
-* two `*.WAR` application deployment to the WebLogic cluster
+* WebLogic resource deployment: `Conection Pool`, `Connection Factory` `Distributed JMS Queues`.
 
 
-* Database schema creation for the application
+* Two `*.WAR` files deployment to the WebLogic cluster.
 
 
-* Initialize the database and keep up to date the scheme with Liquibase
+* Database schema creation for the application.
 
 
-* Insert initial master data to the database during the automated deployment
+* Initialize the database and keep up to date the scheme with Liquibase.
 
 
-* Sending test messages to the JMS queues to simulate the responses from an external system
+* Insert initial master data to the database during the automated deployment.
+
+
+* Sending test messages to the JMS queues to simulate the responses from an external system.
 
 ## 3) Build
 1) Pull all the following images from the docker repository or build them locally:
@@ -58,12 +61,15 @@ The project shows best practices as well to cover the typical use cases.
   * Password: `password`
 * JDBC URL: `jdbc:oracle:thin:@localhost:1521/ORCLPDB1.localdomain`
 
-### 4.4) Deployed applications
-#### 4.4.1) FIPS checker
+### 4.4) Splunk
+* Splunk web console URL: [http://localhost:8000](http://localhost:8000)
+* WebLogic credentials: `admin`/`password`
+
+### 4.5) Deployed applications
+#### 4.5.1) FIPS checker
 This is a web application that checks whether the FIPS mode is enabled or disabled on the server where the WAR is deployed.
 
 The web application is deployed to the Admin server and the WebLogic cluster as well, and it shows that the FIPS is enabled or not there.
-* Admin server URL (no FIPS): [http://localhost:7001/fips-checker-1.0](http://localhost:7001/fips-checker-1.0)
 * Managed server 1 URL: [http://localhost:8001/fips-checker-1.0](http://localhost:8001/fips-checker-1.0)
 * Managed server 2 URL: [http://localhost:8002/fips-checker-1.0](http://localhost:8002/fips-checker-1.0)
 
@@ -71,7 +77,7 @@ The web application is deployed to the Admin server and the WebLogic cluster as 
 >
 >This step-by-step instruction [here](https://docs.oracle.com/middleware/1213/wls/SECMG/fips.htm#SECMG768) describes how to enable FIPS mode on the Oracle WebLogic server.
 
-#### 4.4.2) Hello WebLogic World Web application
+#### 4.5.2) Hello WebLogic World Web application
 This is a simple web application contains only one static HTML page.
 The aim of this application is to demonstrate the multiply WAR deployment in the same WebLogic custer in Docker using the Remal's Docker images.
 That deployment also demonstrates the deployment of a connection-pool and some JMS queues.
@@ -129,3 +135,5 @@ Before the build, you must download the `Oracle JDK` install kit from the Oracle
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
+
+<a href="https://trackgit.com"><img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" /></a>

@@ -1,18 +1,18 @@
 #!/bin/bash
 # ******************************************************************************
-# Fips-Checker installation script.
+#  Fips-Checker installation script.
 #
-# Since : July, 2021
-# Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#  Since : Jun, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-# Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
-# BSD (2-clause) licensed
+#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
 # ******************************************************************************
 
 # ------------------------------------------------------------------------------
 # prints all parameters used by this script
 # ------------------------------------------------------------------------------
-function showVariables {
+function showContext {
     echo
     echo ".==================================================================."
     echo "||    ( )              STARTING THE SHOW WITH              ( )    ||"
@@ -41,7 +41,7 @@ function showVariables {
     echo "||                                                                ||"
     echo "|'================================================================'|"
     echo
-    echo "variables for $BASH_SOURCE:"
+    echo "executing the ${BASH_SOURCE[0]} script with"
     echo "   oracle home:                    $ORACLE_HOME"
     echo "   WebLogic domain name:           $DOMAIN_NAME"
     echo "   WebLogic cluster name:          $CLUSTER_NAME"
@@ -53,10 +53,11 @@ function showVariables {
 # ------------------------------------------------------------------------------
 # main program starts here
 # ------------------------------------------------------------------------------
-source ./common-utils.sh
-PROPERTIES_FILE=$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/security/boot.properties
-ADMIN_SERVER_USER=$(getValue $PROPERTIES_FILE "username")
-ADMIN_SERVER_PASSWORD=$(getValue $PROPERTIES_FILE "password")
+source "$ORACLE_HOME/common-utils.sh"
 
-showVariables
-deployApplication $ORACLE_HOME/bin/fips-checker/fips-checker-1.0.war $ADMIN_SERVER_NAME $CLUSTER_NAME
+PROPERTIES_FILE="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/security/boot.properties"
+ADMIN_SERVER_USER=$(getValue "$PROPERTIES_FILE" "username")
+ADMIN_SERVER_PASSWORD=$(getValue "$PROPERTIES_FILE" "password")
+
+showContext
+deployApplication "$HOSTNAME" "$ORACLE_HOME/bin/fips-checker/fips-checker-1.0.war"

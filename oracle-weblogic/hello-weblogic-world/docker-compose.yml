@@ -1,7 +1,7 @@
 # ******************************************************************************
 #  Compose file for a the hello-weblogic-world application.
 #
-#  Since : July, 2021
+#  Since : April, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
@@ -10,15 +10,18 @@
 version: '3'
 services:
     # ----- WebLogic Admin server ----------------------------------------------
-    admin-server:
-        image: docker/remal/hello-welogic-world-admin-server:1.0.0
-        container_name: admin-server
-        hostname: admin-server
+    hello-admin-server:
+        image: docker/remal/hello-welogic-world-admin-server:2.0.0
+        container_name: hello-admin-server
+        hostname: hello-admin-server
         ports:
             - "7001:7001" # weblogic listening port
             - "4001:4001" # debug port
-        command: ["/home/oracle/wait-for-database-and-managed-server.sh", "2"]
+        depends_on:
+            - "oracle-db"
+        command: ["/home/oracle/wait-for-database-server.sh"]
         environment:
+            - MANAGED_SERVER_HOSTNAMES=hello-managed-server-1, hello-managed-server-2
             - WEB_CONSOLE_COLOR=#9575CD
             - DB_HOST=oracle-db
             - DB_PORT=1521
@@ -28,37 +31,33 @@ services:
             - DB_SCHEMA_USER_HELLO=hello
             - DB_SCHEMA_PASSWORD=password
             - CREATE_DATABASE=true
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/admin-server/upload:/home/oracle/upload
 
     # ----- WebLogic Managed servers -------------------------------------------
-    hello-welogic-world-managed-server-1:
-        image: docker/remal/hello-welogic-world-managed-server:1.0.0
-        container_name: managed-server-1
-        hostname: managed-server-1
+    hello-managed-server-1:
+        image: docker/remal/hello-welogic-world-managed-server:2.0.0
+        container_name: hello-managed-server-1
+        hostname: hello-managed-server-1
         ports:
             - "8001:8001" # weblogic listening port
             - "5001:4001" # debug port
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
+        depends_on:
+            - "hello-admin-server"
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
-            - ADMIN_SERVER_HOST=admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_1
+            - ADMIN_SERVER_HOST=hello-admin-server
 
-    hello-welogic-world-managed-server-2:
-        image: docker/remal/hello-welogic-world-managed-server:1.0.0
-        container_name: managed-server-2
-        hostname: managed-server-2
+    hello-managed-server-2:
+        image: docker/remal/hello-welogic-world-managed-server:2.0.0
+        container_name: hello-managed-server-2
+        hostname: hello-managed-server-2
         ports:
             - "8002:8001" # weblogic listening port
             - "5002:4001" # debug port
-        volumes:
-            - ~/dev/workspace/docker/shared-volumes/managed-server-2/upload:/home/oracle/upload
+        depends_on:
+            - "hello-admin-server"
         command: ["/home/oracle/wait-for-admin-server.sh"]
         environment:
-            - ADMIN_SERVER_HOST=admin-server
-            - MANAGED_SERVER_NAME=MANAGED_SERVER_2
+            - ADMIN_SERVER_HOST=hello-admin-server
 
     # ----- Oracle Database server ---------------------------------------------
     oracle-db:
@@ -66,3 +65,15 @@ services:
         container_name: oracle-db
         ports:
             - "1521:1521" # database listening port
+
+    # ----- Splunk ---------------------------------------------------
+    splunk:
+        image: docker/remal/splunk-8.2:2.0.0
+        container_name: splunk
+        hostname: splunk
+        environment:
+            - SPLUNK_START_ARGS=--accept-license
+            - SPLUNK_PASSWORD=password
+        ports:
+            - 8000:8000  # splunk default listening port
+            - 8088:8088  # HTTP event collector port

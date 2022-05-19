@@ -1,16 +1,16 @@
 # ******************************************************************************
-#  Oracle WebLogic Server Administration Server Dockerfile.
+#  Oracle WebLogic Administration Server Dockerfile.
 #
-#  Since : February, 2021
+#  Since : Jun, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/remal/oracle-weblogic-admin-with-splunk:1.0.0
+FROM docker/remal/oracle-weblogic-admin-with-splunk:2.0.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
-ENV ADMIN_SERVER_JAVA_OPTIONS="$ADMIN_SERVER_JAVA_OPTIONS -Denv.name=dev"
+ENV ADMIN_SERVER_JAVA_OPTIONS="$ADMIN_SERVER_JAVA_OPTIONS"
 
 USER oracle:oracle
 

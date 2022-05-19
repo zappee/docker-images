@@ -1,181 +1,201 @@
 # ******************************************************************************
 # WLST script for creating WebLogic resources for the application.
 #
-# Since : August, 2021
+# Since : Jun, 202
 # Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 # Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 # BSD (2-clause) licensed
 # ******************************************************************************
 
+
 # ------------------------------------------------------------------------------
 # connect to the admin server
 # ------------------------------------------------------------------------------
-def connectToServer(_adminServerHost, _adminServerPort, _adminServerUser, _adminServerPassword):
-    _url='t3://' + _adminServerHost + ':' + _adminServerPort
-    connect(_adminServerUser, _adminServerPassword, _url)
+def connect_to_server(_admin_server_host, _admin_server_port, _admin_server_user, _admin_server_password):
+    _url = 't3://' + _admin_server_host + ':' + _admin_server_port
+    connect(_admin_server_user, _admin_server_password, _url)
+
 
 # ------------------------------------------------------------------------------
 # start a new edit session
 # ------------------------------------------------------------------------------
-def lockAndEdit():
-    _waitTimeInMillis=60000
-    _timeoutInMillis=90000
+def lock_and_edit():
+    _wait_time_in_millis = 60000
+    _timeout_in_millis = 90000
     edit()
-    startEdit(_waitTimeInMillis, _timeoutInMillis, 'True')
+    startEdit(_wait_time_in_millis, _timeout_in_millis, 'True')
+
 
 # ------------------------------------------------------------------------------
 # save changes to disk
 # ------------------------------------------------------------------------------
-def saveChanges():
+def save_changes():
     save()
     activate()
     disconnect()
 
+
 # ------------------------------------------------------------------------------
 # create a new data-source
 # ------------------------------------------------------------------------------
-def createDataSource(_dsName, _dsJNDIName, _dsURL, _dsDriver, _dsUsername, _dsPassword, _dsTargetName, _dsTargetType):
+def create_data_source(_ds_name, _ds_jndi, _ds_url, _ds_driver, _ds_user, _ds_pwd, _ds_target, _ds_target_type):
     print('creating a new data-source...')
-    print('   DS name:     %s' % _dsName)
-    print('   JNDI name:   %s' % _dsJNDIName)
-    print('   DS URL:      %s' % _dsURL)
-    print('   JDBC Driver: %s' % _dsDriver)
-    print('   Username:    %s' % _dsUsername)
-    print('   Password:    %s' % _dsPassword)
-    print('   Target:      %s' % _dsTargetName)
-    print('   Target type: %s' % _dsTargetType)
+    print('   datasource name: %s' % _ds_name)
+    print('   JNDI name:       %s' % _ds_jndi)
+    print('   JDBC URL:        %s' % _ds_url)
+    print('   JDBC Driver:     %s' % _ds_driver)
+    print('   Username:        %s' % _ds_user)
+    print('   Password:        %s' % _ds_pwd)
+    print('   Target:          %s' % _ds_target)
+    print('   Target type:     %s' % _ds_target_type)
 
     cd('/')
-    cmo.createJDBCSystemResource(_dsName)
+    cmo.createJDBCSystemResource(_ds_name)
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName)
-    cmo.setName(_dsName)
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name)
+    cmo.setName(_ds_name)
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName + '/JDBCDataSourceParams/' + _dsName)
-    set('JNDINames', jarray.array([String(_dsJNDIName)], String))
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name + '/JDBCDataSourceParams/' + _ds_name)
+    set('JNDINames', jarray.array([String(_ds_jndi)], String))
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName)
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name)
     cmo.setDatasourceType('GENERIC')
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName + '/JDBCDriverParams/' + _dsName)
-    cmo.setUrl(_dsURL)
-    cmo.setDriverName(_dsDriver)
-    set('Password', _dsPassword)
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name + '/JDBCDriverParams/' + _ds_name)
+    cmo.setUrl(_ds_url)
+    cmo.setDriverName(_ds_driver)
+    set('Password', _ds_pwd)
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName + '/JDBCDriverParams/' + _dsName + '/Properties/' + _dsName)
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name + '/JDBCDriverParams/' + _ds_name
+       + '/Properties/' + _ds_name)
     cmo.createProperty('user')
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName + '/JDBCDriverParams/' + _dsName + '/Properties/' + _dsName + '/Properties/user')
-    cmo.setValue(_dsUsername)
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName + '/JDBCConnectionPoolParams/' + _dsName)
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name + '/JDBCDriverParams/' + _ds_name
+       + '/Properties/' + _ds_name + '/Properties/user')
+    cmo.setValue(_ds_user)
+
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name + '/JDBCConnectionPoolParams/' + _ds_name)
     cmo.setTestTableName('SQL SELECT 1 FROM DUAL')
 
-    cd('/JDBCSystemResources/' + _dsName + '/JDBCResource/' + _dsName + '/JDBCDataSourceParams/' + _dsName)
+    cd('/JDBCSystemResources/' + _ds_name + '/JDBCResource/' + _ds_name + '/JDBCDataSourceParams/' + _ds_name)
     cmo.setGlobalTransactionsProtocol('TwoPhaseCommit')
 
-    cd('/JDBCSystemResources/' + _dsName)
-    set('Targets',jarray.array([ObjectName('com.bea:Name=' + _dsTargetName + ',Type=' + _dsTargetType)], ObjectName))
+    cd('/JDBCSystemResources/' + _ds_name)
+    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _ds_target + ',Type=' + _ds_target_type)], ObjectName))
+
 
 # ------------------------------------------------------------------------------
 # create a new jms-server
 # ------------------------------------------------------------------------------
-def createJmsServer(_jmsServerName, _jmsTargetName, _jmsTargetType):
+def create_jms_server(_jms_server, _jms_target, _jms_target_type):
     print('creating a new jms-server...')
-    print('   JMS server name: %s' % _jmsServerName)
-    print('   Target:          %s' % _jmsTargetName)
-    print('   Target type:     %s' % _jmsTargetType)
+    print('   JMS server name: %s' % _jms_server)
+    print('   Target:          %s' % _jms_target)
+    print('   Target type:     %s' % _jms_target_type)
 
     cd('/')
-    cmo.createJMSServer(_jmsServerName)
-    cd('/JMSServers/' + _jmsServerName)
-    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _jmsTargetName + ',Type=' + _jmsTargetType)], ObjectName))
+    cmo.createJMSServer(_jms_server)
+    cd('/JMSServers/' + _jms_server)
+    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _jms_target + ',Type=' + _jms_target_type)], ObjectName))
+
 
 # ------------------------------------------------------------------------------
 # create a new jms-module
 # ------------------------------------------------------------------------------
-def createJmsModule(_jmsServerName, _jmsModuleName, _jmsModuleSubDeploymentName, _jmsTargetName, _jmsTargetType):
+def create_jms_module(_jms_server, _jms_module, _jms_module_sub_deployment, _jms_target, _jms_target_type):
     print('creating a new jms-module...')
-    print('   JMS server name:                %s' % _jmsServerName)
-    print('   JMS module name:                %s' % _jmsModuleName)
-    print('   JMS module sub-deployment name: %s' % _jmsModuleSubDeploymentName)
-    print('   Target:                         %s' % _jmsTargetName)
-    print('   Target type:                    %s' % _jmsTargetType)
+    print('   JMS server name:                %s' % _jms_server)
+    print('   JMS module name:                %s' % _jms_module)
+    print('   JMS module sub-deployment name: %s' % _jms_module_sub_deployment)
+    print('   Target:                         %s' % _jms_target)
+    print('   Target type:                    %s' % _jms_target_type)
 
     cd('/')
-    cmo.createJMSSystemResource(_jmsModuleName)
-    cd('/JMSSystemResources/' + _jmsModuleName)
-    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _jmsTargetName + ',Type=' + _jmsTargetType)], ObjectName))
+    cmo.createJMSSystemResource(_jms_module)
+    cd('/JMSSystemResources/' + _jms_module)
+    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _jms_target + ',Type=' + _jms_target_type)], ObjectName))
 
-    cmo.createSubDeployment(_jmsModuleSubDeploymentName)
-    cd('/JMSSystemResources/' + _jmsModuleName + '/SubDeployments/' + _jmsModuleSubDeploymentName)
-    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _jmsServerName + ',Type=JMSServer')], ObjectName))
+    cmo.createSubDeployment(_jms_module_sub_deployment)
+    cd('/JMSSystemResources/' + _jms_module + '/SubDeployments/' + _jms_module_sub_deployment)
+    set('Targets', jarray.array([ObjectName('com.bea:Name=' + _jms_server + ',Type=JMSServer')], ObjectName))
+
 
 # ------------------------------------------------------------------------------
 # create a new jms-connection-factory
 # ------------------------------------------------------------------------------
-def createConnectionFactory(_jmsModuleName, _jmsModuleSubDeploymentName, _jmsconnectionFactoryName, _jmsconnectionFactoryJndiName):
+def create_connection_factory(_jms_module, _jms_module_sub_deployment, _jms_cf, _jms_cf_jndi):
     print('creating a new connection-factory...')
-    print('   JMS module name:                %s' % _jmsModuleName)
-    print('   JMS module sub-deployment name: %s' % _jmsModuleSubDeploymentName)
-    print('   Connection factory name:        %s' % _jmsconnectionFactoryName)
-    print('   Connection factory JNDI name:   %s' % _jmsconnectionFactoryJndiName)
+    print('   JMS module name:                %s' % _jms_module)
+    print('   JMS module sub-deployment name: %s' % _jms_module_sub_deployment)
+    print('   Connection factory name:        %s' % _jms_cf)
+    print('   Connection factory JNDI name:   %s' % _jms_cf_jndi)
 
-    cd('/JMSSystemResources/' + _jmsModuleName + '/JMSResource/' + _jmsModuleName)
-    cmo.createConnectionFactory(_jmsconnectionFactoryName)
-    cd('/JMSSystemResources/' + _jmsModuleName + '/JMSResource/' + _jmsModuleName + '/ConnectionFactories/' + _jmsconnectionFactoryName)
-    cmo.setJNDIName('jms/' + _jmsconnectionFactoryJndiName)
-    cmo.setSubDeploymentName(_jmsModuleSubDeploymentName)
+    cd('/JMSSystemResources/' + _jms_module + '/JMSResource/' + _jms_module)
+    cmo.createConnectionFactory(_jms_cf)
+    cd('/JMSSystemResources/' + _jms_module + '/JMSResource/' + _jms_module + '/ConnectionFactories/' + _jms_cf)
+    cmo.setJNDIName('jms/' + _jms_cf_jndi)
+    cmo.setSubDeploymentName(_jms_module_sub_deployment)
 
 
 # ------------------------------------------------------------------------------
 # create a new distributed-jms-queue
 # ------------------------------------------------------------------------------
-def createDistributedJmsQueue(_jmsModuleName, _jmsModuleSubDeploymentName, _jmsQueueName, _jmsQueueJndiName):
+def create_distributed_jms_queue(_jms_module, _jms_module_sub_deployment, _jms_queue_name, _jms_queue_jndi):
     print('creating a new distributed-jms-queue...')
-    print('   JMS module name:                %s' % _jmsModuleName)
-    print('   JMS module sub-deployment name: %s' % _jmsModuleSubDeploymentName)
-    print('   JMS queue name:                 %s' % _jmsQueueName)
-    print('   JMS queue JNDI name:            %s' % _jmsQueueJndiName)
+    print('   JMS module name:                %s' % _jms_module)
+    print('   JMS module sub-deployment name: %s' % _jms_module_sub_deployment)
+    print('   JMS queue name:                 %s' % _jms_queue_name)
+    print('   JMS queue JNDI name:            %s' % _jms_queue_jndi)
 
-    cd('/JMSSystemResources/' + _jmsModuleName + '/JMSResource/' + _jmsModuleName)
-    cmo.createUniformDistributedQueue(_jmsQueueName)
+    cd('/JMSSystemResources/' + _jms_module + '/JMSResource/' + _jms_module)
+    cmo.createUniformDistributedQueue(_jms_queue_name)
 
-    cd('/JMSSystemResources/' + _jmsModuleName + '/JMSResource/' + _jmsModuleName + '/UniformDistributedQueues/' + _jmsQueueName)
-    cmo.setJNDIName(_jmsQueueJndiName)
-    cmo.setSubDeploymentName(_jmsModuleSubDeploymentName)
+    cd('/JMSSystemResources/' + _jms_module + '/JMSResource/' + _jms_module + '/UniformDistributedQueues/'
+       + _jms_queue_name)
+    cmo.setJNDIName(_jms_queue_jndi)
+    cmo.setSubDeploymentName(_jms_module_sub_deployment)
+
 
 # ------------------------------------------------------------------------------
 # main program starts here
 # ------------------------------------------------------------------------------
-adminServerHost = sys.argv[1]
-adminServerPort = sys.argv[2]
-clusterName = sys.argv[3]
-dbHost = sys.argv[4]
-dbPort = sys.argv[5]
-dbName = sys.argv[6]
-dsUsername = sys.argv[7]
-dsPassword = sys.argv[8]
+admin_server_host = sys.argv[1]
+admin_server_port = sys.argv[2]
+cluster_name = sys.argv[3]
+db_host = sys.argv[4]
+db_port = sys.argv[5]
+db_name = sys.argv[6]
+ds_user = sys.argv[7]
+ds_pwd = sys.argv[8]
 
-print('admin server host:     %s' % adminServerHost)
-print('admin server port:     %s' % adminServerPort)
-print('admin server user:     %s' % username)
-print('admin server password: %s' % password)
-print('cluster name:          %s' % clusterName)
+print("executing the ${BASH_SOURCE[0]} script with")
+print('   admin server host:     %s' % admin_server_host)
+print('   admin server port:     %s' % admin_server_port)
+print('   admin server user:     %s' % username)
+print('   admin server password: %s' % password)
+print('   cluster name:          %s' % cluster_name)
 
-connectToServer(adminServerHost, adminServerPort, username, password)
-lockAndEdit()
+connect_to_server(admin_server_host, admin_server_port, username, password)
+lock_and_edit()
 
-dsURL = 'jdbc:oracle:thin:@//' + dbHost + ':' + dbPort + '/' + dbName
-createDataSource('hello-ds', 'jdbc/HELLO_DS', dsURL, 'oracle.jdbc.xa.client.OracleXADataSource', dsUsername, dsPassword, clusterName, 'Cluster')
+dsURL = 'jdbc:oracle:thin:@//' + db_host + ':' + db_port + '/' + db_name
+create_data_source('hello-ds',
+                   'jdbc/HELLO_DS',
+                   dsURL,
+                   'oracle.jdbc.xa.client.OracleXADataSource',
+                   ds_user,
+                   ds_pwd,
+                   cluster_name,
+                   'Cluster')
 
-jmsServerName = 'dev-jms-server'
-jmsModuleName = 'dev-jms-module'
-jmsModuleSubDeploymentName = 'dev-jms-module-subdeployment'
-createJmsServer(jmsServerName, clusterName, 'Cluster')
-createJmsModule(jmsServerName, jmsModuleName, jmsModuleSubDeploymentName, clusterName, 'Cluster')
-createConnectionFactory(jmsModuleName, jmsModuleSubDeploymentName, 'jms-connection-factory', 'qcf')
-createDistributedJmsQueue(jmsModuleName, jmsModuleSubDeploymentName, 'hello-incoming-queue', 'jms/incoming')
-createDistributedJmsQueue(jmsModuleName, jmsModuleSubDeploymentName, 'hello-outgoing-queue', 'jms/outgoing')
+jms_server_name = 'dev-jms-server'
+jms_module_name = 'dev-jms-module'
+jms_module_sub_deployment = 'dev-jms-module-subdeployment'
+create_jms_server(jms_server_name, cluster_name, 'Cluster')
+create_jms_module(jms_server_name, jms_module_name, jms_module_sub_deployment, cluster_name, 'Cluster')
+create_connection_factory(jms_module_name, jms_module_sub_deployment, 'jms-connection-factory', 'qcf')
+create_distributed_jms_queue(jms_module_name, jms_module_sub_deployment, 'hello-incoming-queue', 'jms/incoming')
+create_distributed_jms_queue(jms_module_name, jms_module_sub_deployment, 'hello-outgoing-queue', 'jms/outgoing')
 
-saveChanges()
+save_changes()
