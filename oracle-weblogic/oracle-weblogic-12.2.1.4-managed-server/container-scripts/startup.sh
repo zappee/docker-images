@@ -1,9 +1,9 @@
 #!/bin/bash 
 # ******************************************************************************
-# Creates a new managed server during the first run and calls WebLogic
-# lifecycle bash script.
+#  This startup script is executed automatically by Docker when a container
+#  starts.
 #
-# Since : February, 2021
+# Since : Jun, 2022
 # Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 # Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
@@ -11,154 +11,280 @@
 # ******************************************************************************
 
 # ------------------------------------------------------------------------------
-# shows all the input parameters
+# prints all variables used by this script
 # ------------------------------------------------------------------------------
-function showVariables {
+function showContext {
     echo
-    echo "variables for $BASH_SOURCE:"
+    echo "executing the ${BASH_SOURCE[0]} script with"
+    echo "   oracle home:         $ORACLE_HOME"
     echo "   admin server host:   $ADMIN_SERVER_HOST"
     echo "   admin server port:   $ADMIN_SERVER_PORT"
     echo "   domain name:         $DOMAIN_NAME"
     echo "   cluster name:        $CLUSTER_NAME"
     echo "   hostname:            $HOSTNAME"
-    echo "   managed server home: $MANAGED_SERVER_HOME"
     echo "   managed server name: $MANAGED_SERVER_NAME"
     echo "   managed server port: $MANAGED_SERVER_PORT"
     echo "   node manager port:   $NODE_MANAGER_PORT"
-    echo "   oracle home:         $ORACLE_HOME"
-    echo "   password:            $PASSWORD"
-    echo "   username:            $USERNAME"
-    echo "   verbose:             $VERBOSE"
     echo
+}
+
+# ------------------------------------------------------------------------------
+# execute tasks before the first server startup
+# ------------------------------------------------------------------------------
+function executeStep1Tasks() {
+    local markerFile fileToExecute
+    markerFile="$ORACLE_HOME/.before-server-first-startup.marker"
+    fileToExecute="$ORACLE_HOME/before-server-first-startup.sh"
+
+    if [ -f "$markerFile" ]; then
+        echo "this is not the first startup, skipping the execution of before the first server startup tasks..."
+    else
+        echo "this is the first startup, let's execute tasks before the first server startup..."
+
+        createAdminServer
+        configureNodeManager
+        updateManagedServerConfig
+        configureSplunkForwarder
+
+        if [ -f "$fileToExecute" ]; then
+            echo "---------------------------------------------------------------------"
+            echo "--                             STEP  1                             --"
+            echo "--                   BEFORE FIRST SERVER STARTUP                   --"
+            echo "---------------------------------------------------------------------"
+            "$fileToExecute"
+            echo "--------------------------- end of STEP 1 ---------------------------"
+            echo
+            touch "$markerFile"
+        else
+            echo "the '$fileToExecute' file does not exist"
+        fi
+    fi
+}
+
+# ------------------------------------------------------------------------------
+# execute tasks before each server startup
+# ------------------------------------------------------------------------------
+function executeStep2Tasks() {
+    local fileToExecute
+    fileToExecute="$ORACLE_HOME/before-server-startup.sh"
+
+    if [ -f "$fileToExecute" ]; then
+        echo "-------------------------------------------------------------------------"
+        echo "--                               STEP  2                               --"
+        echo "--                        BEFORE SERVER STARTUP                        --"
+        echo "-------------------------------------------------------------------------"
+        "$fileToExecute"
+        echo "----------------------------- end of STEP 2 -----------------------------"
+        echo
+    else
+      echo "the '$fileToExecute' file does not exist"
+    fi
 }
 
 # ------------------------------------------------------------------------------
 # create an admin server
 # ------------------------------------------------------------------------------
 function createAdminServer {
-    echo "creating a new WebLogic admin server..."
-    wlst.sh -skipWLSModuleScanning -loadProperties $PROPERTIES_FILE $ORACLE_HOME/create-admin-server.py $ORACLE_HOME $ADMIN_SERVER_NAME $ADMIN_SERVER_PORT $DOMAIN_NAME $CLUSTER_NAME $PRODUCTION_MODE $NODE_MANAGER_PORT
-    local _RETURN_VALUE=$?
-    if [ $_RETURN_VALUE -ne 0 ]; then
-        echo "Admin server creation failed. Return code: $_RETURN_VALUE."
-        exit 1
-    fi
+    echo "downloading the template JAR from $ADMIN_SERVER_HOST..."
+    local templateHome templateJar port
+    templateHome="$ORACLE_HOME/wlserver/common/templates/domain/"
+    templateJar="$DOMAIN_NAME-template.jar"
+    port=1384
+    mkdir -p "$templateHome"
+    wget -O "$templateHome/$templateJar" "$ADMIN_SERVER_HOST":"$port"
+
+    echo "unpacking the WebLogic domain server template JAR..."
+    local toolHome
+    toolHome="$ORACLE_HOME/oracle_common/common/bin/"
+
+	  cd "$toolHome" || { echo "Error while trying to change directory from $(pwd) to $toolHome."; exit 1; }
+    unpack.sh \
+        -domain="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME" \
+        -template="$templateHome/$templateJar" \
+        -overwrite_domain true
+    cd - || { echo "Error while trying to return to the original directory."; exit 1; }
 }
 
 # ------------------------------------------------------------------------------
-# create a managed server via WLST
+# configure the node manager
 # ------------------------------------------------------------------------------
-createManagedServer() {
-    echo "creating a new managed server..."
-    wlst.sh -skipWLSModuleScanning -loadProperties $PROPERTIES_FILE $ORACLE_HOME/create-managed-server.py $ADMIN_SERVER_HOST $ADMIN_SERVER_PORT $USERNAME $PASSWORD $MANAGED_SERVER_NAME $MANAGED_SERVER_PORT $CLUSTER_NAME
-    local _RETURN_VALUE=$?
-    if [ $_RETURN_VALUE -ne 0 ]; then
-      echo "Managed server creation failed. Return code: $_RETURN_VALUE."
+function configureNodeManager() {
+    echo "enrolling the node manager..."
+    local propertiesFile adminServerUsername adminServerPassword
+    propertiesFile="$ORACLE_HOME/properties/boot.properties"
+    adminServerUsername=$(getValue "$propertiesFile" "username")
+    adminServerPassword=$(getValue "$propertiesFile" "password")
+    wlst.sh \
+        -skipWLSModuleScanning \
+        -loadProperties "$propertiesFile" \
+        "$ORACLE_HOME/enroll-node-manager.py" \
+            "$ADMIN_SERVER_HOST" \
+            "$ADMIN_SERVER_PORT" \
+            "$adminServerUsername" \
+            "$adminServerPassword" \
+            "$ORACLE_HOME" \
+            "$DOMAIN_NAME"
+
+    local returnValue
+    returnValue=$?
+    if [ $returnValue -ne 0 ]; then
+      echo "Enrolling then node manager failed with $returnValue."
       exit 1
     fi
 
-    mkdir -p ${MANAGED_SERVER_HOME}/security
-    mv $ORACLE_HOME/startWebLogic.sh $ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/bin/
+    local configFile="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/nodemanager/nodemanager.properties"
+    echo "updating the node manager config file, path: $configFile..."
+    sed -i "s/SecureListener=true/SecureListener=false/g" "$configFile"
+    sed -i "s/ListenAddress=localhost/ListenAddress=$HOSTNAME/g" "$configFile"
 }
 
 # ------------------------------------------------------------------------------
-# waiting for server to startup
+# update the managed server configuration i.e. username, password, classpath
+# and JVM arguments
 # ------------------------------------------------------------------------------
-function waitForManagedServer() {
-    echo "checking whether $MANAGED_SERVER_NAME is up and running..."
-    local _COMMAND="wget --timeout=1 --tries=1 -qO- --user ${USERNAME} --password ${PASSWORD} http://${ADMIN_SERVER_HOST}:${ADMIN_SERVER_PORT}/management/tenant-monitoring/servers/${MANAGED_SERVER_NAME}"
-    echo "command: $_COMMAND"
-    local _JSON=$($_COMMAND)
-    local _SHOW_MESSAGE=true
+function updateManagedServerConfig() {
+    echo "updating the managed server configuration i.e. username, password, classpath and JVM arguments..."
+    local propertiesFile serverUsername serverPassword
+    propertiesFile="$ORACLE_HOME/properties/boot.properties"
+    serverUsername=$(getValue "$propertiesFile" "username")
+    serverPassword=$(getValue "$propertiesFile" "password")
 
-    while [[ ${_JSON} != *"RUNNING"* ]]
-    do
-        if [ $_SHOW_MESSAGE = "true" ]; then echo "$MANAGED_SERVER_NAME is not running yet, waiting..."; fi
-        if [ $VERBOSE = "false" ]; then _SHOW_MESSAGE="false"; fi
-        sleep 0.5
-        _JSON=$($_COMMAND)
+    # COMMENT 1:
+    #    The CLASSPATH environment variable will be overwritten by the
+    #    'wlst.sh' during the execution so this is the only way how we can
+    #    preserve the original value of this variable while executing the
+    #    'update-managed-server-config.py' python script.
+    #
+    # COMMENT 2:
+    #    The classpath and the JVM arguments are passed to the
+    #    'update-managed-server-config.py' python script via environment
+    #    variables, not as a bash command line arguments i.e. username and
+    #    password. Why? Because these values contain special characters
+    #    i.e. '/', ':' and ','. These characters - especially the comma - split
+    #    the parameter to multiply parts and the python script receives pieces.
+    #    Pieces can be concatenated and handled properly on the python side but
+    #    it requires more complex python code.
+    export ACLASSPATH="$CLASSPATH"
+
+    wlst.sh \
+        -skipWLSModuleScanning \
+        -loadProperties "$propertiesFile" \
+        "$ORACLE_HOME/update-managed-server-config.py" \
+            "$ADMIN_SERVER_HOST" \
+            "$ADMIN_SERVER_PORT" \
+            "$serverUsername" \
+            "$serverPassword" \
+            "${HOSTNAME^^}" \
+            "$serverUsername" \
+            "$serverPassword"
+
+    local returnValue
+    returnValue=$?
+    if [ $returnValue -ne 0 ]; then
+      echo "Updating the managed server failed with $returnValue."
+      exit 1
+    fi
+}
+
+# ------------------------------------------------------------------------------
+# configure the Splunk Universal Forwarder to send log entries to the Splunk
+# server
+# ------------------------------------------------------------------------------
+function configureSplunkForwarder() {
+    echo "configuring logfiles to be monitored by Splunk...";
+    local logHome
+    logHome="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME/logs"
+
+    mkdir -p "$logHome"
+    touch "$logHome/$MANAGED_SERVER_NAME.nohup"
+    touch "$logHome/$MANAGED_SERVER_NAME.log"
+
+    "$SPLUNK_HOME/bin/splunk" \
+        add monitor "$logHome/$MANAGED_SERVER_NAME.nohup" \
+        -index main \
+        -sourcetype "$MANAGED_SERVER_NAME" \
+        -auth "$SPLUNK_USERNAME":"$SPLUNK_PASSWORD"
+
+    "$SPLUNK_HOME/bin/splunk" \
+        add monitor "$logHome/$MANAGED_SERVER_NAME.log" \
+        -index main \
+        -sourcetype "$MANAGED_SERVER_NAME" \
+        -auth "$SPLUNK_USERNAME":"$SPLUNK_PASSWORD"
+}
+
+# ------------------------------------------------------------------------------
+# start Splunk Universal Forwarder
+# ------------------------------------------------------------------------------
+function startSplunkForwarder() {
+    echo "starting Splunk Universal Forwarder..."
+    "$SPLUNK_HOME/bin/splunk" start --accept-license
+    echo "Splunk Universal Forwarder is up and running"
+}
+
+# ------------------------------------------------------------------------------
+# start the Node Manager
+# ------------------------------------------------------------------------------
+function startNodeManager() {
+    echo "starting the node manager for $MANAGED_SERVER_NAME server..."
+    "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/bin/startNodeManager.sh" &
+
+    while ! nc -z "$HOSTNAME" "$NODE_MANAGER_PORT"; do
+      sleep 0.5
     done
-    echo "$MANAGED_SERVER_NAME is up and running"
+    echo "node manager is up and ready to receive requests"
 }
 
 # ------------------------------------------------------------------------------
-# read value from property file
+# start the managed server
 # ------------------------------------------------------------------------------
-getValue() {
-    local _PROPERTIES_FILE=$1
-    local _KEY=$2
-    local _VALUE=`awk '{print $1}' $_PROPERTIES_FILE | grep $_KEY | cut -d "=" -f2`
-    echo "$_VALUE"
-}
+function startManagedServer() {
+    echo "starting the $MANAGED_SERVER_NAME managed server..."
+    local propertiesFile adminServerUsername adminServerPassword
+    propertiesFile="$ORACLE_HOME/properties/boot.properties"
+    adminServerUsername=$(getValue "$propertiesFile" "username")
+    adminServerPassword=$(getValue "$propertiesFile" "password")
 
-# ------------------------------------------------------------------------------
-# execute commands if this is the first run
-# ------------------------------------------------------------------------------
-function executeFirstRun() {
-    local _MARKER_FILE=$ORACLE_HOME/.server-created
-    if [ -f "$_MARKER_FILE" ]; then
-        echo "managed server has been already created"
-    else
-        createAdminServer
-        createManagedServer
-        executeBeforeFirstStartup
-        touch $_MARKER_FILE
+    wlst.sh \
+        -skipWLSModuleScanning \
+        -loadProperties "$propertiesFile" \
+        "$ORACLE_HOME/start-managed-server.py" \
+        "$ADMIN_SERVER_HOST" "$ADMIN_SERVER_PORT" "$adminServerUsername" "$adminServerPassword" "$MANAGED_SERVER_NAME"
+
+    local returnValue
+    returnValue=$?
+    if [ $returnValue -ne 0 ]; then
+        echo "An error appeared while starting the managed server. Error: $returnValue."
+        exit 1
     fi
-}
 
-
-# ------------------------------------------------------------------------------
-# run the before-first-startup.sh script
-# ------------------------------------------------------------------------------
-function executeBeforeFirstStartup() {
-    local _EXTERNAL_SCRIPT=$ORACLE_HOME/before-startup.sh
-    if [ -f "$_EXTERNAL_SCRIPT" ]; then
-        echo "-------------------------------------------------------------------------"
-        echo "--                               step  1                               --"
-        echo "--                           MANAGED-SERVER                            --"
-        echo "--                        BEFORE-FIRST-STARTUP                         --"
-        echo "-------------------------------------------------------------------------"
-        $_EXTERNAL_SCRIPT
-        echo "------------------ end of step 1: BEFORE-FIRST-STARTUP ------------------"
-        echo
-    fi
+    setServerUpState
 }
 
 # ------------------------------------------------------------------------------
-# run the before-startup.sh script
+# open a port to inform the listeners about the server up state
+# it runs at the background in order to does not block the main script execution
 # ------------------------------------------------------------------------------
-function executeBeforeStartup() {
-    local _EXTERNAL_SCRIPT=$ORACLE_HOME/before-first-startup.sh
-    if [ -f "$_EXTERNAL_SCRIPT" ]; then
-        echo "-------------------------------------------------------------------------"
-        echo "--                               step 2                                --"
-        echo "--                           MANAGED-SERVER                            --"
-        echo "--                           BEFORE-STARTUP                            --"
-        echo "-------------------------------------------------------------------------"
-        $_EXTERNAL_SCRIPT
-        echo "--------------------- end of step 2: BEFORE-STARTUP ---------------------"
-        echo
-    fi
+function setServerUpState() {
+    echo ">>> WebLogic $MANAGED_SERVER_NAME server is up and ready to serve incoming requests <<<"
+    nc --listen --keep-open --source-port "$READY_SIGNAL_PORT" &
 }
 
 # ------------------------------------------------------------------------------
 # main app starts here
 # ------------------------------------------------------------------------------
-MANAGED_SERVER_HOME=$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME
-PROPERTIES_FILE=$ORACLE_HOME/properties/boot.properties
-PASSWORD=$(getValue $PROPERTIES_FILE "password")
-USERNAME=$(getValue $PROPERTIES_FILE "username")
-VERBOSE=false
+source "$ORACLE_HOME/common-utils.sh"
+export MANAGED_SERVER_NAME=${HOSTNAME^^}
 
-showVariables
-executeFirstRun
-executeBeforeStartup
+showContext
+startSplunkForwarder
+executeStep1Tasks
+executeStep2Tasks
+startNodeManager
+startManagedServer
 
-echo "starting the $MANAGED_SERVER_NAME managed server..."
-cp $PROPERTIES_FILE $MANAGED_SERVER_HOME/security/boot.properties
-$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/bin/startManagedWebLogic.sh $MANAGED_SERVER_NAME t3://$ADMIN_SERVER_HOST:$ADMIN_SERVER_PORT &
-
-waitForManagedServer
-
-echo "starting the node manager..."
-$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/bin/startNodeManager.sh
+# this command keeps alive the docker container
+tail -F \
+    "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME/logs/$MANAGED_SERVER_NAME.log" \
+    "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME/logs/$MANAGED_SERVER_NAME.nohup" \
+    "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME/logs/$MANAGED_SERVER_NAME.out" \
+    "$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME/logs/datasource.log"
