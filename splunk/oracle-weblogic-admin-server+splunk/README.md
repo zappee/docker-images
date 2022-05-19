@@ -9,9 +9,9 @@ Details:
 
 
 * Splunk Forwarder configuration
-  * monitoring the `$WL_LOG_HOME/$ADMIN_SERVER_NAME.nohup` logfile
-  * monitoring the `$WL_LOG_HOME/$ADMIN_SERVER_NAME.log` logfile
-  * monitoring the `$WL_LOG_HOME/$DOMAIN_NAME.log` logfile
+  * monitoring the `$DOMAIN_NAME/servers/$ADMIN_SERVER_NAME/logs/$ADMIN_SERVER_NAME.nohup` logfile
+  * monitoring the `$DOMAIN_NAME/servers/$ADMIN_SERVER_NAME/logs/$ADMIN_SERVER_NAME.log` logfile
+  * monitoring the `$DOMAIN_NAME/servers/$ADMIN_SERVER_NAME/logs/$DOMAIN_NAME.log` logfile
 
 ## 2) Build
 Build it using:
@@ -39,3 +39,5 @@ Before the build, you must download the `Oracle JDK` install kit from the Oracle
 Copyright (c) 2021 Remal Software, Arnold Somogyi. All rights reserved.
 
 BSD (2-clause) licensed
+
+<a href="https://trackgit.com"><img src="https://us-central1-trackgit-analytics.cloudfunctions.net/token/ping/kv444g8vf7bti919dcgk" alt="trackgit-views" /></a>

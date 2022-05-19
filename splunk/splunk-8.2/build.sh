@@ -1,11 +1,11 @@
 #!/bin/sh
 # ******************************************************************************
-#  AOracle WebLogic 12.2.1.4.0 Docker image build file.
+# Splunk 8.2 Docker image build file.
 #
-#  Since : February, 2021
+#  Since : Jun, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 #
 #  Usage:
@@ -15,14 +15,13 @@
 DOCKER_REGISTRY=docker
 DOCKER_REGISTRY_NAMESPACE=remal
 IMAGE_NAME=splunk-8.2
-IMAGE_VERSION=1.0.0
+IMAGE_VERSION=2.0.0
 PUSH_IMAGE=${1:-false}
 
-docker build --no-cache -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_VERSION .
-docker rmi $(docker image ls -qf dangling=true)
+docker build --no-cache -t "$DOCKER_REGISTRY/$DOCKER_REGISTRY_NAMESPACE/$IMAGE_NAME":"$IMAGE_VERSION" .
+docker rmi "$(docker image ls -qf dangling=true)"
 
-# upload image to GitLab image registry
 if [ "$PUSH_IMAGE" = true ] ; then
     echo "pushing the image to the registry..."
-    docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_NAMESPACE/$IMAGE_NAME:$IMAGE_VERSION
+    docker push "$DOCKER_REGISTRY/$DOCKER_REGISTRY_NAMESPACE/$IMAGE_NAME":"$IMAGE_VERSION"
 fi

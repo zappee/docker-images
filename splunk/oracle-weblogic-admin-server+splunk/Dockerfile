@@ -1,21 +1,22 @@
 # ******************************************************************************
 #  Oracle WebLogic Server 12.2.1.4.0 Administration Server + Splunk dockerfile.
 #
-#  Since : September, 2021
+#  Since : Jun, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/remal/oracle-weblogic-admin-12.2.1.4:1.0.0
+FROM docker/remal/oracle-weblogic-admin-12.2.1.4:2.0.0
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
-ENV SPLUNK_INSTALL_FILE=splunkforwarder-8.2.1-ddff1c41e5cf-linux-2.6-x86_64.rpm
 ENV SPLUNK_HOME=/opt/splunkforwarder
 ENV SPLUNK_USERNAME=admin
 ENV SPLUNK_PASSWORD=password
-ENV SPLUNK_MANAGEMENT_URL=splunk:8089
-ENV SPLUNK_FORWARDER_URL=splunk:9997
+
+ARG SPLUNK_INSTALL_FILE=splunkforwarder-8.2.1-ddff1c41e5cf-linux-2.6-x86_64.rpm
+ARG SPLUNK_MANAGEMENT_URL=splunk:8089
+ARG SPLUNK_FORWARDER_URL=splunk:9997
 
 COPY --chown=oracle:oracle bin/splunk/$SPLUNK_INSTALL_FILE $ORACLE_HOME/bin/splunk/
 COPY --chown=oracle:oracle container-scripts/* $ORACLE_HOME/

@@ -11,4 +11,4 @@ FROM splunk/splunk:8.2
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 ENV SPLUNK_HOME=/opt/splunk
-COPY --chown=splunk:splunk properties/indexes.conf $SPLUNK_HOME/etc/system/local/
+COPY --chown=splunk:splunk properties/* $SPLUNK_HOME/etc/system/local/
