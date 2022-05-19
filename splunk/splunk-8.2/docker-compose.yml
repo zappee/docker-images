@@ -1,5 +1,14 @@
+# ******************************************************************************
+#  Compose file for an Oracle WebLogic domain with two managed servers
+# and Splunk.
+#
+#  Since : April, 2022
+#  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
+#
+#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  BSD (2-clause) licensed
+# ******************************************************************************
 version: "3.6"
-
 services:
     # ----- Splunk ---------------------------------------------------
     splunk:
