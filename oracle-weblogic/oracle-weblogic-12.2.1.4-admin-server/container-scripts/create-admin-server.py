@@ -1,10 +1,10 @@
 # ******************************************************************************
 #  WLST script for creating a new administration server in the WebLogic domain.
 #
-#  Since : Jun, 2022
+#  Since : Jul, 2022
 #  Author: Arnold Somogyi <arnold.somogyi@gmail.com>
 #
-#  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
+#  Copyright (c) 2020-2022 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
 import socket
@@ -60,9 +60,20 @@ def create_admin_server(_domain_name, _admin_server_name, _admin_server_host, _a
     cd('/')
     set('Name', _domain_name)
     setOption('DomainName', _domain_name)
+    
+    # domain log configuration
+    log_file_count = 3
+    
+    print('updating the domain logging configuration for \'' + _domain_name + '\'...')
     create(_domain_name, 'Log')
     cd('/Log/' + _domain_name)
     set('FileName', 'logs/' + _domain_name + '.log')
+    set('RotationType', 'byTime')
+    set('RotationTime', '23:59')
+    set('NumberOfFilesLimited', 'true')
+    set('FileCount', log_file_count)
+    set('RotateLogOnStartup', 'false')
+    set('DateFormatPattern', 'yyyy.MM.dd hh:mm:ss,SSS')
 
     # configure the administration server
     print('configuring the \'' + _admin_server_name + '\' server...')
@@ -70,6 +81,21 @@ def create_admin_server(_domain_name, _admin_server_name, _admin_server_host, _a
     #set('ListenAddress', _admin_server_host)
     set('ListenPort', _admin_server_port)
     set('Name', _admin_server_name)
+
+    # web server access log configuration
+    print('updating the web server access log configuration for \'' + _admin_server_name + '\'...')
+    cd('/Servers/' + _admin_server_name)
+    create(_admin_server_name, 'WebServer')
+    cd('WebServer/' + _admin_server_name)
+    create(_admin_server_name, 'WebServerLog')
+    cd('WebServerLog/' + _admin_server_name)
+    set('FileName', 'logs/access.log')
+    set('RotationType', 'byTime')
+    set('RotationTime', '23:59')
+    set('NumberOfFilesLimited', 'true')
+    set('FileCount', log_file_count)
+    set('RotateLogOnStartup', 'false')
+    set('DateFormatPattern', 'yyyy.MM.dd hh:mm:ss,SSS')
 
     # username and password come from the boot.properties file
     cd('/Security/' + _domain_name + '/User/weblogic/')
