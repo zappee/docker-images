@@ -24,7 +24,7 @@ However, in some special cases, you may need to deploy this image and login into
 In this situation the following commands will help.
 
 * Run the image
-  * `docker run --name weblogic-12.2.1.4 -d docker/remal/oracle-weblogic/weblogic-12.2.1.4:2.0.0 tail -f /dev/null`
+  * `docker run --name weblogic-12.2.1.4 -d docker/remal/oracle-weblogic-12.2.1.4:2.0.0 tail -f /dev/null`
 
 
 * Login into the running container
@@ -39,7 +39,7 @@ In this situation the following commands will help.
 
 
 * Start multiply WebLogic domains with managed servers
-  * Command: `docker-compose -f docker-compose-multiserver.yml  up`
+  * Command: `docker-compose -f docker-compose-multiserver.yml up`
   * WebLogic Domain-1 console URL: [http://localhost:7101/console](http://localhost:7101/console)
   * WebLogic Domain-2 console URL: [http://localhost:7201/console](http://localhost:7201/console)
   * WebLogic credentials: `weblogic`/`weblogic12`
