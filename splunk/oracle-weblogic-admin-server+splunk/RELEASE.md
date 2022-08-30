@@ -13,3 +13,7 @@ All notable changes to this project will be documented in this file.
 #### Modified
 * Use the latest `racle-weblogic-admin-12.2.1.4:2.0.0` image.
 * Improvements in bash scripts.
+
+## [2.0.1] - 30/Aug/2022
+#### Modified
+* Use the latest `racle-weblogic-admin-12.2.1.4:2.0.1` image.
