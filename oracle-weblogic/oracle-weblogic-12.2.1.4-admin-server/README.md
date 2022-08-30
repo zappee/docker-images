@@ -95,7 +95,7 @@ Example:
 version: '3'
 services:
     weblogic-admin-server:
-    image: docker/remal/oracle-weblogic-admin-12.2.1.4:2.0.0
+    image: docker/remal/oracle-weblogic-admin-12.2.1.4:2.0.1
     container_name: weblogic-admin-server
     hostname: weblogic-admin-server
     ports:
@@ -108,7 +108,7 @@ services:
         - MANAGED_SERVER_HOSTNAMES=weblogic-managed-server-1, weblogic-managed-server-2
 
     weblogic-managed-server-1:
-        image: docker/remal/oracle-weblogic-managed-12.2.1.4:2.0.0
+        image: docker/remal/oracle-weblogic-managed-12.2.1.4:2.0.1
         container_name: weblogic-managed-server-1
         hostname: weblogic-managed-server-1
         ports:

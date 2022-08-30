@@ -57,3 +57,7 @@ All notable changes to this project will be documented in this file.
 * Remove the unused `MANAGED_SERVER_NAME` environment variable from your docker compose file.
 * Update the `command` section in your docker compose file.
 * Ordering your container startup properly with the `depends_on` in your docker compose file.
+
+## [weblogic-admin-12.2.1.4:2.0.1] - 30/Aug/2022
+#### Modified
+* Use the latest `weblogic-12.2.1.4:2.0.1` image.

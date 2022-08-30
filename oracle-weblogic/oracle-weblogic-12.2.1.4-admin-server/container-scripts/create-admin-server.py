@@ -67,7 +67,6 @@ def create_admin_server(_domain_name, _admin_server_name, _admin_server_host, _a
     # configure the administration server
     print('configuring the \'' + _admin_server_name + '\' server...')
     cd('/Servers/AdminServer')
-    #set('ListenAddress', _admin_server_host)
     set('ListenPort', _admin_server_port)
     set('Name', _admin_server_name)
 
@@ -126,6 +125,44 @@ def save_domain(_domain_home, _production_mode_enabled):
 
 
 # ------------------------------------------------------------------------------
+# updating the logging configuration of a given server
+# ------------------------------------------------------------------------------
+def update_server_log_config(_server_name):
+    # the value is considered as days
+    log_file_count = 10
+
+    # server log configuration
+    print('updating the log configuration for \'' + _server_name + '\'...')
+    cd('/Servers/' + _server_name)
+    create(_server_name, 'Log')
+    cd('Log/' + _server_name)
+    set('FileName', 'logs/' + _server_name + '.log')
+    set('RotationType', 'bySize')  # byTime, bySize
+    set('RotationTime', '23:59')
+    set('FileMinSize', 10000)
+    set('NumberOfFilesLimited', 'true')
+    set('FileCount', log_file_count)
+    set('RotateLogOnStartup', 'false')
+    set('DateFormatPattern', 'yyyy.MM.dd hh:mm:ss,SSS')
+
+    # web server access log configuration
+    print('updating the web server access log configuration for \'' + _server_name + '\'...')
+    cd('/Servers/' + _server_name)
+    create(_server_name, 'WebServer')
+    cd('WebServer/' + _server_name)
+    create(_server_name, 'WebServerLog')
+    cd('WebServerLog/' + _server_name)
+    set('FileName', 'logs/access.log')
+    set('RotationType', 'bySize')  # byTime, bySize
+    set('RotationTime', '23:59')
+    set('FileMinSize', 10000)
+    set('NumberOfFilesLimited', 'true')
+    set('FileCount', log_file_count)
+    set('RotateLogOnStartup', 'false')
+    set('DateFormatPattern', 'yyyy.MM.dd hh:mm:ss,SSS')
+
+
+# ------------------------------------------------------------------------------
 # main program starts here
 # ------------------------------------------------------------------------------
 oracle_home = sys.argv[1]
@@ -158,6 +195,7 @@ print('   node manager port     %s' % node_manager_port)
 read_domain_template(oracle_home)
 create_machine(machine_name, admin_server_host, node_manager_port)
 create_admin_server(domain_name, admin_server_name, admin_server_host, admin_server_port, machine_name)
+update_server_log_config(admin_server_name)
 create_cluster(cluster_name, cluster_address)
 update_console_cookie_name(domain_name)
 save_domain(domain_home, production_mode)

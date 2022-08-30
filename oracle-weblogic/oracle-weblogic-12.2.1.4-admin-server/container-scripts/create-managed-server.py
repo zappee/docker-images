@@ -76,6 +76,41 @@ def create_managed_server(_managed_server_name,
 
 
 # ------------------------------------------------------------------------------
+# updating the logging configuration of a given server
+# ------------------------------------------------------------------------------
+def update_server_log_config(_server_name):
+    # the value is considered as days
+    log_file_count = 10
+
+    # server log configuration
+    print('updating the log configuration for \'' + _server_name + '\'...')
+    cd('/Servers/' + _server_name)
+    cd('Log/' + _server_name)
+    cmo.setFileName('logs/' + _server_name + '.log')
+    cmo.setRotationType('bySize') # byTime, bySize
+    cmo.setRotationTime('23:59')
+    cmo.setFileMinSize(10000)
+    cmo.setNumberOfFilesLimited(true)
+    cmo.setFileCount(log_file_count)
+    cmo.setRotateLogOnStartup(false)
+    cmo.setDateFormatPattern('yyyy.MM.dd hh:mm:ss,SSS')
+
+    # web server access log configuration
+    print('updating the web server access log configuration for \'' + _server_name + '\'...')
+    cd('/Servers/' + _server_name)
+    cd('WebServer/' + _server_name)
+    cd('WebServerLog/' + _server_name)
+    cmo.setFileName('logs/access.log')
+    cmo.setRotationType('bySize') # byTime, bySize
+    cmo.setRotationTime('23:59')
+    cmo.setFileMinSize(10000)
+    cmo.setNumberOfFilesLimited(true)
+    cmo.setFileCount(log_file_count)
+    cmo.setRotateLogOnStartup(false)
+    cmo.setDateFormatPattern('yyyy.MM.dd hh:mm:ss,SSS')
+
+
+# ------------------------------------------------------------------------------
 # save changes to disk
 # ------------------------------------------------------------------------------
 def save_changes():
@@ -114,5 +149,6 @@ connect_to_server(admin_server_host, admin_server_port, admin_server_user, admin
 lock_and_edit()
 create_machine(machine_name, managed_server_host, node_manager_port)
 create_managed_server(managed_server_name, managed_server_host, managed_server_port, cluster_name, machine_name)
+update_server_log_config(managed_server_name)
 save_changes()
 print('machine, node manager and the managed server have been created successfully')

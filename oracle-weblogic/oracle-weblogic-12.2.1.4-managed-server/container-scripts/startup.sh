@@ -87,7 +87,7 @@ function executeStep2Tasks() {
 function createAdminServer {
     echo "downloading the template JAR from $ADMIN_SERVER_HOST..."
     local templateHome templateJar port
-    templateHome="$ORACLE_HOME/wlserver/common/templates/domain/"
+    templateHome="$ORACLE_HOME/wlserver/common/templates/domain"
     templateJar="$DOMAIN_NAME-template.jar"
     port=1384
     mkdir -p "$templateHome"
@@ -196,11 +196,11 @@ function configureSplunkForwarder() {
     logHome="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME/servers/$MANAGED_SERVER_NAME/logs"
 
     mkdir -p "$logHome"
-    touch "$logHome/$MANAGED_SERVER_NAME.nohup"
+    touch "$logHome/$MANAGED_SERVER_NAME.out"
     touch "$logHome/$MANAGED_SERVER_NAME.log"
 
     "$SPLUNK_HOME/bin/splunk" \
-        add monitor "$logHome/$MANAGED_SERVER_NAME.nohup" \
+        add monitor "$logHome/$MANAGED_SERVER_NAME.out" \
         -index main \
         -sourcetype "$MANAGED_SERVER_NAME" \
         -auth "$SPLUNK_USERNAME":"$SPLUNK_PASSWORD"
