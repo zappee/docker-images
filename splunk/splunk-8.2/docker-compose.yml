@@ -24,7 +24,7 @@ services:
 
     # ----- WebLogic Admin server ------------------------------------
     weblogic-admin-server:
-        image: docker/remal/oracle-weblogic-admin-with-splunk:2.0.0
+        image: docker/remal/oracle-weblogic-admin-with-splunk:2.0.1
         container_name: weblogic-admin-server
         hostname: weblogic-admin-server
         ports:
@@ -40,7 +40,7 @@ services:
 
     # ----- WebLogic Managed server ----------------------------------
     weblogic-managed-server-1:
-        image: docker/remal/oracle-weblogic-managed-with-splunk:2.0.0
+        image: docker/remal/oracle-weblogic-managed-with-splunk:2.0.1
         container_name: weblogic-managed-server-1
         hostname: weblogic-managed-server-1
         ports:
@@ -55,7 +55,7 @@ services:
             - ~/dev/workspace/docker/shared-volumes/managed-server-1/upload:/home/oracle/upload
 
     weblogic-managed-server-2:
-        image: docker/remal/oracle-weblogic-managed-with-splunk:2.0.0
+        image: docker/remal/oracle-weblogic-managed-with-splunk:2.0.1
         container_name: weblogic-managed-server-2
         hostname: weblogic-managed-server-2
         ports:

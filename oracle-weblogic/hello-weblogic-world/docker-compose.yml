@@ -11,7 +11,7 @@ version: '3'
 services:
     # ----- WebLogic Admin server ----------------------------------------------
     hello-admin-server:
-        image: docker/remal/hello-welogic-world-admin-server:2.0.0
+        image: docker/remal/hello-welogic-world-admin-server:2.0.1
         container_name: hello-admin-server
         hostname: hello-admin-server
         ports:
@@ -34,7 +34,7 @@ services:
 
     # ----- WebLogic Managed servers -------------------------------------------
     hello-managed-server-1:
-        image: docker/remal/hello-welogic-world-managed-server:2.0.0
+        image: docker/remal/hello-welogic-world-managed-server:2.0.1
         container_name: hello-managed-server-1
         hostname: hello-managed-server-1
         ports:
@@ -47,7 +47,7 @@ services:
             - ADMIN_SERVER_HOST=hello-admin-server
 
     hello-managed-server-2:
-        image: docker/remal/hello-welogic-world-managed-server:2.0.0
+        image: docker/remal/hello-welogic-world-managed-server:2.0.1
         container_name: hello-managed-server-2
         hostname: hello-managed-server-2
         ports:

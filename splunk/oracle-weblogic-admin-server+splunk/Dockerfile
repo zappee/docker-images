@@ -7,7 +7,7 @@
 #  Copyright (c) 2020-2021 Remal Software and Arnold Somogyi All rights reserved
 #  BSD (2-clause) licensed
 # ******************************************************************************
-FROM docker/remal/oracle-weblogic-admin-12.2.1.4:2.0.0
+FROM docker/remal/oracle-weblogic-admin-12.2.1.4:2.0.1
 LABEL authors="Arnold Somogyi <arnold.somogyi@gmail.com>"
 
 ENV SPLUNK_HOME=/opt/splunkforwarder
