@@ -87,7 +87,7 @@ def update_server_log_config(_server_name):
     cd('/Servers/' + _server_name)
     cd('Log/' + _server_name)
     cmo.setFileName('logs/' + _server_name + '.log')
-    cmo.setRotationType('bySize') # byTime, bySize
+    cmo.setRotationType('bySize')  # byTime, bySize
     cmo.setRotationTime('23:59')
     cmo.setFileMinSize(10000)
     cmo.setNumberOfFilesLimited(true)
@@ -101,7 +101,7 @@ def update_server_log_config(_server_name):
     cd('WebServer/' + _server_name)
     cd('WebServerLog/' + _server_name)
     cmo.setFileName('logs/access.log')
-    cmo.setRotationType('bySize') # byTime, bySize
+    cmo.setRotationType('bySize')  # byTime, bySize
     cmo.setRotationTime('23:59')
     cmo.setFileMinSize(10000)
     cmo.setNumberOfFilesLimited(true)
