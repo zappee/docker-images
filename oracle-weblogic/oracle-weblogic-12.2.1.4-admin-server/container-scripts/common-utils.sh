@@ -313,3 +313,17 @@ function waitForAdminServer() {
     done
     echo "$adminServerName is up and running"
 }
+
+# ------------------------------------------------------------------------------
+# start SSH server
+# ------------------------------------------------------------------------------
+function startSshServer() {
+    local userName userPassword
+    userName="$1"
+    userPassword="$2"
+    echo "starting the SSH server..."
+    echo "   - the SSH Server will run at the background"
+    echo "   - Username: '$userName'"
+    echo "   - Password of the '$userName' user: '$userPassword'"
+    echo "$userPassword" | su "$userName" -c "/usr/sbin/sshd -D &"
+}

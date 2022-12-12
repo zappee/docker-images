@@ -61,3 +61,13 @@ All notable changes to this project will be documented in this file.
 ## [weblogic-admin-12.2.1.4:2.0.1] - 30/Aug/2022
 #### Modified
 * Use the latest `weblogic-12.2.1.4:2.0.1` image.
+
+## [2.1.0] - 12/Dec/2022
+#### Modified
+* Using the latest `oracle-weblogic` image as a base image.
+#### Removed
+* Removed the exposing of the `$ORACLE_HOME/wlserver/common/templates/domain/$DOMAIN_NAME-template.jar` file with `NetCat`.
+  The file can be downloaded with the standard `ssc` command.
+#### Added
+* Adding a new functionality to the `common-utils.sh` script that can be used to start the SSH Server.
+* Starting the pre-installed SSH Server in the container, in the name of the `root` user.

@@ -16,6 +16,7 @@
 function showContext {
     echo
     echo "executing the ${BASH_SOURCE[0]} script with"
+    echo "   unix root password:       $ROOT_PASSWORD"
     echo "   admin server name:        $ADMIN_SERVER_NAME"
     echo "   admin server port:        $ADMIN_SERVER_PORT"
     echo "   server ready signal port: $READY_SIGNAL_PORT"
@@ -397,6 +398,9 @@ function setServerUpState() {
 # ------------------------------------------------------------------------------
 # generate a WebLogic Domain Server Template during the first start,
 # the template can be used to create a Managed Server on a remote host
+#
+# path of the domain template jar:
+#     ""$ORACLE_HOME/wlserver/common/templates/domain/$DOMAIN_NAME-template.jar"
 # ------------------------------------------------------------------------------
 function generateServerTemplate() {
     echo "generating a WebLogic domain server template JAR..."
@@ -415,30 +419,6 @@ function generateServerTemplate() {
 	      -template_name="$DOMAIN_NAME" \
 	      -template_author="arnold.somogyi@gmail.com"
     cd - || { echo "Error while trying to return to the original directory."; exit 1; }
-
-    # make the template jar available for other docker containers
-    exposeTemplateJar "$templateHome/$templateJar" &
-}
-
-# ------------------------------------------------------------------------------
-# make the template jar available for another docker containers via the
-# docker network
-#
-# this runs in the background to avoid blocking the main script execution
-# ------------------------------------------------------------------------------
-function exposeTemplateJar() {
-    local templateJar port
-    templateJar="$1"
-    port=1384
-
-    echo "exposing the template JAR for another docker containers with..."
-    echo "   template JAR: $templateJar"
-    echo "   port:         $port"
-
-    while :
-    do
-        { echo -ne "HTTP/1.0 200 OK\r\n\r\n"; cat "$templateJar" ; } | nc  -l "$port"
-    done
 }
 
 # ------------------------------------------------------------------------------
@@ -520,6 +500,7 @@ function waitForDomain() {
 # main app starts here
 # ------------------------------------------------------------------------------
 source "$ORACLE_HOME/common-utils.sh"
+startSshServer "root" "$ROOT_PASSWORD"
 showContext
 executeStep1Tasks
 executeStep2Tasks
