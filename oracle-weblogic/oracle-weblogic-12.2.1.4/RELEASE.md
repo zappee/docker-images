@@ -16,3 +16,8 @@ All notable changes to this project will be documented in this file.
 * Use the latest `oracle-8:2.0.0` java image as a base image.
 * Optimize the unix environment variables defined in `Dockerfile`.
 * Improve the build bash script.
+
+## [weblogic-12.2.1.4:2.1.0] - 12/Dec/2022
+#### Modified
+* Using the latest java image as a base image.
+* Optimizing the environment variables definitions.
