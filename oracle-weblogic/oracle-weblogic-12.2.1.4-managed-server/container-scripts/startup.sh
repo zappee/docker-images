@@ -85,13 +85,25 @@ function executeStep2Tasks() {
 # create an admin server
 # ------------------------------------------------------------------------------
 function createAdminServer {
-    echo "downloading the template JAR from $ADMIN_SERVER_HOST..."
-    local templateHome templateJar port
-    templateHome="$ORACLE_HOME/wlserver/common/templates/domain"
+    local localTemplateHome remoteTemplateHome templateJar
+    localTemplateHome="$ORACLE_HOME/wlserver/common/templates/domain/"
+    remoteTemplateHome="$ORACLE_HOME/wlserver/common/templates/domain/"
     templateJar="$DOMAIN_NAME-template.jar"
-    port=1384
-    mkdir -p "$templateHome"
-    wget -O "$templateHome/$templateJar" "$ADMIN_SERVER_HOST":"$port"
+
+    local remote_host remote_user remote_password
+    remote_host="$ADMIN_SERVER_HOST"
+    remote_user="root"
+    remote_password="$ROOT_PASSWORD"
+
+    echo "downloading the template JAR..."
+    echo "   - remote host:     $remote_host"
+    echo "   - remote user:     $remote_user"
+    echo "   - remote password: $remote_password"
+    echo "   - remote file:     $remoteTemplateHome/$templateJar"
+    echo "   - local file:      $localTemplateHome/$templateJar"
+
+    mkdir -p "$localTemplateHome"
+    sshpass -p "$remote_password" scp -o StrictHostKeyChecking=no root@$remote_host:/$remoteTemplateHome/$templateJar $localTemplateHome/
 
     echo "unpacking the WebLogic domain server template JAR..."
     local toolHome
@@ -100,7 +112,7 @@ function createAdminServer {
 	  cd "$toolHome" || { echo "Error while trying to change directory from $(pwd) to $toolHome."; exit 1; }
     unpack.sh \
         -domain="$ORACLE_HOME/user_projects/domains/$DOMAIN_NAME" \
-        -template="$templateHome/$templateJar" \
+        -template="$localTemplateHome/$templateJar" \
         -overwrite_domain true
     cd - || { echo "Error while trying to return to the original directory."; exit 1; }
 }

@@ -22,10 +22,10 @@ def connect_to_server(_admin_server_host, _admin_server_port, _admin_server_user
 # start a new edit session
 # ------------------------------------------------------------------------------
 def lock_and_edit():
-    _wait_time_in_millis = 60000
+    _wait_time_in_millis = 300000
     _timeout_in_millis = 90000
     edit()
-    startEdit(_wait_time_in_millis, _timeout_in_millis, 'True')
+    startEdit(_wait_time_in_millis, _timeout_in_millis, 'False')
 
 
 # ------------------------------------------------------------------------------
@@ -39,13 +39,21 @@ def update_server_config(_managed_server_name,
                          _managed_server_arguments):
 
     print('setting java options and classpath for \'' + _managed_server_name + '\' started by Node Manager...')
-    cd('/Servers/' + _managed_server_name + '/ServerStart/' + _managed_server_name)
-    cmo.setClassPath(_managed_server_classpath)
-    cmo.setArguments(_managed_server_arguments)
 
-    print('setting username and password for \'' + _managed_server_name + '\', started by Node Manager...')
-    cmo.setUsername(_managed_server_username)
-    cmo.setPassword(_managed_server_password)
+    try:
+        cd('/Servers/' + _managed_server_name + '/ServerStart/' + _managed_server_name)
+        cmo.setClassPath(_managed_server_classpath)
+        cmo.setArguments(_managed_server_arguments)
+
+        print('setting username and password for \'' + _managed_server_name + '\', started by Node Manager...')
+        cmo.setUsername(_managed_server_username)
+        cmo.setPassword(_managed_server_password)
+    except Exception, e:
+        print('[ERROR] An unexpected error appeared while trying to configure the ' + _managed_server_name + '.')
+        print('[ERROR] Probably the Admin server configuration that you use is wrong.')
+        print('[ERROR] Please check the MANAGED_SERVER_HOSTNAMES environment variable in your *.yml file.')
+        print e
+        print('\n')
 
 
 # ------------------------------------------------------------------------------

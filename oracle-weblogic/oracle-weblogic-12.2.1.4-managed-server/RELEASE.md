@@ -68,3 +68,13 @@ All notable changes to this project will be documented in this file.
 
   `/home/oracle/wlserver/common/templates/domain//DEV_DOMAIN-template.jar` -> `/home/oracle/wlserver/common/templates/domain/DEV_DOMAIN-template.jar`
 * Fix a typo in the name of the server log: `MANAGED_SERVER_NAME.nohup` > `MANAGED_SERVER_NAME.out`
+
+## [2.1.0] - 12/Dec/2022
+#### Modified
+* Using the latest `oracle-weblogic` image as a base image.
+* Changing the way how the Oracle WebLogic Template JAR is downloaded from the WebLogic Admin Server.
+  Instead of using NetCat, the file from now is downloaded with a standard `scp` command.
+* Fix an issue that appeared during the WL start/restart while using multiple managed server
+  * Improve error handling and logging in `update-managed-server-config.py`
+  * Change the managed-server start procedure.
+  * Change the `WLST edit session` parameters.

@@ -18,29 +18,10 @@ def connect_to_server(_admin_server_host, _admin_server_port, _admin_server_user
 
 
 # ------------------------------------------------------------------------------
-# start a new edit session
-# ------------------------------------------------------------------------------
-def lock_and_edit():
-    _wait_time_in_millis = 60000
-    _timeout_in_millis = 90000
-    edit()
-    startEdit(_wait_time_in_millis, _timeout_in_millis, 'True')
-
-
-# ------------------------------------------------------------------------------
 # start the server
 # ------------------------------------------------------------------------------
 def start_managed_server(_managed_server_name):
     start(managed_server_name, 'Server')
-
-
-# ------------------------------------------------------------------------------
-# save changes to disk
-# ------------------------------------------------------------------------------
-def save_changes():
-    save()
-    activate()
-    disconnect()
 
 
 # ------------------------------------------------------------------------------
@@ -61,7 +42,5 @@ print('   admin server password: %s' % admin_server_password)
 print('   managed server name    %s' % managed_server_name)
 
 connect_to_server(admin_server_host, admin_server_port, admin_server_user, admin_server_password)
-lock_and_edit()
 start_managed_server(managed_server_name)
-save_changes()
 print('managed server has been started successfully')

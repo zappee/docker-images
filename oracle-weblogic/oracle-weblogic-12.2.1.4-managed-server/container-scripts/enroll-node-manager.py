@@ -21,7 +21,7 @@ def connect_to_server(_admin_server_host, _admin_server_port, _admin_server_user
 # start a new edit session
 # ------------------------------------------------------------------------------
 def lock_and_edit():
-    _wait_time_in_millis = 60000
+    _wait_time_in_millis = 300000
     _timeout_in_millis = 90000
     edit()
     startEdit(_wait_time_in_millis, _timeout_in_millis, 'True')
@@ -35,7 +35,26 @@ def enroll_node_manager(_oracle_home, _domain_name):
 
 
 # ------------------------------------------------------------------------------
-# save changes to disk
+# This command enrolls the computer on which WLST is running with the domain
+# of the administration server to which WLST is connected. What "enrolling"
+# means is the command downloads two files from the administration server to
+# this computer: nm_password.properties and SerializedSystemIni.dat.
+#
+# The Node Manager "secret file," nm_password.properties, contains the
+# encrypted username and password used by the adminstration server to
+# authenticate itself to the Node Manager process. This file is placed in the
+# domain directory under /config/nodemanager/.
+#
+# The file used for encryption and decryption, SerializedSystemIni.dat, is
+# placed in the domain directory under /security/.
+#
+# In addition, the nmEnroll() command creates or updates the nodemanager.domains
+# file found in the Node Manager home directory. It adds the current domain to
+# the list of domains that this Node Manager is allowed to manage.
+#
+# The nmEnroll() command has two arguments:
+#    1: The domain home directory on this computer
+#    2: The Node Manager home directory on this computer
 # ------------------------------------------------------------------------------
 def save_changes():
     save()
