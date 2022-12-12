@@ -16,7 +16,7 @@ DOCKER_REGISTRY=docker
 DOCKER_REGISTRY_NAMESPACE=remal
 IMAGE_NAME_ADMIN=hello-welogic-world-admin-server
 IMAGE_NAME_MANAGED=hello-welogic-world-managed-server
-IMAGE_VERSION=2.0.1
+IMAGE_VERSION=2.1.0
 PUSH_IMAGE=${1:-false}
 
 echo "building the admin-server image..."
