@@ -24,7 +24,7 @@ However, in some special cases, you may need to deploy this image and login into
 In this situation the following commands will help.
 
 * Run the image
-  * `docker run --name weblogic-12.2.1.4 -d docker/remal/oracle-weblogic-12.2.1.4:2.0.0 tail -f /dev/null`
+  * `docker run --name weblogic-12.2.1.4 -d docker/remal/oracle-weblogic-12.2.1.4:2.1.0 tail -f /dev/null`
 
 
 * Login into the running container
