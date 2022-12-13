@@ -86,8 +86,8 @@ function executeStep2Tasks() {
 # ------------------------------------------------------------------------------
 function createAdminServer {
     local localTemplateHome remoteTemplateHome templateJar
-    localTemplateHome="$ORACLE_HOME/wlserver/common/templates/domain/"
-    remoteTemplateHome="$ORACLE_HOME/wlserver/common/templates/domain/"
+    localTemplateHome="$ORACLE_HOME/wlserver/common/templates/domain"
+    remoteTemplateHome="$ORACLE_HOME/wlserver/common/templates/domain"
     templateJar="$DOMAIN_NAME-template.jar"
 
     local remote_host remote_user remote_password
